@@ -108,12 +108,22 @@ app.post('/api/index', express.json(), async (req, res) => {
 
       // Build JS/TS graph
       if (entry || nodeEntry) {
-        graphs.js = await buildJSGraph({ entry, nodeEntry });
+        try {
+          graphs.js = await buildJSGraph({ entry, nodeEntry });
+        } catch (err) {
+          console.error('Error building JS graph:', err.message);
+          // Continue even if JS graph fails
+        }
       }
 
       // Build Python graph
       if (pyRoot) {
-        graphs.py = await buildPythonGraph({ root: pyRoot, extraPath: pyExtraPath });
+        try {
+          graphs.py = await buildPythonGraph({ root: pyRoot, extraPath: pyExtraPath });
+        } catch (err) {
+          console.error('Error building Python graph:', err.message);
+          // Continue even if Python graph fails
+        }
       }
 
       // Merge graphs
@@ -133,10 +143,14 @@ app.post('/api/index', express.json(), async (req, res) => {
         graph: merged,
         repoPath: fullPath,
       });
+    } catch (error) {
+      console.error('Error indexing repository:', error);
+      res.status(500).json({ error: 'Failed to index repository', message: error.message });
     } finally {
       process.chdir(originalCwd);
     }
   } catch (error) {
+    console.error('Error in /api/index:', error);
     res.status(500).json({ error: 'Failed to index repository', message: error.message });
   }
 });

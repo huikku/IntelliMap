@@ -18,7 +18,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
   const [indexing, setIndexing] = useState(false);
   const [pathInput, setPathInput] = useState('');
   const [indexConfig, setIndexConfig] = useState({
-    entry: 'src/index.ts',
+    entry: '',
     nodeEntry: '',
     pyRoot: '',
     pyExtraPath: '',
@@ -255,10 +255,10 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                 </div>
               </div>
               <div>
-                <label className="text-xs text-gray-400">Frontend Entry Point</label>
+                <label className="text-xs text-gray-400">Frontend Entry Point (optional)</label>
                 <input
                   type="text"
-                  placeholder="e.g., src/index.ts"
+                  placeholder="e.g., src/index.ts or src/main.jsx"
                   value={indexConfig.entry}
                   onChange={e => setIndexConfig({ ...indexConfig, entry: e.target.value })}
                   className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
@@ -268,7 +268,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                 <label className="text-xs text-gray-400">Node.js Entry Point (optional)</label>
                 <input
                   type="text"
-                  placeholder="e.g., server/index.ts"
+                  placeholder="e.g., server/index.js or index.js"
                   value={indexConfig.nodeEntry}
                   onChange={e => setIndexConfig({ ...indexConfig, nodeEntry: e.target.value })}
                   className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
@@ -278,7 +278,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                 <label className="text-xs text-gray-400">Python Root (optional)</label>
                 <input
                   type="text"
-                  placeholder="e.g., backend/"
+                  placeholder="e.g., . or backend/ or src/"
                   value={indexConfig.pyRoot}
                   onChange={e => setIndexConfig({ ...indexConfig, pyRoot: e.target.value })}
                   className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
@@ -288,7 +288,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                 <label className="text-xs text-gray-400">Python Extra Path (optional)</label>
                 <input
                   type="text"
-                  placeholder="e.g., backend/.venv/lib/python3.11/site-packages"
+                  placeholder="e.g., .venv/lib/python3.11/site-packages"
                   value={indexConfig.pyExtraPath}
                   onChange={e => setIndexConfig({ ...indexConfig, pyExtraPath: e.target.value })}
                   className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
