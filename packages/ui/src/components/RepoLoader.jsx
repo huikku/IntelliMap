@@ -208,30 +208,35 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
             ) : (
               <div className="divide-y divide-gray-700">
                 {items.map(item => (
-                  <button
-                    key={item.path}
-                    onClick={() => {
-                      if (item.isDirectory) {
-                        browsePath(item.path);
-                      } else {
-                        setSelectedRepo(item.path);
-                      }
-                    }}
-                    className={`w-full text-left px-4 py-3 hover:bg-gray-800 transition flex items-center gap-3 ${
-                      selectedRepo === item.path ? 'bg-blue-900' : ''
-                    }`}
-                  >
-                    <span className="text-lg">
-                      {item.isDirectory ? '📁' : '📄'}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">{item.name}</div>
-                      <div className="text-xs text-gray-500 truncate">{item.path}</div>
-                    </div>
-                    {selectedRepo === item.path && (
-                      <span className="text-blue-400">✓</span>
-                    )}
-                  </button>
+                  <div key={item.path} className="flex items-center">
+                    <button
+                      onClick={() => {
+                        if (item.isDirectory) {
+                          browsePath(item.path);
+                        }
+                      }}
+                      className="flex-1 text-left px-4 py-3 hover:bg-gray-800 transition flex items-center gap-3"
+                    >
+                      <span className="text-lg">
+                        {item.isDirectory ? '📁' : '📄'}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">{item.name}</div>
+                        <div className="text-xs text-gray-500 truncate">{item.path}</div>
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => setSelectedRepo(item.path)}
+                      className={`px-4 py-3 transition ${
+                        selectedRepo === item.path
+                          ? 'bg-blue-900 text-blue-400'
+                          : 'hover:bg-gray-800 text-gray-400'
+                      }`}
+                      title={`Select ${item.isDirectory ? 'folder' : 'file'} as repository`}
+                    >
+                      {selectedRepo === item.path ? '✓' : '○'}
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
