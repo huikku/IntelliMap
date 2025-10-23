@@ -196,6 +196,11 @@ export async function buildJSGraph(options) {
         metafile.inputs = { ...metafile.inputs, ...backendResult.metafile.inputs };
       } catch (error) {
         console.warn('⚠️  Backend build failed:', error.message);
+        // Try to extract partial metafile from error
+        if (error.metafile && error.metafile.inputs) {
+          console.log('📊 Extracting partial backend metafile from error');
+          metafile.inputs = { ...metafile.inputs, ...error.metafile.inputs };
+        }
       }
     }
 
