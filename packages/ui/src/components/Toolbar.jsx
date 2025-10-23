@@ -66,11 +66,11 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       </button>
 
       <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-gray-400">Layout:</label>
+        <label className="text-xs text-gray-400 font-mono">Layout:</label>
         <select
           value={layout}
           onChange={e => handleLayoutChange(e.target.value)}
-          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition"
+          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition font-mono"
         >
           <option value="elk">📊 Hierarchical (Right)</option>
           <option value="elkDown">📊 Hierarchical (Down)</option>

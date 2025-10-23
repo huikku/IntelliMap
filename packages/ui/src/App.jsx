@@ -145,9 +145,9 @@ export default function App() {
       {/* Header */}
       <header className="h-12 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4 gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="text-lg font-bold">🗺️ IntelliMap</h1>
+          <h1 className="text-lg font-heading font-bold">🗺️ IntelliMap</h1>
           {currentRepo && (
-            <span className="text-xs text-gray-400 truncate max-w-xs">
+            <span className="text-xs text-gray-400 truncate max-w-xs font-condensed">
               {currentRepo.split('/').pop()}
             </span>
           )}

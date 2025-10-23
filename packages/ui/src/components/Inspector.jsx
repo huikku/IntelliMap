@@ -6,7 +6,7 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
     return (
       <aside className="w-80 bg-gray-900 border-l border-gray-800 flex flex-col overflow-hidden">
         <div className="flex-1 p-4 overflow-y-auto">
-          <h2 className="text-sm font-bold text-gray-300 mb-4">DETAILS</h2>
+          <h2 className="text-sm font-heading font-bold text-gray-300 mb-4">DETAILS</h2>
           <p className="text-xs text-gray-500">Select a node to view details</p>
         </div>
       </aside>
@@ -21,12 +21,12 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
     <aside className="w-80 bg-gray-900 border-l border-gray-800 flex flex-col overflow-hidden">
       {/* Top section - Details */}
       <div className="flex-1 p-4 overflow-y-auto">
-        <h2 className="text-sm font-bold text-gray-300 mb-4">DETAILS</h2>
+        <h2 className="text-sm font-heading font-bold text-gray-300 mb-4">DETAILS</h2>
 
         <div className="space-y-3 text-sm">
           <div>
-            <label className="text-xs text-gray-400">Path</label>
-            <code className="block bg-gray-800 p-2 rounded text-xs mt-1 break-all">
+            <label className="text-xs text-gray-400 font-condensed">Path</label>
+            <code className="block bg-gray-800 p-2 rounded text-xs mt-1 break-all font-mono">
               {selectedNode.id}
             </code>
           </div>
@@ -69,8 +69,8 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
 
         {outgoing.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-xs font-bold text-gray-300 mb-2">OUTGOING ({outgoing.length})</h3>
-            <ul className="space-y-1 text-xs">
+            <h3 className="text-xs font-heading font-bold text-gray-300 mb-2">OUTGOING ({outgoing.length})</h3>
+            <ul className="space-y-1 text-xs font-mono">
               {outgoing.slice(0, 10).map(e => (
                 <li key={e.to} className="text-gray-400 truncate">
                   → {e.to.split('/').pop()}
@@ -85,7 +85,7 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
 
         {incoming.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-xs font-bold text-gray-300 mb-2">INCOMING ({incoming.length})</h3>
+            <h3 className="text-xs font-heading font-bold text-gray-300 mb-2">INCOMING ({incoming.length})</h3>
             <ul className="space-y-1 text-xs">
               {incoming.slice(0, 10).map(e => (
                 <li key={e.from} className="text-gray-400 truncate">

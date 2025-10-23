@@ -80,8 +80,8 @@ export default function FilePreview({ filePath, currentRepo }) {
     <div className="flex flex-col h-full overflow-hidden">
       {/* File info header */}
       <div className="px-2 py-1 bg-gray-800 border-b border-gray-700 text-xs text-gray-400">
-        <div className="truncate font-mono">{filePath}</div>
-        <div className="text-xs text-gray-500">{lineCount} lines</div>
+        <div className="truncate font-mono text-xs">{filePath}</div>
+        <div className="text-xs text-gray-500 font-condensed">{lineCount} lines</div>
       </div>
 
       {/* Code preview */}
