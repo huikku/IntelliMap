@@ -4,6 +4,9 @@ import fs from 'fs-extra';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setupSSE, notifyClients } from './reload.js';
+import { buildJSGraph } from '../cli/indexers/esbuildGraph.js';
+import { buildPythonGraph } from '../cli/indexers/pythonGraph.js';
+import { mergeGraphs } from '../cli/indexers/mergeGraphs.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,6 +29,96 @@ app.get('/graph', (req, res) => {
     res.json(graph);
   } catch (error) {
     res.status(500).json({ error: 'Failed to load graph', message: error.message });
+  }
+});
+
+// Browse directories
+app.get('/api/browse', (req, res) => {
+  try {
+    const homeDir = process.env.HOME || '/home/john';
+    const path = req.query.path || homeDir;
+    const fullPath = resolve(path);
+
+    // Security: prevent directory traversal outside home
+    if (!fullPath.startsWith(homeDir) && fullPath !== '/') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const items = fs.readdirSync(fullPath, { withFileTypes: true })
+      .filter(item => !item.name.startsWith('.'))
+      .map(item => ({
+        name: item.name,
+        path: join(fullPath, item.name),
+        isDirectory: item.isDirectory(),
+        isFile: item.isFile(),
+      }))
+      .sort((a, b) => {
+        if (a.isDirectory !== b.isDirectory) return b.isDirectory - a.isDirectory;
+        return a.name.localeCompare(b.name);
+      });
+
+    res.json({ path: fullPath, items });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to browse directory', message: error.message });
+  }
+});
+
+// Index a repository
+app.post('/api/index', express.json(), async (req, res) => {
+  try {
+    const { repoPath, entry, nodeEntry, pyRoot, pyExtraPath } = req.body;
+
+    if (!repoPath) {
+      return res.status(400).json({ error: 'repoPath is required' });
+    }
+
+    const homeDir = process.env.HOME || '/home/john';
+    const fullPath = resolve(repoPath);
+
+    // Security: prevent directory traversal outside home
+    if (!fullPath.startsWith(homeDir) && fullPath !== '/') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Change to repo directory
+    const originalCwd = process.cwd();
+    process.chdir(fullPath);
+
+    try {
+      const graphs = {};
+
+      // Build JS/TS graph
+      if (entry || nodeEntry) {
+        graphs.js = await buildJSGraph({ entry, nodeEntry });
+      }
+
+      // Build Python graph
+      if (pyRoot) {
+        graphs.py = await buildPythonGraph({ root: pyRoot, extraPath: pyExtraPath });
+      }
+
+      // Merge graphs
+      const merged = mergeGraphs(graphs);
+
+      // Write to repo's .intellimap directory
+      const intellimapDir = join(fullPath, '.intellimap');
+      fs.ensureDirSync(intellimapDir);
+      fs.writeFileSync(join(intellimapDir, 'graph.json'), JSON.stringify(merged, null, 2));
+
+      // Update current working directory for graph serving
+      process.chdir(fullPath);
+
+      res.json({
+        success: true,
+        message: 'Repository indexed successfully',
+        graph: merged,
+        repoPath: fullPath,
+      });
+    } finally {
+      process.chdir(originalCwd);
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to index repository', message: error.message });
   }
 });
 

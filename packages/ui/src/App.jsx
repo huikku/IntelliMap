@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
 import Inspector from './components/Inspector';
 import PlaneSwitcher from './components/PlaneSwitcher';
+import RepoLoader from './components/RepoLoader';
 
 export default function App() {
   const [graph, setGraph] = useState(null);
@@ -12,6 +13,8 @@ export default function App() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [plane, setPlane] = useState('static');
   const [layout, setLayout] = useState('elk');
+  const [currentRepo, setCurrentRepo] = useState(null);
+  const [showRepoLoader, setShowRepoLoader] = useState(false);
   const [filters, setFilters] = useState({
     language: 'all',
     env: 'all',
@@ -94,12 +97,33 @@ export default function App() {
     );
   }
 
+  const handleRepoLoaded = (newGraph, repoPath) => {
+    setGraph(newGraph);
+    setCurrentRepo(repoPath);
+    setSelectedNode(null);
+    setPlane('static');
+  };
+
   return (
     <div className="flex flex-col h-screen bg-dark-900 text-white">
       {/* Header */}
       <header className="h-12 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4">
-        <h1 className="text-lg font-bold">🗺️ IntelliMap</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-lg font-bold">🗺️ IntelliMap</h1>
+          {currentRepo && (
+            <span className="text-xs text-gray-400 truncate max-w-xs">
+              {currentRepo.split('/').pop()}
+            </span>
+          )}
+        </div>
         <div className="flex gap-2">
+          <button
+            onClick={() => setShowRepoLoader(true)}
+            className="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded text-sm"
+            title="Open repository"
+          >
+            📁 Open Repo
+          </button>
           <button
             onClick={fetchGraph}
             className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
@@ -110,6 +134,13 @@ export default function App() {
           <PlaneSwitcher plane={plane} setPlane={setPlane} />
         </div>
       </header>
+
+      {showRepoLoader && (
+        <RepoLoader
+          onRepoLoaded={handleRepoLoaded}
+          onClose={() => setShowRepoLoader(false)}
+        />
+      )}
 
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar */}
