@@ -35,7 +35,10 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
       // Zoom to node
       cy.animate({
         zoom: 2,
-        center: { ebb: nodeElement },
+        center: {
+          x: nodeElement.position().x,
+          y: nodeElement.position().y,
+        },
       }, {
         duration: 500,
       });

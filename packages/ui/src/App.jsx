@@ -41,9 +41,13 @@ export default function App() {
         const nodeElement = cy.getElementById(selectedNodeRef.current.id);
 
         if (nodeElement.length > 0) {
+          const pos = nodeElement.renderedPosition();
           cy.animate({
             zoom: 2,
-            center: { ebb: nodeElement },
+            center: {
+              x: nodeElement.position().x,
+              y: nodeElement.position().y,
+            },
           }, {
             duration: 500,
           });
