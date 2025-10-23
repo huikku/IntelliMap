@@ -68,6 +68,10 @@ def build_python_graph(root_path, extra_path=None):
         if node_id not in node_map:
             node_map[node_id] = True
             folder = rel_path.split('/')[0] if '/' in rel_path else rel_path
+
+            # Get file size in bytes
+            size = py_file.stat().st_size
+
             nodes.append({
                 "id": node_id,
                 "lang": "py",
@@ -75,6 +79,7 @@ def build_python_graph(root_path, extra_path=None):
                 "pkg": "backend",
                 "folder": folder,
                 "changed": False,
+                "size": size,
             })
 
         # Extract imports

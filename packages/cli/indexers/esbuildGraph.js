@@ -24,6 +24,16 @@ function scanBackendFiles(backendDir) {
         if (!nodeMap.has(file)) {
           nodeMap.set(file, true);
           const isTS = file.endsWith('.ts');
+
+          // Get file size in bytes
+          let size = 0;
+          try {
+            const stats = fs.statSync(file);
+            size = stats.size;
+          } catch (e) {
+            // If file doesn't exist, size stays 0
+          }
+
           nodes.push({
             id: file,
             lang: isTS ? 'ts' : 'js',
@@ -31,6 +41,7 @@ function scanBackendFiles(backendDir) {
             pkg: 'root',
             folder: file.split('/')[0],
             changed: false,
+            size: size,
           });
         }
       }
@@ -234,6 +245,15 @@ export async function buildJSGraph(options) {
           isBackend = inputPath.startsWith(nodeEntryDir + '/') || inputPath === nodeEntryDir || inputPath.startsWith('./');
         }
 
+        // Get file size in bytes
+        let size = 0;
+        try {
+          const stats = fs.statSync(inputPath);
+          size = stats.size;
+        } catch (e) {
+          // If file doesn't exist, size stays 0
+        }
+
         nodes.push({
           id: nodeId,
           lang: isTS ? 'ts' : 'js',
@@ -241,6 +261,7 @@ export async function buildJSGraph(options) {
           pkg: 'root',
           folder: inputPath.split('/')[0],
           changed: false,
+          size: size,
         });
       }
 

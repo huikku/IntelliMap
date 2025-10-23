@@ -242,6 +242,38 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           return size;
         },
       }).update();
+    } else if (sizeMode === 'filesize') {
+      // Size by file size
+      // Find min and max file sizes for normalization
+      let minSize = Infinity;
+      let maxSize = 0;
+      cyInstance.nodes().forEach(n => {
+        const fileSize = n.data('fileSize') || 0;
+        if (fileSize > 0) {
+          minSize = Math.min(minSize, fileSize);
+          maxSize = Math.max(maxSize, fileSize);
+        }
+      });
+
+      if (minSize === Infinity) minSize = 0;
+      const range = maxSize - minSize || 1;
+
+      cyInstance.style().selector('node').style({
+        'width': node => {
+          if (node.data('isCluster')) return 'label';
+          const fileSize = node.data('fileSize') || 0;
+          const normalized = (fileSize - minSize) / range;
+          const size = Math.max(30, Math.min(120, 30 + (normalized * 90))) * exaggeration;
+          return size;
+        },
+        'height': node => {
+          if (node.data('isCluster')) return 'label';
+          const fileSize = node.data('fileSize') || 0;
+          const normalized = (fileSize - minSize) / range;
+          const size = Math.max(30, Math.min(120, 30 + (normalized * 90))) * exaggeration;
+          return size;
+        },
+      }).update();
     }
 
     // Run a layout to prevent overlaps
@@ -339,6 +371,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         >
           <option value="uniform">📏 Uniform</option>
           <option value="degree">🔗 By Degree</option>
+          <option value="filesize">📁 By File Size</option>
         </select>
 
         <input

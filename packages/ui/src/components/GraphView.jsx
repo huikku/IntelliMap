@@ -108,6 +108,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             nodeType,
             folder: n.folder,
             pkg: n.pkg,
+            fileSize: n.size || 0,
             parent: clustering ? n.folder : undefined,
           },
         };
