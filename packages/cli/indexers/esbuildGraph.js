@@ -81,6 +81,15 @@ export async function buildJSGraph(options) {
 
     // Build with esbuild to get metafile
     console.log('🔨 Building with esbuild, entryPoints:', entryPoints);
+
+    // Determine if we're building backend or frontend
+    const hasBackendEntry = entryPoints.some(ep => ep.endsWith('.cjs') || ep.endsWith('.mjs'));
+    const hasFrontendEntry = entryPoints.some(ep => !ep.endsWith('.cjs') && !ep.endsWith('.mjs'));
+
+    // Use appropriate platform and format
+    const platform = hasBackendEntry && !hasFrontendEntry ? 'node' : 'browser';
+    const format = hasBackendEntry && !hasFrontendEntry ? 'cjs' : 'esm';
+
     const result = await esbuild.build({
       entryPoints,
       bundle: true,
@@ -88,18 +97,20 @@ export async function buildJSGraph(options) {
       write: false,
       external: [],
       logLevel: 'error',
-      platform: 'browser',
+      platform,
       target: 'es2020',
-      format: 'esm',
+      format,
       jsx: 'automatic',
       jsxImportSource: 'react',
       absWorkingDir: process.cwd(),
-      resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
+      resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
       loader: {
         '.ts': 'ts',
         '.tsx': 'tsx',
         '.js': 'js',
         '.jsx': 'jsx',
+        '.cjs': 'js',
+        '.mjs': 'js',
         '.svg': 'dataurl',
         '.png': 'dataurl',
         '.jpg': 'dataurl',
