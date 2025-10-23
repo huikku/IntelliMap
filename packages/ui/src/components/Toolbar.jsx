@@ -6,6 +6,7 @@ import fcose from 'cytoscape-fcose';
 import euler from 'cytoscape-euler';
 import cola from 'cytoscape-cola';
 import LayoutSpinner from './LayoutSpinner';
+import LayoutProgressModal from './LayoutProgressModal';
 
 // Register layout plugins for background instance
 cytoscape.use(elk);
@@ -18,11 +19,20 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   const [isLayouting, setIsLayouting] = useState(false);
   const [sizing, setSizing] = useState('uniform');
   const [sizeExaggeration, setSizeExaggeration] = useState(1);
+  const [progressModal, setProgressModal] = useState({
+    isVisible: false,
+    layoutName: '',
+    progress: 0,
+    message: '',
+    details: '',
+  });
   const layoutCacheRef = useRef({});
   const bgLayoutTimeoutRef = useRef(null);
   const bgLayoutIntervalRef = useRef(null);
   const bgCyRef = useRef(null);
   const lastGraphIdRef = useRef(null);
+  const layoutStartTimeRef = useRef(null);
+  const layoutStatsRef = useRef({});
 
   // Precompute layouts in background using hidden Cytoscape instance
   useEffect(() => {
@@ -70,28 +80,52 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
       const layoutsToPrecompute = ['dagre', 'dagreDown', 'fcose', 'euler', 'cola', 'elkDown', 'elkTree', 'grid'];
       let index = 0;
+      layoutStatsRef.current = {};
 
       bgLayoutIntervalRef.current = setInterval(() => {
         if (index >= layoutsToPrecompute.length) {
           clearInterval(bgLayoutIntervalRef.current);
           console.log('✅ All layouts precomputed');
+          setProgressModal(prev => ({ ...prev, isVisible: false }));
           return;
         }
 
         const layoutName = layoutsToPrecompute[index];
         if (!layoutCacheRef.current[layoutName]) {
+          layoutStartTimeRef.current = performance.now();
           console.log(`🔄 Precomputing layout: ${layoutName}`);
+
+          const nodeCount = bgCyRef.current.nodes().length;
+          const edgeCount = bgCyRef.current.edges().length;
+
+          setProgressModal(prev => ({
+            ...prev,
+            isVisible: true,
+            layoutName: layoutName,
+            progress: (index / layoutsToPrecompute.length),
+            message: `Computing ${layoutName} layout...`,
+            details: `Nodes: ${nodeCount} | Edges: ${edgeCount}\nQueue: ${index + 1}/${layoutsToPrecompute.length}`,
+          }));
+
           const layoutOptions = getLayoutOptions(layoutName, bgCyRef.current);
           const bgLayout = bgCyRef.current.layout(layoutOptions);
 
           bgLayout.on('layoutstop', () => {
+            const elapsed = performance.now() - layoutStartTimeRef.current;
+            layoutStatsRef.current[layoutName] = elapsed;
+
             // Save the positions
             const positions = {};
             bgCyRef.current.nodes().forEach(n => {
               positions[n.id()] = { x: n.position('x'), y: n.position('y') };
             });
             layoutCacheRef.current[layoutName] = positions;
-            console.log(`✓ Cached layout: ${layoutName}`);
+            console.log(`✓ Cached layout: ${layoutName} (${elapsed.toFixed(0)}ms)`);
+
+            setProgressModal(prev => ({
+              ...prev,
+              message: `✓ Completed ${layoutName} (${elapsed.toFixed(0)}ms)`,
+            }));
           });
 
           bgLayout.run();
@@ -301,17 +335,45 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       setIsLayouting(false);
     } else {
       console.log(`🔄 Computing layout: ${newLayout}`);
+      layoutStartTimeRef.current = performance.now();
+
+      const nodeCount = cy.nodes().length;
+      const edgeCount = cy.edges().length;
+
+      setProgressModal(prev => ({
+        ...prev,
+        isVisible: true,
+        layoutName: newLayout,
+        progress: 0.5,
+        message: `Computing ${newLayout} layout...`,
+        details: `Nodes: ${nodeCount} | Edges: ${edgeCount}\nThis layout is being computed on-demand`,
+      }));
+
       const layoutOptions = getLayoutOptions(newLayout, cy);
       const layout = cy.layout(layoutOptions);
 
       layout.on('layoutstop', () => {
+        const elapsed = performance.now() - layoutStartTimeRef.current;
+
         // Cache the positions
         const positions = {};
         cy.nodes().forEach(n => {
           positions[n.id()] = { x: n.position('x'), y: n.position('y') };
         });
         layoutCacheRef.current[newLayout] = positions;
-        setIsLayouting(false);
+
+        console.log(`✓ Layout computed: ${newLayout} (${elapsed.toFixed(0)}ms)`);
+
+        setProgressModal(prev => ({
+          ...prev,
+          message: `✓ Completed ${newLayout} (${elapsed.toFixed(0)}ms)`,
+          progress: 1,
+        }));
+
+        setTimeout(() => {
+          setProgressModal(prev => ({ ...prev, isVisible: false }));
+          setIsLayouting(false);
+        }, 500);
       });
 
       layout.run();
@@ -404,6 +466,13 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       </div>
 
       <LayoutSpinner isVisible={isLayouting} />
+      <LayoutProgressModal
+        isVisible={progressModal.isVisible}
+        layoutName={progressModal.layoutName}
+        progress={progressModal.progress}
+        message={progressModal.message}
+        details={progressModal.details}
+      />
     </div>
   );
 }
