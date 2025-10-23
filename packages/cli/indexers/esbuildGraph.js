@@ -198,8 +198,10 @@ export async function buildJSGraph(options) {
         console.warn('⚠️  Backend build failed:', error.message);
         // Try to extract partial metafile from error
         if (error.metafile && error.metafile.inputs) {
-          console.log('📊 Extracting partial backend metafile from error');
+          console.log(`📊 Extracting partial backend metafile from error (${Object.keys(error.metafile.inputs).length} files)`);
           metafile.inputs = { ...metafile.inputs, ...error.metafile.inputs };
+        } else {
+          console.warn('⚠️  No partial metafile available in error');
         }
       }
     }
