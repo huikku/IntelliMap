@@ -1,4 +1,4 @@
-export default function Toolbar({ cy, layout, setLayout }) {
+export default function Toolbar({ cy, layout, setLayout, clustering, setClustering }) {
   const handleFit = () => {
     if (cy) cy.fit();
   };
@@ -78,6 +78,18 @@ export default function Toolbar({ cy, layout, setLayout }) {
           <option value="grid">📋 Grid Layout</option>
         </select>
       </div>
+
+      <button
+        onClick={() => setClustering(!clustering)}
+        className={`px-3 py-1 rounded text-sm transition ${
+          clustering
+            ? 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+        }`}
+        title="Toggle folder clustering"
+      >
+        📦 Cluster
+      </button>
 
       <div className="ml-auto text-xs text-gray-500">
         ✓ Ready

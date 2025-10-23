@@ -13,6 +13,7 @@ export default function App() {
   const [selectedNode, setSelectedNode] = useState(null);
   const [plane, setPlane] = useState('static');
   const [layout, setLayout] = useState('elk');
+  const [clustering, setClustering] = useState(false);
   const [currentRepo, setCurrentRepo] = useState(null);
   const [showRepoLoader, setShowRepoLoader] = useState(false);
   const [filters, setFilters] = useState({
@@ -152,7 +153,7 @@ export default function App() {
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col">
-          <Toolbar cy={cyRef.current} layout={layout} setLayout={setLayout} />
+          <Toolbar cy={cyRef.current} layout={layout} setLayout={setLayout} clustering={clustering} setClustering={setClustering} />
           <GraphView
             graph={graph}
             plane={plane}
@@ -160,6 +161,7 @@ export default function App() {
             selectedNode={selectedNode}
             setSelectedNode={setSelectedNode}
             cyRef={cyRef}
+            clustering={clustering}
           />
         </main>
 

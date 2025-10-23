@@ -47,7 +47,7 @@ function getNodeColor(lang, nodeType, changed) {
   return langColors[nodeType] || langColors.default;
 }
 
-export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef }) {
+export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef, clustering = false }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     filteredEdges = filteredEdges.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));
 
     // Build Cytoscape elements with enhanced metadata
-    const elements = [
+    let elements = [
       ...filteredNodes.map(n => {
         const filename = n.id.split('/').pop();
         const nodeType = getNodeType(filename);
@@ -98,6 +98,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             nodeType,
             folder: n.folder,
             pkg: n.pkg,
+            parent: clustering ? n.folder : undefined,
           },
         };
       }),
@@ -110,6 +111,19 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
       })),
     ];
 
+    // Add cluster nodes if clustering is enabled
+    if (clustering) {
+      const folders = new Set(filteredNodes.map(n => n.folder));
+      const clusterElements = Array.from(folders).map(folder => ({
+        data: {
+          id: folder,
+          label: folder,
+          isCluster: true,
+        },
+      }));
+      elements = [...clusterElements, ...elements];
+    }
+
     // Initialize Cytoscape
     const cy = cytoscape({
       container: containerRef.current,
@@ -118,23 +132,38 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         {
           selector: 'node',
           style: {
-            'background-color': node => getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed')),
-            'shape': node => getNodeShape(node.data('nodeType')),
+            'background-color': node => {
+              if (node.data('isCluster')) return '#1f2937';
+              return getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed'));
+            },
+            'shape': node => {
+              if (node.data('isCluster')) return 'rectangle';
+              return getNodeShape(node.data('nodeType'));
+            },
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'font-size': 10,
+            'font-size': node => (node.data('isCluster') ? 12 : 10),
+            'font-weight': node => (node.data('isCluster') ? 'bold' : 'normal'),
             'color': '#fff',
-            'border-width': node => (node.data('changed') ? 3 : 1),
-            'border-color': node => (node.data('changed') ? '#fca5a5' : '#333'),
-            'width': 45,
-            'height': 45,
-            'padding': 5,
+            'border-width': node => {
+              if (node.data('isCluster')) return 2;
+              return node.data('changed') ? 3 : 1;
+            },
+            'border-color': node => {
+              if (node.data('isCluster')) return '#4b5563';
+              return node.data('changed') ? '#fca5a5' : '#333';
+            },
+            'border-style': node => (node.data('isCluster') ? 'dashed' : 'solid'),
+            'width': node => (node.data('isCluster') ? 'label' : 45),
+            'height': node => (node.data('isCluster') ? 'label' : 45),
+            'padding': node => (node.data('isCluster') ? 15 : 5),
             'text-wrap': 'wrap',
             'text-max-width': 40,
             'text-background-color': '#000',
             'text-background-opacity': 0.7,
             'text-background-padding': 2,
+            'compound-sizing-wrt-labels': 'include',
           },
         },
         {
@@ -190,7 +219,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     return () => {
       cy.destroy();
     };
-  }, [graph, plane, filters, setSelectedNode]);
+  }, [graph, plane, filters, setSelectedNode, clustering]);
 
   return <div ref={containerRef} className="w-full h-full bg-dark-900" />;
 }
