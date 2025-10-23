@@ -82,90 +82,128 @@ export async function buildJSGraph(options) {
     // Build with esbuild to get metafile
     console.log('🔨 Building with esbuild, entryPoints:', entryPoints);
 
-    // Determine if we're building backend or frontend
-    const hasBackendEntry = entryPoints.some(ep => ep.endsWith('.cjs') || ep.endsWith('.mjs'));
-    const hasFrontendEntry = entryPoints.some(ep => !ep.endsWith('.cjs') && !ep.endsWith('.mjs'));
+    // Build frontend and backend separately to avoid conflicts
+    const frontendEntries = entryPoints.filter(ep => !ep.endsWith('.cjs') && !ep.endsWith('.mjs'));
+    const backendEntries = entryPoints.filter(ep => ep.endsWith('.cjs') || ep.endsWith('.mjs'));
 
-    // When we have both frontend and backend, mark Node.js built-ins as external
-    // This allows esbuild to analyze both without trying to bundle Node modules
-    const nodeBuiltins = [
-      'fs', 'path', 'crypto', 'events', 'stream', 'util', 'os', 'http', 'https',
-      'net', 'url', 'querystring', 'zlib', 'buffer', 'child_process', 'cluster',
-      'dgram', 'dns', 'domain', 'http2', 'inspector', 'module', 'perf_hooks',
-      'process', 'punycode', 'readline', 'repl', 'tls', 'tty', 'v8', 'vm',
-      'worker_threads', 'assert', 'async_hooks', 'console', 'constants', 'debugger',
-      'errors', 'fs/promises', 'node:fs', 'node:path', 'node:crypto', 'node:events',
-      'node:stream', 'node:util', 'node:os', 'node:http', 'node:https', 'node:net',
-      'node:url', 'node:querystring', 'node:zlib', 'node:buffer', 'node:child_process',
-      'node:cluster', 'node:dgram', 'node:dns', 'node:domain', 'node:http2',
-      'node:inspector', 'node:module', 'node:perf_hooks', 'node:process', 'node:punycode',
-      'node:readline', 'node:repl', 'node:tls', 'node:tty', 'node:v8', 'node:vm',
-      'node:worker_threads', 'node:assert', 'node:async_hooks', 'node:console',
-      'node:constants', 'node:debugger', 'node:errors', 'node:fs/promises',
-      'node:string_decoder',
-    ];
+    let metafile = { inputs: {} };
 
-    const external = hasFrontendEntry && hasBackendEntry ? nodeBuiltins : [];
-
-    let result;
-    try {
-      result = await esbuild.build({
-        entryPoints,
-        bundle: true,
-        metafile: true,
-        write: false,
-        outdir: '/tmp/intellimap-esbuild', // Required when multiple entry points
-        external,
-        logLevel: 'silent', // Suppress errors for external modules
-        platform: 'browser', // Use browser for analysis, external handles Node modules
-        target: 'es2020',
-        format: 'esm',
-        jsx: 'automatic',
-        jsxImportSource: 'react',
-        absWorkingDir: process.cwd(),
-        resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
-        loader: {
-          '.ts': 'ts',
-          '.tsx': 'tsx',
-          '.js': 'js',
-          '.jsx': 'jsx',
-          '.cjs': 'js',
-          '.mjs': 'js',
-          '.svg': 'dataurl',
-          '.png': 'dataurl',
-          '.jpg': 'dataurl',
-          '.jpeg': 'dataurl',
-          '.gif': 'dataurl',
-          '.webp': 'dataurl',
-          '.mp4': 'dataurl',
-          '.webm': 'dataurl',
-          '.mp3': 'dataurl',
-          '.wav': 'dataurl',
-          '.woff': 'dataurl',
-          '.woff2': 'dataurl',
-          '.ttf': 'dataurl',
-          '.eot': 'dataurl',
-        },
-      });
-    } catch (buildError) {
-      // If build fails, try to extract what we can from the metafile
-      // esbuild still provides partial results even on error
-      if (buildError.errors && buildError.errors.length > 0) {
-        console.warn(`⚠️  esbuild had ${buildError.errors.length} errors, but continuing with partial results`);
-        // The error object has the metafile in the same structure
-        result = { metafile: buildError.metafile };
-      } else {
-        throw buildError;
+    // Build frontend if present
+    if (frontendEntries.length > 0) {
+      try {
+        console.log('🔨 Building frontend with esbuild');
+        const frontendResult = await esbuild.build({
+          entryPoints: frontendEntries,
+          bundle: true,
+          metafile: true,
+          write: false,
+          outdir: '/tmp/intellimap-esbuild-frontend',
+          external: [],
+          logLevel: 'silent',
+          platform: 'browser',
+          target: 'es2020',
+          format: 'esm',
+          jsx: 'automatic',
+          jsxImportSource: 'react',
+          absWorkingDir: process.cwd(),
+          resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
+          loader: {
+            '.ts': 'ts',
+            '.tsx': 'tsx',
+            '.js': 'js',
+            '.jsx': 'jsx',
+            '.svg': 'dataurl',
+            '.png': 'dataurl',
+            '.jpg': 'dataurl',
+            '.jpeg': 'dataurl',
+            '.gif': 'dataurl',
+            '.webp': 'dataurl',
+            '.mp4': 'dataurl',
+            '.webm': 'dataurl',
+            '.mp3': 'dataurl',
+            '.wav': 'dataurl',
+            '.woff': 'dataurl',
+            '.woff2': 'dataurl',
+            '.ttf': 'dataurl',
+            '.eot': 'dataurl',
+          },
+        });
+        metafile.inputs = { ...metafile.inputs, ...frontendResult.metafile.inputs };
+      } catch (error) {
+        console.warn('⚠️  Frontend build failed:', error.message);
       }
     }
 
-    // Handle case where metafile might not exist
-    if (!result || !result.metafile) {
-      console.warn('⚠️  No metafile generated, returning empty graph');
-      return { nodes: [], edges: [] };
+    // Build backend if present
+    if (backendEntries.length > 0) {
+      try {
+        console.log('🔨 Building backend with esbuild');
+        const nodeBuiltins = [
+          'fs', 'path', 'crypto', 'events', 'stream', 'util', 'os', 'http', 'https',
+          'net', 'url', 'querystring', 'zlib', 'buffer', 'child_process', 'cluster',
+          'dgram', 'dns', 'domain', 'http2', 'inspector', 'module', 'perf_hooks',
+          'process', 'punycode', 'readline', 'repl', 'tls', 'tty', 'v8', 'vm',
+          'worker_threads', 'assert', 'async_hooks', 'console', 'constants', 'debugger',
+          'errors', 'fs/promises', 'node:fs', 'node:path', 'node:crypto', 'node:events',
+          'node:stream', 'node:util', 'node:os', 'node:http', 'node:https', 'node:net',
+          'node:url', 'node:querystring', 'node:zlib', 'node:buffer', 'node:child_process',
+          'node:cluster', 'node:dgram', 'node:dns', 'node:domain', 'node:http2',
+          'node:inspector', 'node:module', 'node:perf_hooks', 'node:process', 'node:punycode',
+          'node:readline', 'node:repl', 'node:tls', 'node:tty', 'node:v8', 'node:vm',
+          'node:worker_threads', 'node:assert', 'node:async_hooks', 'node:console',
+          'node:constants', 'node:debugger', 'node:errors', 'node:fs/promises',
+          'node:string_decoder',
+        ];
+
+        const backendResult = await esbuild.build({
+          entryPoints: backendEntries,
+          bundle: true,
+          metafile: true,
+          write: false,
+          outdir: '/tmp/intellimap-esbuild-backend',
+          external: nodeBuiltins,
+          logLevel: 'silent',
+          platform: 'browser', // Still use browser to avoid bundling node_modules
+          target: 'es2020',
+          format: 'esm',
+          jsx: 'automatic',
+          jsxImportSource: 'react',
+          absWorkingDir: process.cwd(),
+          resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
+          loader: {
+            '.ts': 'ts',
+            '.tsx': 'tsx',
+            '.js': 'js',
+            '.jsx': 'jsx',
+            '.cjs': 'js',
+            '.mjs': 'js',
+            '.svg': 'dataurl',
+            '.png': 'dataurl',
+            '.jpg': 'dataurl',
+            '.jpeg': 'dataurl',
+            '.gif': 'dataurl',
+            '.webp': 'dataurl',
+            '.mp4': 'dataurl',
+            '.webm': 'dataurl',
+            '.mp3': 'dataurl',
+            '.wav': 'dataurl',
+            '.woff': 'dataurl',
+            '.woff2': 'dataurl',
+            '.ttf': 'dataurl',
+            '.eot': 'dataurl',
+          },
+        });
+        metafile.inputs = { ...metafile.inputs, ...backendResult.metafile.inputs };
+      } catch (error) {
+        console.warn('⚠️  Backend build failed:', error.message);
+      }
     }
 
-    const metafile = result.metafile;
+    // If no metafile was generated, return empty graph
+    if (!metafile || !metafile.inputs || Object.keys(metafile.inputs).length === 0) {
+      console.warn('⚠️  No files analyzed, returning empty graph');
+      return { nodes: [], edges: [] };
+    }
 
     // Parse inputs from metafile
     for (const [inputPath, inputData] of Object.entries(metafile.inputs)) {
