@@ -41,8 +41,8 @@ export default function App() {
         const nodeElement = cy.getElementById(selectedNodeRef.current.id);
 
         if (nodeElement.length > 0) {
-          // First center on the node, then zoom
-          cy.center(nodeElement);
+          // Use fit to properly zoom and center on node at any zoom level
+          cy.fit(nodeElement, 50); // 50px padding
           cy.animate({
             zoom: 2,
           }, {

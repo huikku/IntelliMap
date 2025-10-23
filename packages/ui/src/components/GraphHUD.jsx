@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function GraphHUD({ cyRef, graph }) {
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [nodeCount, setNodeCount] = useState(0);
+  const updateIntervalRef = useRef(null);
 
   useEffect(() => {
-    if (!cyRef.current) return;
+    if (!cyRef?.current) return;
 
     const cy = cyRef.current;
 
@@ -18,14 +19,20 @@ export default function GraphHUD({ cyRef, graph }) {
 
     // Listen to zoom and pan events
     cy.on('zoom pan', updateHUD);
-    
+
+    // Also poll for updates in case events don't fire
+    updateIntervalRef.current = setInterval(updateHUD, 100);
+
     // Initial update
     updateHUD();
 
     return () => {
       cy.off('zoom pan', updateHUD);
+      if (updateIntervalRef.current) {
+        clearInterval(updateIntervalRef.current);
+      }
     };
-  }, [cyRef]);
+  }, [cyRef?.current]);
 
   useEffect(() => {
     if (graph?.nodes) {
