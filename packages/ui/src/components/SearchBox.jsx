@@ -32,13 +32,10 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
       cy.elements().unselect();
       nodeElement.select();
 
-      // Zoom to node
+      // Center and zoom to node
+      cy.center(nodeElement);
       cy.animate({
         zoom: 2,
-        center: {
-          x: nodeElement.position().x,
-          y: nodeElement.position().y,
-        },
       }, {
         duration: 500,
       });
