@@ -95,6 +95,7 @@ export async function buildJSGraph(options) {
       bundle: true,
       metafile: true,
       write: false,
+      outdir: '/tmp/intellimap-esbuild', // Required when multiple entry points
       external: [],
       logLevel: 'error',
       platform,
