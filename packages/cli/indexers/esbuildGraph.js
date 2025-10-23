@@ -155,56 +155,61 @@ export async function buildJSGraph(options) {
           'node:string_decoder',
         ];
 
-        const backendResult = await esbuild.build({
-          entryPoints: backendEntries,
-          bundle: true,
-          metafile: true,
-          write: false,
-          outdir: '/tmp/intellimap-esbuild-backend',
-          external: nodeBuiltins,
-          logLevel: 'error', // Only show errors, not warnings
-          platform: 'browser', // Use browser to avoid bundling node_modules
-          target: 'es2020',
-          format: 'esm',
-          jsx: 'automatic',
-          jsxImportSource: 'react',
-          absWorkingDir: process.cwd(),
-          resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
-          loader: {
-            '.ts': 'ts',
-            '.tsx': 'tsx',
-            '.js': 'js',
-            '.jsx': 'jsx',
-            '.cjs': 'js',
-            '.mjs': 'js',
-            '.svg': 'dataurl',
-            '.png': 'dataurl',
-            '.jpg': 'dataurl',
-            '.jpeg': 'dataurl',
-            '.gif': 'dataurl',
-            '.webp': 'dataurl',
-            '.mp4': 'dataurl',
-            '.webm': 'dataurl',
-            '.mp3': 'dataurl',
-            '.wav': 'dataurl',
-            '.woff': 'dataurl',
-            '.woff2': 'dataurl',
-            '.ttf': 'dataurl',
-            '.eot': 'dataurl',
-          },
-        });
-        console.log(`📊 Backend metafile has ${Object.keys(backendResult.metafile.inputs).length} files`);
-        metafile.inputs = { ...metafile.inputs, ...backendResult.metafile.inputs };
-      } catch (error) {
-        console.warn('⚠️  Backend build failed:', error.message);
-        // Try to extract partial metafile from error
-        if (error.metafile && error.metafile.inputs) {
-          console.log(`📊 Extracting partial backend metafile from error (${Object.keys(error.metafile.inputs).length} files)`);
-          metafile.inputs = { ...metafile.inputs, ...error.metafile.inputs };
-        } else {
-          console.warn('⚠️  No partial metafile available in error');
+        let backendResult;
+        try {
+          backendResult = await esbuild.build({
+            entryPoints: backendEntries,
+            bundle: true,
+            metafile: true,
+            write: false,
+            outdir: '/tmp/intellimap-esbuild-backend',
+            external: nodeBuiltins,
+            logLevel: 'silent', // Suppress all messages
+            platform: 'browser', // Use browser to avoid bundling node_modules
+            target: 'es2020',
+            format: 'esm',
+            jsx: 'automatic',
+            jsxImportSource: 'react',
+            absWorkingDir: process.cwd(),
+            resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
+            loader: {
+              '.ts': 'ts',
+              '.tsx': 'tsx',
+              '.js': 'js',
+              '.jsx': 'jsx',
+              '.cjs': 'js',
+              '.mjs': 'js',
+              '.svg': 'dataurl',
+              '.png': 'dataurl',
+              '.jpg': 'dataurl',
+              '.jpeg': 'dataurl',
+              '.gif': 'dataurl',
+              '.webp': 'dataurl',
+              '.mp4': 'dataurl',
+              '.webm': 'dataurl',
+              '.mp3': 'dataurl',
+              '.wav': 'dataurl',
+              '.woff': 'dataurl',
+              '.woff2': 'dataurl',
+              '.ttf': 'dataurl',
+              '.eot': 'dataurl',
+            },
+          });
+        } catch (error) {
+          // esbuild throws even with logLevel: silent if there are errors
+          // Try to get the metafile from the error object
+          if (error.metafile) {
+            console.log('📊 Backend build had errors, using partial metafile');
+            backendResult = error;
+          } else {
+            throw error;
+          }
         }
-      }
+
+        if (backendResult?.metafile?.inputs) {
+          console.log(`📊 Backend metafile has ${Object.keys(backendResult.metafile.inputs).length} files`);
+          metafile.inputs = { ...metafile.inputs, ...backendResult.metafile.inputs };
+        }
     }
 
     // If no metafile was generated, return empty graph
