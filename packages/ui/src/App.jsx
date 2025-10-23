@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import GraphView from './components/GraphView';
 import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
@@ -11,12 +11,14 @@ export default function App() {
   const [error, setError] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
   const [plane, setPlane] = useState('static');
+  const [layout, setLayout] = useState('elk');
   const [filters, setFilters] = useState({
     language: 'all',
     env: 'all',
     showChanged: false,
     collapseByFolder: true,
   });
+  const cyRef = useRef(null);
 
   useEffect(() => {
     fetchGraph();
@@ -89,13 +91,14 @@ export default function App() {
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col">
-          <Toolbar />
+          <Toolbar cy={cyRef.current} layout={layout} setLayout={setLayout} />
           <GraphView
             graph={graph}
             plane={plane}
             filters={filters}
             selectedNode={selectedNode}
             setSelectedNode={setSelectedNode}
+            cyRef={cyRef}
           />
         </main>
 

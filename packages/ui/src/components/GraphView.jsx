@@ -4,9 +4,8 @@ import elk from 'cytoscape-elk';
 
 cytoscape.use(elk);
 
-export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode }) {
+export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef }) {
   const containerRef = useRef(null);
-  const cyRef = useRef(null);
 
   useEffect(() => {
     if (!graph || !containerRef.current) return;
@@ -66,29 +65,48 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           style: {
             'background-color': node => {
               const lang = node.data('lang');
-              const env = node.data('env');
               if (lang === 'py') return '#3b82f6';
-              if (env === 'backend') return '#8b5cf6';
+              if (lang === 'ts') return '#ef5350';
               return '#10b981';
             },
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'font-size': 10,
+            'font-size': 11,
             'color': '#fff',
-            'border-width': node => (node.data('changed') ? 2 : 0),
-            'border-color': '#ef4444',
-            'width': 30,
-            'height': 30,
+            'border-width': node => (node.data('changed') ? 3 : 1),
+            'border-color': node => (node.data('changed') ? '#ef4444' : '#444'),
+            'width': 40,
+            'height': 40,
+            'padding': 5,
+            'text-wrap': 'wrap',
+            'text-max-width': 35,
+          },
+        },
+        {
+          selector: 'node:selected',
+          style: {
+            'border-width': 3,
+            'border-color': '#fbbf24',
+            'box-shadow': '0 0 10px rgba(251, 191, 36, 0.5)',
           },
         },
         {
           selector: 'edge',
           style: {
-            'line-color': '#666',
-            'target-arrow-color': '#666',
+            'line-color': '#555',
+            'target-arrow-color': '#555',
             'target-arrow-shape': 'triangle',
-            'width': 1,
+            'width': 1.5,
+            'curve-style': 'bezier',
+          },
+        },
+        {
+          selector: 'edge:selected',
+          style: {
+            'line-color': '#fbbf24',
+            'target-arrow-color': '#fbbf24',
+            'width': 2.5,
           },
         },
       ],
@@ -97,6 +115,8 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         elk: {
           algorithm: 'layered',
           'elk.direction': 'RIGHT',
+          'elk.spacing.nodeNode': 50,
+          'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
         },
       },
     });
