@@ -1,5 +1,14 @@
 import { useState } from 'react';
 
+const QUICK_PATHS = [
+  { name: '📁 Home', path: process.env.HOME || '/home/john' },
+  { name: '💻 Root', path: '/' },
+  { name: '📂 Desktop', path: `${process.env.HOME || '/home/john'}/Desktop` },
+  { name: '📥 Downloads', path: `${process.env.HOME || '/home/john'}/Downloads` },
+  { name: '🖥️ /opt', path: '/opt' },
+  { name: '📦 /usr', path: '/usr' },
+];
+
 export default function RepoLoader({ onRepoLoaded, onClose }) {
   const [currentPath, setCurrentPath] = useState(null);
   const [items, setItems] = useState([]);
@@ -7,6 +16,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
   const [error, setError] = useState(null);
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [indexing, setIndexing] = useState(false);
+  const [pathInput, setPathInput] = useState('');
   const [indexConfig, setIndexConfig] = useState({
     entry: 'src/index.ts',
     nodeEntry: '',
@@ -67,31 +77,55 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
   if (!currentPath) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-gray-900 rounded-lg p-6 max-w-2xl w-full max-h-96 flex flex-col">
-          <h2 className="text-xl font-bold mb-4">📁 Load Repository</h2>
-          <p className="text-sm text-gray-400 mb-4">Click to start browsing from root directory</p>
-          <button
-            onClick={() => browsePath('/')}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white"
-          >
-            Browse System
-          </button>
-          <button
-            onClick={onClose}
-            className="mt-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
-          >
-            Cancel
-          </button>
+        <div className="bg-gray-900 rounded-lg w-full max-w-4xl max-h-96 flex flex-col">
+          <div className="flex justify-between items-center p-4 border-b border-gray-700">
+            <h2 className="text-lg font-bold">📁 Open Repository</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white text-2xl"
+            >
+              ✕
+            </button>
+          </div>
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <p className="text-gray-400 mb-6">Select a location to start browsing</p>
+              <div className="grid grid-cols-2 gap-3">
+                {QUICK_PATHS.map(({ name, path }) => (
+                  <button
+                    key={path}
+                    onClick={() => browsePath(path)}
+                    className="px-4 py-3 bg-gray-800 hover:bg-gray-700 rounded text-left transition"
+                  >
+                    <div className="font-semibold">{name}</div>
+                    <div className="text-xs text-gray-500">{path}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
+  const handlePathInputChange = (e) => {
+    setPathInput(e.target.value);
+  };
+
+  const handlePathInputSubmit = (e) => {
+    if (e.key === 'Enter' && pathInput.trim()) {
+      browsePath(pathInput.trim());
+      setPathInput('');
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-900 rounded-lg p-6 max-w-3xl w-full max-h-96 flex flex-col">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">📁 Load Repository</h2>
+      <div className="bg-gray-900 rounded-lg w-full max-w-5xl max-h-[90vh] flex flex-col">
+        {/* Header */}
+        <div className="flex justify-between items-center p-4 border-b border-gray-700 bg-gray-800">
+          <h2 className="text-lg font-bold">📁 Open Repository</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-white text-2xl"
@@ -100,109 +134,177 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
           </button>
         </div>
 
-        {error && (
-          <div className="mb-4 p-3 bg-red-900 text-red-200 rounded text-sm">
-            {error}
-          </div>
-        )}
-
-        <div className="mb-4">
-          <p className="text-sm text-gray-400 mb-2 truncate">Current: <code className="text-xs">{currentPath}</code></p>
-          <div className="flex gap-2">
-            <button
-              onClick={() => browsePath('/')}
-              className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
-            >
-              / Root
-            </button>
+        {/* Address Bar */}
+        <div className="p-3 border-b border-gray-700 bg-gray-800">
+          <div className="flex gap-2 items-center">
             <button
               onClick={() => {
                 const parent = currentPath.split('/').slice(0, -1).join('/') || '/';
                 if (parent !== currentPath) browsePath(parent);
               }}
-              className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
+              className="px-3 py-1 bg-gray-700 hover:bg-gray-600 rounded text-sm"
+              title="Go up one level"
             >
-              ↑ Up
+              ↑
+            </button>
+            <input
+              type="text"
+              value={pathInput || currentPath}
+              onChange={handlePathInputChange}
+              onKeyPress={handlePathInputSubmit}
+              placeholder="Type path and press Enter..."
+              className="flex-1 px-3 py-1 bg-gray-700 border border-gray-600 rounded text-sm font-mono"
+            />
+            <button
+              onClick={() => browsePath(pathInput || currentPath)}
+              className="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded text-sm"
+            >
+              Go
             </button>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto mb-4 border border-gray-700 rounded">
-          {loading ? (
-            <div className="p-4 text-gray-400">Loading...</div>
-          ) : (
-            <div className="divide-y divide-gray-700">
-              {items.map(item => (
+        {/* Error Message */}
+        {error && (
+          <div className="p-3 bg-red-900 text-red-200 text-sm border-b border-red-800">
+            ⚠️ {error}
+          </div>
+        )}
+
+        {/* Main Content */}
+        <div className="flex flex-1 overflow-hidden">
+          {/* Sidebar */}
+          <div className="w-48 bg-gray-800 border-r border-gray-700 overflow-y-auto">
+            <div className="p-3 space-y-1">
+              <div className="text-xs font-bold text-gray-400 px-2 py-1">QUICK ACCESS</div>
+              {QUICK_PATHS.map(({ name, path }) => (
                 <button
-                  key={item.path}
-                  onClick={() => {
-                    if (item.isDirectory) {
-                      browsePath(item.path);
-                    } else {
-                      setSelectedRepo(item.path);
-                    }
-                  }}
-                  className={`w-full text-left px-4 py-2 hover:bg-gray-800 transition ${
-                    selectedRepo === item.path ? 'bg-blue-900' : ''
-                  }`}
+                  key={path}
+                  onClick={() => browsePath(path)}
+                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-700 rounded transition"
                 >
-                  <span className="mr-2">{item.isDirectory ? '📁' : '📄'}</span>
-                  {item.name}
+                  {name}
                 </button>
               ))}
             </div>
-          )}
+          </div>
+
+          {/* File List */}
+          <div className="flex-1 overflow-y-auto">
+            {loading ? (
+              <div className="flex items-center justify-center h-full text-gray-400">
+                <div className="text-center">
+                  <div className="text-2xl mb-2">⏳</div>
+                  <div>Loading...</div>
+                </div>
+              </div>
+            ) : items.length === 0 ? (
+              <div className="flex items-center justify-center h-full text-gray-400">
+                <div className="text-center">
+                  <div className="text-2xl mb-2">📭</div>
+                  <div>Empty directory</div>
+                </div>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-700">
+                {items.map(item => (
+                  <button
+                    key={item.path}
+                    onClick={() => {
+                      if (item.isDirectory) {
+                        browsePath(item.path);
+                      } else {
+                        setSelectedRepo(item.path);
+                      }
+                    }}
+                    className={`w-full text-left px-4 py-3 hover:bg-gray-800 transition flex items-center gap-3 ${
+                      selectedRepo === item.path ? 'bg-blue-900' : ''
+                    }`}
+                  >
+                    <span className="text-lg">
+                      {item.isDirectory ? '📁' : '📄'}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{item.name}</div>
+                      <div className="text-xs text-gray-500 truncate">{item.path}</div>
+                    </div>
+                    {selectedRepo === item.path && (
+                      <span className="text-blue-400">✓</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
+        {/* Config Panel */}
         {selectedRepo && (
-          <div className="mb-4 p-3 bg-gray-800 rounded">
-            <p className="text-sm text-gray-300 mb-3">
-              Selected: <code className="text-xs bg-gray-900 px-2 py-1 rounded">{selectedRepo}</code>
-            </p>
+          <div className="border-t border-gray-700 bg-gray-800 p-4 max-h-48 overflow-y-auto">
+            <div className="text-sm font-bold mb-3">📋 Index Configuration</div>
             <div className="space-y-2 text-sm">
-              <input
-                type="text"
-                placeholder="Entry point (e.g., src/index.ts)"
-                value={indexConfig.entry}
-                onChange={e => setIndexConfig({ ...indexConfig, entry: e.target.value })}
-                className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
-              />
-              <input
-                type="text"
-                placeholder="Node entry (optional, e.g., server/index.ts)"
-                value={indexConfig.nodeEntry}
-                onChange={e => setIndexConfig({ ...indexConfig, nodeEntry: e.target.value })}
-                className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
-              />
-              <input
-                type="text"
-                placeholder="Python root (optional, e.g., backend/)"
-                value={indexConfig.pyRoot}
-                onChange={e => setIndexConfig({ ...indexConfig, pyRoot: e.target.value })}
-                className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
-              />
-              <input
-                type="text"
-                placeholder="Python extra path (optional)"
-                value={indexConfig.pyExtraPath}
-                onChange={e => setIndexConfig({ ...indexConfig, pyExtraPath: e.target.value })}
-                className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
-              />
+              <div>
+                <label className="text-xs text-gray-400">Selected Repository</label>
+                <div className="px-2 py-1 bg-gray-900 rounded text-xs font-mono truncate">
+                  {selectedRepo}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-gray-400">Frontend Entry Point</label>
+                <input
+                  type="text"
+                  placeholder="e.g., src/index.ts"
+                  value={indexConfig.entry}
+                  onChange={e => setIndexConfig({ ...indexConfig, entry: e.target.value })}
+                  className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-400">Node.js Entry Point (optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g., server/index.ts"
+                  value={indexConfig.nodeEntry}
+                  onChange={e => setIndexConfig({ ...indexConfig, nodeEntry: e.target.value })}
+                  className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-400">Python Root (optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g., backend/"
+                  value={indexConfig.pyRoot}
+                  onChange={e => setIndexConfig({ ...indexConfig, pyRoot: e.target.value })}
+                  className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-400">Python Extra Path (optional)</label>
+                <input
+                  type="text"
+                  placeholder="e.g., backend/.venv/lib/python3.11/site-packages"
+                  value={indexConfig.pyExtraPath}
+                  onChange={e => setIndexConfig({ ...indexConfig, pyExtraPath: e.target.value })}
+                  className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
+                />
+              </div>
             </div>
           </div>
         )}
 
-        <div className="flex gap-2">
+        {/* Footer */}
+        <div className="flex gap-2 p-4 border-t border-gray-700 bg-gray-800">
           <button
             onClick={handleIndexRepo}
             disabled={!selectedRepo || indexing}
-            className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 rounded text-white"
+            className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 rounded text-white font-medium transition"
           >
             {indexing ? '⏳ Indexing...' : '✓ Load Repository'}
           </button>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
+            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white transition"
           >
             Cancel
           </button>
