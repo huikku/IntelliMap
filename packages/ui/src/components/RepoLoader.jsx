@@ -45,7 +45,13 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
 
   const handleIndexRepo = async () => {
     if (!selectedRepo) return;
-    
+
+    // Check if at least one entry point is set
+    if (!indexConfig.entry && !indexConfig.nodeEntry && !indexConfig.pyRoot) {
+      setError('❌ Please set at least one entry point:\n- Frontend (e.g., src/main.tsx)\n- Node.js (e.g., server.js)\n- Python (e.g., .)');
+      return;
+    }
+
     setIndexing(true);
     setError(null);
     try {
@@ -268,10 +274,10 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                 </div>
               </div>
               <div>
-                <label className="text-xs text-gray-400">Frontend Entry Point (optional)</label>
+                <label className="text-xs text-gray-400">Frontend Entry Point <span className="text-gray-500">(or set Node.js/Python)</span></label>
                 <input
                   type="text"
-                  placeholder="e.g., src/index.ts or src/main.jsx"
+                  placeholder="e.g., src/main.tsx or src/index.js"
                   value={indexConfig.entry}
                   onChange={e => setIndexConfig({ ...indexConfig, entry: e.target.value })}
                   className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
