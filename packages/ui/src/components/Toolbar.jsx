@@ -4,49 +4,73 @@ import LayoutSpinner from './LayoutSpinner';
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering }) {
   const [isLayouting, setIsLayouting] = useState(false);
   const [sizing, setSizing] = useState('uniform');
+  const [sizeExaggeration, setSizeExaggeration] = useState(1);
   const layoutCacheRef = useRef({});
   const bgLayoutTimeoutRef = useRef(null);
+  const bgLayoutIntervalRef = useRef(null);
+  const lastGraphIdRef = useRef(null);
 
-  // Precompute layouts in background
+  // Precompute layouts in background - only once per graph
   useEffect(() => {
     if (!cy) return;
+
+    // Get a unique identifier for the current graph
+    const graphId = cy.nodes().length + '-' + cy.edges().length;
+
+    // If graph changed, clear cache and restart
+    if (graphId !== lastGraphIdRef.current) {
+      console.log('📊 New graph detected, clearing layout cache');
+      layoutCacheRef.current = {};
+      lastGraphIdRef.current = graphId;
+    }
 
     // Clear any pending background layout
     if (bgLayoutTimeoutRef.current) {
       clearTimeout(bgLayoutTimeoutRef.current);
     }
+    if (bgLayoutIntervalRef.current) {
+      clearInterval(bgLayoutIntervalRef.current);
+    }
 
     // Start precomputing other layouts after a delay
     bgLayoutTimeoutRef.current = setTimeout(() => {
       const layoutsToPrecompute = ['dagre', 'dagreDown', 'fcose', 'euler', 'cola', 'elkDown', 'elkTree', 'grid'];
+      let index = 0;
 
-      layoutsToPrecompute.forEach((layoutName, index) => {
-        // Stagger the precomputation to avoid blocking
-        setTimeout(() => {
-          if (!layoutCacheRef.current[layoutName]) {
-            console.log(`🔄 Precomputing layout: ${layoutName}`);
-            const layoutOptions = getLayoutOptions(layoutName, cy);
-            const layout = cy.layout(layoutOptions);
+      bgLayoutIntervalRef.current = setInterval(() => {
+        if (index >= layoutsToPrecompute.length) {
+          clearInterval(bgLayoutIntervalRef.current);
+          return;
+        }
 
-            layout.on('layoutstop', () => {
-              // Save the positions
-              const positions = {};
-              cy.nodes().forEach(n => {
-                positions[n.id()] = { x: n.position('x'), y: n.position('y') };
-              });
-              layoutCacheRef.current[layoutName] = positions;
-              console.log(`✓ Cached layout: ${layoutName}`);
+        const layoutName = layoutsToPrecompute[index];
+        if (!layoutCacheRef.current[layoutName]) {
+          console.log(`🔄 Precomputing layout: ${layoutName}`);
+          const layoutOptions = getLayoutOptions(layoutName, cy);
+          const layout = cy.layout(layoutOptions);
+
+          layout.on('layoutstop', () => {
+            // Save the positions
+            const positions = {};
+            cy.nodes().forEach(n => {
+              positions[n.id()] = { x: n.position('x'), y: n.position('y') };
             });
+            layoutCacheRef.current[layoutName] = positions;
+            console.log(`✓ Cached layout: ${layoutName}`);
+          });
 
-            layout.run();
-          }
-        }, index * 500); // Stagger by 500ms
-      });
+          layout.run();
+        }
+        index++;
+      }, 500); // Stagger by 500ms
     }, 2000); // Wait 2 seconds after initial render
 
     return () => {
       if (bgLayoutTimeoutRef.current) {
         clearTimeout(bgLayoutTimeoutRef.current);
+      }
+      if (bgLayoutIntervalRef.current) {
+        clearInterval(bgLayoutIntervalRef.current);
       }
     };
   }, [cy]);
@@ -146,30 +170,49 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   const handleSizingChange = (newSizing) => {
     if (!cy) return;
     setSizing(newSizing);
+    updateNodeSizes(newSizing, sizeExaggeration, cy);
+  };
 
-    if (newSizing === 'uniform') {
+  const handleSizeExaggeration = (value) => {
+    setSizeExaggeration(value);
+    updateNodeSizes(sizing, value, cy);
+  };
+
+  const updateNodeSizes = (sizeMode, exaggeration, cyInstance) => {
+    if (!cyInstance) return;
+
+    if (sizeMode === 'uniform') {
       // Reset to uniform sizing
-      cy.style().selector('node').style({
-        'width': node => (node.data('isCluster') ? 'label' : 45),
-        'height': node => (node.data('isCluster') ? 'label' : 45),
+      const baseSize = 45 * exaggeration;
+      cyInstance.style().selector('node').style({
+        'width': node => (node.data('isCluster') ? 'label' : baseSize),
+        'height': node => (node.data('isCluster') ? 'label' : baseSize),
       }).update();
-    } else if (newSizing === 'degree') {
+    } else if (sizeMode === 'degree') {
       // Size by degree (number of connections)
-      cy.nodes().forEach(n => {
+      cyInstance.nodes().forEach(n => {
         n.data('degree', n.degree());
       });
-      cy.style().selector('node').style({
+      cyInstance.style().selector('node').style({
         'width': node => {
           if (node.data('isCluster')) return 'label';
           const degree = node.data('degree') || 0;
-          return Math.max(30, Math.min(100, 30 + (degree * 3)));
+          const size = Math.max(30, Math.min(100, 30 + (degree * 3))) * exaggeration;
+          return size;
         },
         'height': node => {
           if (node.data('isCluster')) return 'label';
           const degree = node.data('degree') || 0;
-          return Math.max(30, Math.min(100, 30 + (degree * 3)));
+          const size = Math.max(30, Math.min(100, 30 + (degree * 3))) * exaggeration;
+          return size;
         },
       }).update();
+    }
+
+    // Run a layout to prevent overlaps
+    if (cyInstance.elements().length > 0) {
+      const currentLayout = cyInstance.layout({ name: 'fcose', animate: true, animationDuration: 300 });
+      currentLayout.run();
     }
   };
 
@@ -262,6 +305,18 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           <option value="uniform">📏 Uniform</option>
           <option value="degree">🔗 By Degree</option>
         </select>
+
+        <input
+          type="range"
+          min="0.5"
+          max="3"
+          step="0.1"
+          value={sizeExaggeration}
+          onChange={e => handleSizeExaggeration(parseFloat(e.target.value))}
+          className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          title={`Size exaggeration: ${sizeExaggeration.toFixed(1)}x`}
+        />
+        <span className="text-xs text-gray-400 font-mono w-8">{sizeExaggeration.toFixed(1)}x</span>
       </div>
 
       <button
