@@ -64,9 +64,22 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
       }
       
       const data = await response.json();
+      console.log('✓ Repository indexed successfully');
+      console.log('Graph:', data.graph);
+      console.log('Nodes:', data.graph.nodes?.length || 0);
+      console.log('Edges:', data.graph.edges?.length || 0);
+
+      // Check if graph is empty
+      if (!data.graph.nodes || data.graph.nodes.length === 0) {
+        setError('⚠️ No code found! Check your entry points:\n- Frontend: ' + (indexConfig.entry || 'not set') + '\n- Node.js: ' + (indexConfig.nodeEntry || 'not set') + '\n- Python: ' + (indexConfig.pyRoot || 'not set'));
+        setIndexing(false);
+        return;
+      }
+
       onRepoLoaded(data.graph, selectedRepo);
       onClose();
     } catch (err) {
+      console.error('Error indexing repo:', err);
       setError(err.message);
     } finally {
       setIndexing(false);

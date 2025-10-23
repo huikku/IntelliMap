@@ -98,6 +98,10 @@ export default function App() {
   }
 
   const handleRepoLoaded = (newGraph, repoPath) => {
+    console.log('📁 Loading repository:', repoPath);
+    console.log('📊 Graph data:', newGraph);
+    console.log('📍 Nodes:', newGraph.nodes?.length || 0);
+    console.log('🔗 Edges:', newGraph.edges?.length || 0);
     setGraph(newGraph);
     setCurrentRepo(repoPath);
     setSelectedNode(null);

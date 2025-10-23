@@ -8,7 +8,12 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (!graph || !containerRef.current) return;
+    if (!graph || !containerRef.current) {
+      console.log('GraphView: Skipping render - graph:', !!graph, 'container:', !!containerRef.current);
+      return;
+    }
+
+    console.log('🎨 GraphView rendering with', graph.nodes?.length || 0, 'nodes');
 
     // Filter nodes based on plane and filters
     let filteredNodes = graph.nodes;
