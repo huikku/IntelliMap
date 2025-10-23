@@ -1,37 +1,13 @@
 import React from 'react';
+import FilePreview from './FilePreview';
 
-export default function Inspector({ selectedNode, graph }) {
-  const [showFileList, setShowFileList] = React.useState(false);
-
+export default function Inspector({ selectedNode, graph, currentRepo }) {
   if (!selectedNode) {
     return (
       <aside className="w-80 bg-gray-900 border-l border-gray-800 flex flex-col overflow-hidden">
         <div className="flex-1 p-4 overflow-y-auto">
           <h2 className="text-sm font-bold text-gray-300 mb-4">DETAILS</h2>
           <p className="text-xs text-gray-500">Select a node to view details</p>
-        </div>
-
-        {/* File Listing Section */}
-        <div className="border-t border-gray-800 p-4 overflow-y-auto max-h-1/2">
-          <button
-            onClick={() => setShowFileList(!showFileList)}
-            className="w-full text-left text-sm font-bold text-gray-300 mb-2 hover:text-gray-100 transition"
-          >
-            📁 Files ({graph?.nodes?.length || 0}) {showFileList ? '▼' : '▶'}
-          </button>
-
-          {showFileList && (
-            <ul className="space-y-1 text-xs max-h-96 overflow-y-auto">
-              {graph?.nodes?.slice(0, 100).map(node => (
-                <li key={node.id} className="text-gray-400 truncate hover:text-gray-200 cursor-pointer">
-                  {node.id}
-                </li>
-              ))}
-              {graph?.nodes?.length > 100 && (
-                <li className="text-gray-500">... and {graph.nodes.length - 100} more</li>
-              )}
-            </ul>
-          )}
         </div>
       </aside>
     );
@@ -124,27 +100,9 @@ export default function Inspector({ selectedNode, graph }) {
         )}
       </div>
 
-      {/* Bottom section - File Listing */}
-      <div className="border-t border-gray-800 p-4 overflow-y-auto max-h-1/2">
-        <button
-          onClick={() => setShowFileList(!showFileList)}
-          className="w-full text-left text-sm font-bold text-gray-300 mb-2 hover:text-gray-100 transition"
-        >
-          📁 Files ({graph?.nodes?.length || 0}) {showFileList ? '▼' : '▶'}
-        </button>
-
-        {showFileList && (
-          <ul className="space-y-1 text-xs max-h-96 overflow-y-auto">
-            {graph?.nodes?.slice(0, 100).map(node => (
-              <li key={node.id} className="text-gray-400 truncate hover:text-gray-200 cursor-pointer">
-                {node.id}
-              </li>
-            ))}
-            {graph?.nodes?.length > 100 && (
-              <li className="text-gray-500">... and {graph.nodes.length - 100} more</li>
-            )}
-          </ul>
-        )}
+      {/* Bottom section - File Preview */}
+      <div className="border-t border-gray-800 flex flex-col overflow-hidden max-h-1/2">
+        <FilePreview filePath={selectedNode.id} currentRepo={currentRepo} />
       </div>
     </aside>
   );

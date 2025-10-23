@@ -258,6 +258,52 @@ app.post('/api/index', express.json(), async (req, res) => {
   }
 });
 
+// Get file content for preview
+app.get('/api/file-content', (req, res) => {
+  try {
+    const { repo, file } = req.query;
+
+    if (!repo || !file) {
+      return res.status(400).json({ error: 'Missing repo or file parameter' });
+    }
+
+    const fullPath = resolve(repo, file);
+
+    // Security: ensure the file is within the repo directory
+    const repoPath = resolve(repo);
+    if (!fullPath.startsWith(repoPath)) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Check if file exists
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    const stats = fs.statSync(fullPath);
+    if (!stats.isFile()) {
+      return res.status(400).json({ error: 'Path is not a file' });
+    }
+
+    // Limit file size to 1MB for preview
+    if (stats.size > 1024 * 1024) {
+      return res.status(413).json({ error: 'File too large for preview (max 1MB)' });
+    }
+
+    // Read file content
+    const content = fs.readFileSync(fullPath, 'utf-8');
+
+    res.json({
+      content,
+      size: stats.size,
+      path: file,
+    });
+  } catch (error) {
+    console.error('Error reading file:', error);
+    res.status(500).json({ error: 'Failed to read file', message: error.message });
+  }
+});
+
 // Serve static UI from dist
 const uiDistPath = join(__dirname, '../ui/dist');
 if (fs.existsSync(uiDistPath)) {

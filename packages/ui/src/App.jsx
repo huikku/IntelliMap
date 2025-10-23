@@ -25,6 +25,30 @@ export default function App() {
   });
   const cyRef = useRef(null);
 
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Press 'f' to focus/zoom to selected node
+      if (e.key === 'f' && selectedNode && cyRef.current) {
+        e.preventDefault();
+        const cy = cyRef.current;
+        const nodeElement = cy.getElementById(selectedNode.id);
+
+        if (nodeElement.length > 0) {
+          cy.animate({
+            zoom: 2,
+            center: { ebb: nodeElement },
+          }, {
+            duration: 500,
+          });
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedNode, cyRef]);
+
   useEffect(() => {
     fetchGraph();
 
@@ -168,7 +192,7 @@ export default function App() {
         </main>
 
         {/* Right Sidebar */}
-        <Inspector selectedNode={selectedNode} graph={graph} />
+        <Inspector selectedNode={selectedNode} graph={graph} currentRepo={currentRepo} />
       </div>
 
       {/* Footer */}
