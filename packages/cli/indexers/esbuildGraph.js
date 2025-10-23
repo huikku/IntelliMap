@@ -137,7 +137,7 @@ export async function buildJSGraph(options) {
     // Build backend if present
     if (backendEntries.length > 0) {
       try {
-        console.log('🔨 Building backend with esbuild (no bundle)');
+        console.log('🔨 Building backend with esbuild');
         const nodeBuiltins = [
           'fs', 'path', 'crypto', 'events', 'stream', 'util', 'os', 'http', 'https',
           'net', 'url', 'querystring', 'zlib', 'buffer', 'child_process', 'cluster',
@@ -157,14 +157,15 @@ export async function buildJSGraph(options) {
 
         const backendResult = await esbuild.build({
           entryPoints: backendEntries,
-          bundle: false, // Don't bundle, just analyze imports
+          bundle: true,
           metafile: true,
           write: false,
           outdir: '/tmp/intellimap-esbuild-backend',
-          logLevel: 'silent',
-          platform: 'node', // Use node platform for backend
+          external: nodeBuiltins,
+          logLevel: 'error', // Only show errors, not warnings
+          platform: 'browser', // Use browser to avoid bundling node_modules
           target: 'es2020',
-          format: 'cjs',
+          format: 'esm',
           jsx: 'automatic',
           jsxImportSource: 'react',
           absWorkingDir: process.cwd(),
