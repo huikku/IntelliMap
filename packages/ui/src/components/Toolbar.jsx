@@ -1,4 +1,10 @@
+import { useState } from 'react';
+import LayoutSpinner from './LayoutSpinner';
+
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering }) {
+  const [isLayouting, setIsLayouting] = useState(false);
+  const [sizing, setSizing] = useState('uniform');
+
   const handleFit = () => {
     if (cy) cy.fit();
   };
@@ -7,9 +13,40 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
     if (cy) cy.center();
   };
 
+  const handleSizingChange = (newSizing) => {
+    if (!cy) return;
+    setSizing(newSizing);
+
+    if (newSizing === 'uniform') {
+      // Reset to uniform sizing
+      cy.style().selector('node').style({
+        'width': node => (node.data('isCluster') ? 'label' : 45),
+        'height': node => (node.data('isCluster') ? 'label' : 45),
+      }).update();
+    } else if (newSizing === 'degree') {
+      // Size by degree (number of connections)
+      cy.nodes().forEach(n => {
+        n.data('degree', n.degree());
+      });
+      cy.style().selector('node').style({
+        'width': node => {
+          if (node.data('isCluster')) return 'label';
+          const degree = node.data('degree') || 0;
+          return Math.max(30, Math.min(100, 30 + (degree * 3)));
+        },
+        'height': node => {
+          if (node.data('isCluster')) return 'label';
+          const degree = node.data('degree') || 0;
+          return Math.max(30, Math.min(100, 30 + (degree * 3)));
+        },
+      }).update();
+    }
+  };
+
   const handleLayoutChange = (newLayout) => {
     if (!cy) return;
     setLayout(newLayout);
+    setIsLayouting(true);
 
     const layoutOptions = {
       elk: {
@@ -92,7 +129,11 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       },
     };
 
-    cy.layout(layoutOptions[newLayout]).run();
+    const layout = cy.layout(layoutOptions[newLayout]);
+    layout.on('layoutstop', () => {
+      setIsLayouting(false);
+    });
+    layout.run();
   };
 
   return (
@@ -139,6 +180,18 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         </select>
       </div>
 
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-gray-400 font-mono">Size:</label>
+        <select
+          value={sizing}
+          onChange={e => handleSizingChange(e.target.value)}
+          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition font-mono"
+        >
+          <option value="uniform">📏 Uniform</option>
+          <option value="degree">🔗 By Degree</option>
+        </select>
+      </div>
+
       <button
         onClick={() => setClustering(!clustering)}
         className={`px-3 py-1 rounded text-sm transition ${
@@ -152,8 +205,10 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       </button>
 
       <div className="ml-auto text-xs text-gray-500">
-        ✓ Ready
+        {isLayouting ? '⏳ Layouting...' : '✓ Ready'}
       </div>
+
+      <LayoutSpinner isVisible={isLayouting} />
     </div>
   );
 }
