@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 const QUICK_PATHS = [
   { name: '📁 Home', path: process.env.HOME || '/home/john' },
@@ -176,7 +177,9 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <>
+      {indexing && <LoadingSpinner message="Indexing repository and building dependency graph..." />}
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-gray-900 rounded-lg w-full max-w-5xl h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-700 bg-gray-800">
@@ -464,7 +467,8 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 
