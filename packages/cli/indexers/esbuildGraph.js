@@ -192,6 +192,7 @@ export async function buildJSGraph(options) {
             '.eot': 'dataurl',
           },
         });
+        console.log(`📊 Backend metafile has ${Object.keys(backendResult.metafile.inputs).length} files`);
         metafile.inputs = { ...metafile.inputs, ...backendResult.metafile.inputs };
       } catch (error) {
         console.warn('⚠️  Backend build failed:', error.message);
