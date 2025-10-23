@@ -1,9 +1,17 @@
 import { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import elk from 'cytoscape-elk';
+import dagre from 'cytoscape-dagre';
+import fcose from 'cytoscape-fcose';
+import euler from 'cytoscape-euler';
+import cola from 'cytoscape-cola';
 import GraphHUD from './GraphHUD';
 
 cytoscape.use(elk);
+cytoscape.use(dagre);
+cytoscape.use(fcose);
+cytoscape.use(euler);
+cytoscape.use(cola);
 
 // Helper to classify node type based on filename
 function getNodeType(filename) {

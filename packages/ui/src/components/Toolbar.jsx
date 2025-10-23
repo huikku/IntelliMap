@@ -43,6 +43,53 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         cols: Math.ceil(Math.sqrt(cy.nodes().length)),
         spacingFactor: 1.5,
       },
+      dagre: {
+        name: 'dagre',
+        rankDir: 'LR',
+        nodeSep: 80,
+        edgeSep: 50,
+        rankSep: 150,
+        padding: 10,
+      },
+      dagreDown: {
+        name: 'dagre',
+        rankDir: 'TB',
+        nodeSep: 80,
+        edgeSep: 50,
+        rankSep: 150,
+        padding: 10,
+      },
+      fcose: {
+        name: 'fcose',
+        quality: 'default',
+        randomize: true,
+        animate: false,
+        nodeSeparation: 80,
+        idealEdgeLength: 100,
+        gravity: 0.25,
+        nodeRepulsion: 4500,
+        nestingFactor: 0.8,
+        packComponents: true,
+      },
+      euler: {
+        name: 'euler',
+        springLength: 80,
+        springCoeff: 0.0008,
+        mass: node => 2 + node.degree(false),
+        gravity: -1.2,
+        pull: 0.002,
+        timeStep: 10,
+        refresh: 20,
+      },
+      cola: {
+        name: 'cola',
+        animate: false,
+        nodeSpacing: 50,
+        edgeLengthVal: 100,
+        flow: { axis: 'x', minSeparation: 60 },
+        clustering: true,
+        randomize: false,
+      },
     };
 
     cy.layout(layoutOptions[newLayout]).run();
@@ -72,10 +119,23 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           onChange={e => handleLayoutChange(e.target.value)}
           className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition font-mono"
         >
-          <option value="elk">📊 Hierarchical (Right)</option>
-          <option value="elkDown">📊 Hierarchical (Down)</option>
-          <option value="elkTree">🌳 Tree Layout</option>
-          <option value="grid">📋 Grid Layout</option>
+          <optgroup label="ELK (Hierarchical)">
+            <option value="elk">📊 ELK Right</option>
+            <option value="elkDown">📊 ELK Down</option>
+            <option value="elkTree">🌳 ELK Tree</option>
+          </optgroup>
+          <optgroup label="Hierarchical">
+            <option value="dagre">🧠 Dagre (LR)</option>
+            <option value="dagreDown">🧠 Dagre (TB)</option>
+          </optgroup>
+          <optgroup label="Force-Directed">
+            <option value="fcose">🌐 fcose (Organic)</option>
+            <option value="euler">🌀 Euler (Physics)</option>
+            <option value="cola">🎯 Cola (Flow)</option>
+          </optgroup>
+          <optgroup label="Other">
+            <option value="grid">📋 Grid Layout</option>
+          </optgroup>
         </select>
       </div>
 
