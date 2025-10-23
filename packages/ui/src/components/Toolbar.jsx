@@ -18,12 +18,30 @@ export default function Toolbar({ cy, layout, setLayout }) {
           algorithm: 'layered',
           'elk.direction': 'RIGHT',
           'elk.spacing.nodeNode': 50,
+          'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
         },
       },
-      fcose: {
-        name: 'fcose',
-        animate: true,
-        animationDuration: 500,
+      elkDown: {
+        name: 'elk',
+        elk: {
+          algorithm: 'layered',
+          'elk.direction': 'DOWN',
+          'elk.spacing.nodeNode': 50,
+          'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
+        },
+      },
+      elkTree: {
+        name: 'elk',
+        elk: {
+          algorithm: 'mrtree',
+          'elk.spacing.nodeNode': 50,
+        },
+      },
+      grid: {
+        name: 'grid',
+        rows: Math.ceil(Math.sqrt(cy.nodes().length)),
+        cols: Math.ceil(Math.sqrt(cy.nodes().length)),
+        spacingFactor: 1.5,
       },
     };
 
@@ -54,8 +72,10 @@ export default function Toolbar({ cy, layout, setLayout }) {
           onChange={e => handleLayoutChange(e.target.value)}
           className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition"
         >
-          <option value="elk">ELK (Hierarchical)</option>
-          <option value="fcose">fcose (Force-directed)</option>
+          <option value="elk">📊 Hierarchical (Right)</option>
+          <option value="elkDown">📊 Hierarchical (Down)</option>
+          <option value="elkTree">🌳 Tree Layout</option>
+          <option value="grid">📋 Grid Layout</option>
         </select>
       </div>
 

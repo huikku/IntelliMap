@@ -4,6 +4,49 @@ import elk from 'cytoscape-elk';
 
 cytoscape.use(elk);
 
+// Helper to classify node type based on filename
+function getNodeType(filename) {
+  if (filename.includes('component') || filename.includes('Component')) return 'component';
+  if (filename.includes('hook') || filename.includes('Hook')) return 'hook';
+  if (filename.includes('util') || filename.includes('helper') || filename.includes('Util')) return 'util';
+  if (filename.includes('config') || filename.includes('Config')) return 'config';
+  if (filename.includes('test') || filename.includes('spec')) return 'test';
+  if (filename.includes('type') || filename.includes('interface')) return 'type';
+  if (filename.includes('index')) return 'index';
+  if (filename.includes('api') || filename.includes('service')) return 'service';
+  return 'module';
+}
+
+// Helper to get shape based on node type
+function getNodeShape(nodeType) {
+  const shapes = {
+    component: 'ellipse',
+    hook: 'diamond',
+    util: 'rectangle',
+    config: 'square',
+    test: 'triangle',
+    type: 'pentagon',
+    index: 'star',
+    service: 'hexagon',
+    module: 'circle',
+  };
+  return shapes[nodeType] || 'circle';
+}
+
+// Helper to get color based on language and type
+function getNodeColor(lang, nodeType, changed) {
+  if (changed) return '#dc2626'; // Red for changed
+
+  const colorMap = {
+    ts: { component: '#3b82f6', hook: '#06b6d4', util: '#0ea5e9', config: '#1e40af', service: '#1e3a8a', default: '#2563eb' },
+    js: { component: '#f59e0b', hook: '#fbbf24', util: '#fcd34d', config: '#d97706', service: '#b45309', default: '#f97316' },
+    py: { component: '#10b981', hook: '#14b8a6', util: '#06d6a0', config: '#059669', service: '#047857', default: '#34d399' },
+  };
+
+  const langColors = colorMap[lang] || colorMap.ts;
+  return langColors[nodeType] || langColors.default;
+}
+
 export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef }) {
   const containerRef = useRef(null);
 
@@ -40,17 +83,24 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     const nodeIds = new Set(filteredNodes.map(n => n.id));
     filteredEdges = filteredEdges.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));
 
-    // Build Cytoscape elements
+    // Build Cytoscape elements with enhanced metadata
     const elements = [
-      ...filteredNodes.map(n => ({
-        data: {
-          id: n.id,
-          label: n.id.split('/').pop(),
-          lang: n.lang,
-          env: n.env,
-          changed: n.changed,
-        },
-      })),
+      ...filteredNodes.map(n => {
+        const filename = n.id.split('/').pop();
+        const nodeType = getNodeType(filename);
+        return {
+          data: {
+            id: n.id,
+            label: filename,
+            lang: n.lang,
+            env: n.env,
+            changed: n.changed,
+            nodeType,
+            folder: n.folder,
+            pkg: n.pkg,
+          },
+        };
+      }),
       ...filteredEdges.map(e => ({
         data: {
           id: `${e.from}-${e.to}`,
@@ -68,24 +118,23 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         {
           selector: 'node',
           style: {
-            'background-color': node => {
-              const lang = node.data('lang');
-              if (lang === 'py') return '#3b82f6';
-              if (lang === 'ts') return '#ef5350';
-              return '#10b981';
-            },
+            'background-color': node => getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed')),
+            'shape': node => getNodeShape(node.data('nodeType')),
             'label': 'data(label)',
             'text-valign': 'center',
             'text-halign': 'center',
-            'font-size': 11,
+            'font-size': 10,
             'color': '#fff',
             'border-width': node => (node.data('changed') ? 3 : 1),
-            'border-color': node => (node.data('changed') ? '#ef4444' : '#444'),
-            'width': 40,
-            'height': 40,
+            'border-color': node => (node.data('changed') ? '#fca5a5' : '#333'),
+            'width': 45,
+            'height': 45,
             'padding': 5,
             'text-wrap': 'wrap',
-            'text-max-width': 35,
+            'text-max-width': 40,
+            'text-background-color': '#000',
+            'text-background-opacity': 0.7,
+            'text-background-padding': 2,
           },
         },
         {
@@ -93,17 +142,22 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           style: {
             'border-width': 3,
             'border-color': '#fbbf24',
-            'box-shadow': '0 0 10px rgba(251, 191, 36, 0.5)',
+            'shadow-blur': 15,
+            'shadow-color': '#fbbf24',
+            'shadow-opacity': 0.8,
+            'shadow-offset-x': 0,
+            'shadow-offset-y': 0,
           },
         },
         {
           selector: 'edge',
           style: {
-            'line-color': '#555',
-            'target-arrow-color': '#555',
+            'line-color': '#444',
+            'target-arrow-color': '#444',
             'target-arrow-shape': 'triangle',
             'width': 1.5,
             'curve-style': 'bezier',
+            'opacity': 0.6,
           },
         },
         {
@@ -112,6 +166,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             'line-color': '#fbbf24',
             'target-arrow-color': '#fbbf24',
             'width': 2.5,
+            'opacity': 1,
           },
         },
       ],
