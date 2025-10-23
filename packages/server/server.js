@@ -3,6 +3,7 @@ import cors from 'cors';
 import fs from 'fs-extra';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { setupSSE, notifyClients } from './reload.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10,6 +11,9 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = process.env.PORT || 7676;
 const watch = process.env.WATCH === 'true';
+
+// Setup SSE for live reload
+setupSSE(app);
 
 app.use(cors());
 app.use(express.json());
@@ -69,10 +73,12 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', port });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`✅ IntelliMap server running on http://localhost:${port}`);
   if (watch) {
     console.log('👀 Watch mode enabled - will auto-reload on changes');
   }
 });
+
+export { server, notifyClients };
 

@@ -22,6 +22,32 @@ export default function App() {
 
   useEffect(() => {
     fetchGraph();
+
+    // Setup SSE listener for live reload
+    const eventSource = new EventSource('/events');
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === 'connected') {
+          console.log('✓ Connected to live reload');
+        } else if (data.type === 'graph-updated') {
+          console.log('🔄 Graph updated, refreshing...');
+          fetchGraph();
+        }
+      } catch (error) {
+        console.error('Error parsing SSE message:', error);
+      }
+    };
+
+    eventSource.onerror = () => {
+      console.warn('⚠️ Live reload connection lost');
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
   }, []);
 
   const fetchGraph = async () => {
