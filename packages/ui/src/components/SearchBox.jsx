@@ -32,9 +32,10 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
       cy.elements().unselect();
       nodeElement.select();
 
-      // Fit and zoom to node - works at any zoom level
-      cy.fit(nodeElement, 50); // 50px padding
+      // Animate to node position
+      const pos = nodeElement.position();
       cy.animate({
+        center: pos,
         zoom: 2,
       }, {
         duration: 500,
