@@ -1,0 +1,165 @@
+# .augmentrules.moth — IntelliMap code practices & PRD compliance
+
+intent:coding_standards; audience:augment_code; version:1.0
+style:prescriptive; scope:intellimap_local_only
+
+[CORE]
+name:intellimap
+source_of_truth:prd.moth
+non_goals:no_network_service;no_auth_or_cloud;no_runtime_tracing;no_call_graphs;no_3d;no_llm_rag
+
+[STACK]
+runtime:nodejs
+languages:typescript;javascript
+frontend:react;vite;tailwind;shadcn_ui
+viz:cytoscape;cytoscape_elk
+server:express
+tools:esbuild;framer_motion;lucide_react
+storage:local_json
+
+[ARCHITECTURE]
+pattern:modular_monorepo
+modules:cli;server;ui;shared_types
+deps:
+  cli->shared_types
+  server->shared_types
+  ui->server,shared_types
+  shared_types->none
+boundaries:
+  cli:reads_repo;produces:.codemap/graph.json
+  server:serves:/graph and ui build;no_graph_mutation
+  ui:reads:/graph;no_direct_fs;no_network_outside_origin
+shared_contracts:SCHEMAS.graph_json;API.server
+
+[STYLE]
+lang:ts_pref_default:true
+tsconfig:strict;noImplicitAny;noUncheckedIndexedAccess
+indent:2
+quotes:single
+semi:true
+eol:lf
+imports:sorted_grouped
+naming:camelCase_vars;PascalCase_types;UPPER_SNAKE_CONSTS
+react:function_components;tsx_only_for_jsx
+css:tailwind_first;no_inline_styles_except_dynamic
+commit_format:conventional_commits
+
+[CONVENTIONS]
+pkg_names:scoped_or_kebab
+file_exts:.ts;.tsx;.js only where tooling demands
+index_files:avoid_large_barrels(>200loc)
+logging:server_info_warn_error_only;ui_console_removed_in_build
+errors:never_swallow;return_typed_results
+env:LOCAL_ONLY;no_.env_required
+graph_path:.codemap/graph.json
+watch_port_default:7676
+
+[FORBIDDEN]
+no:any_type
+no:var_keyword
+no:default_export_in_shared_types
+no:dynamic_eval_newFunction
+no:network_calls_outbound(fetch|axios|ws)  # local-only
+no:cloud_sdks
+no:runtime_tracing_apis(inspector,perf_hooks) in MVP
+no:3d_libs(three|pixi) in MVP
+no:rag_llm_deps(openai|langchain) in MVP
+no:server_stateful_db
+no:ui_inline_event_handlers_that_mutate_global_state
+no:large_assets_committed(>1MB, except build artifacts ignored)
+
+[TESTING]
+framework:vitest_or_jest
+coverage_thresholds:{lines=80;functions=80;branches=75}
+suites:
+  cli:unit(esbuildGraph,diffEngine,watcher);golden_output(graph.json)
+  server:api_contract(/graph 200 json_matches_schema)
+  ui:component(GraphView,Sidebar,PlaneSwitcher);interaction(search_pan_zoom,highlight)
+schema_tests:validate_SCHEMAS.graph_json_on_every_build
+e2e:minimal_playwright:load_index,fetch_graph,render_nodes_edges
+
+[SLO]
+cli_index_10k_files:<10s_on_m2
+server_/graph_latency_p50:<30ms
+ui_initial_render:<1500ms_on_cold_load
+bundle_size_ui:<400kb_gzip_initial
+
+[SECURITY]
+telemetry:none
+csp:default-src 'self'
+cors:disabled(external);same_origin_only
+fs_access:cli_only;server_read_only_graph
+ipc_network:disabled
+deps_pinning:lockfile_required
+supply_chain:audit_on_ci(npm_audit|oss_review_tool)
+
+[API.server]
+GET:/graph -> req:{} res:{graph_json}
+GET:/ -> req:{} res:{react_ui}
+constraints:
+  methods_only:GET
+  cache_control:no-store
+  content_type:/graph=application/json
+  watch_mode:sse_refresh_when_flagged
+
+[SCHEMAS.graph_json]
+meta:{repoRoot:string;generatedAt:number}
+nodes:{id:string;pkg:string;folder:string;changed:boolean}
+edges:{from:string;to:string;kind:string}
+rules:
+  ids_are_paths:true
+  kind_allowed:import_only
+  disallow_missing_nodes:true
+  max_nodes_default:3000(configurable)
+
+[BUILD]
+packages:cli;server;ui
+commands:
+  cli_build:node ./packages/cli/index.js
+  server_build:tsc_or_js_ok
+  ui_build:vite build
+artifacts:.codemap/graph.json;dist_ui
+fail_build_on:
+  schema_violation_graph:true
+  api_contract_break:true
+  forbidden_dep_detected:true
+
+[COMPLIANCE]
+map_features_to_checks:
+  FEATURES.graph_generation:cli_prod_graph_json_matches_schema
+  FEATURES.visualization:ui_renders_with_cytoscape_elk_or_fcose
+  FEATURES.git_diff:diffEngine_sets_changed_true_for_git_diff_names_only
+  FEATURES.live_reload:server_emits_sse_on_watch_flag
+  SCOPE.local_only:static_analysis_no_outbound_network_calls
+  NON_GOALS.enforced:lint_ruleblocks_match_FORBIDDEN
+
+[CI]
+steps:
+  1:pnpm_install_frozen_lockfile
+  2:lint(eslint_prettier_tsconfig)
+  3:test(unit+schema+e2e_subset)
+  4:build(all)
+  5:audit(deps)
+  6:artifact_check(graph.json_exists && schema_valid)
+failure_policy:block_merge_on_any_failure
+
+[METRICS]
+report:
+  perf:cli_index_time;ui_render_time
+  graph:size_nodes;size_edges;density
+  quality:lint_errors;test_flakiness
+
+[TAGS]
+module:cli;server;ui;shared_types
+plane:static;diff
+layout:elk;fcose
+
+[OUTPUT]
+mode:diff_style_allowed:false
+format:.augmentrules.moth
+enforcement:strict
+
+[NOTES]
+- rules align with PRD scope and non-goals to prevent scope creep
+- architecture enforces one-way deps and local-only behavior
+- API/SCHEMAS mirrored from PRD; changes must update both PRD and rules

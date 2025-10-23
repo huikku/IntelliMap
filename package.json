@@ -1,0 +1,37 @@
+{
+  "name": "intellimap",
+  "version": "0.1.0",
+  "description": "Local-only full-stack code architecture visualizer for JS/TS and Python",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/cli",
+    "packages/server",
+    "packages/ui"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "cli": "node packages/cli/index.js",
+    "index": "node packages/cli/index.js index",
+    "diff": "node packages/cli/index.js diff",
+    "serve": "node packages/cli/index.js serve",
+    "clean": "rm -rf .intellimap node_modules packages/*/node_modules packages/ui/dist"
+  },
+  "keywords": [
+    "architecture",
+    "visualization",
+    "dependency-graph",
+    "code-analysis",
+    "javascript",
+    "typescript",
+    "python"
+  ],
+  "author": "IntelliMap Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
+

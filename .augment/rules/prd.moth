@@ -1,0 +1,174 @@
+[CORE]
+name:intellimap
+intent:visualize_fullstack_architecture
+goal:local_dependency_graph_for_js_ts_python
+question:"How is my entire app — front to back — wired together, and what breaks when I change this file?"
+
+[STACK]
+languages:javascript;typescript;python
+runtimes:nodejs;python3_9_plus
+frontend:react;vite;tailwind;shadcn_ui
+viz:cytoscape;cytoscape_elk
+server:express
+tools:esbuild;chokidar;simple_git;fast_glob;fs_extra;commander
+python_stdlib:ast;importlib;pathlib
+storage:local_json
+outputs:graph_json;js_graph;py_graph
+
+[FEATURES.scope_mvp]
+user:single
+execution:local_only
+graph_type:static_imports_only
+languages_supported:js_ts_python
+repos:single_or_monorepo
+frontend_backend:merged_view
+ui:react_cytoscape
+outputs:self_contained_graph_json
+views:multiplanar_2d_only
+optional:git_diff_overlay
+
+[FEATURES.non_goals]
+no_function_call_graphs:true
+no_runtime_tracing:true
+no_multi_repo_orchestration:true
+no_cloud_or_auth:true
+no_3d:true
+no_rag_llm:true
+
+[SYSTEM.flow]
+pipeline:"CLI -> analyzers{esbuild(js/ts), py_ast(python)} -> merge -> graph.json -> Express server -> React UI"
+
+[COMPONENTS]
+indexer_js_ts_node:esbuild_metafile_parse_imports_requires
+indexer_python:ast_parse_import_from;resolve_local_imports_via_importlib
+merger:merge_js_and_py_graphs_with_tags(lang_env_pkg_folder_changed)
+diff_engine:git_diff_marks_changed_nodes
+server:serves_static_ui_and_graph_json_with_sse_reload
+ui:cytoscape_multiplanar_renderer_with_filter_controls
+
+[FEATURES.graph_generation]
+js_ts_node:{esbuild_metafile;import_require_detection;alias_support;workspace_refs;barrel_export_detection;env_tagging_frontend_backend}
+python:{walk_py_root;ast_extract_imports;resolve_local_modules;vendor_tagging_for_unresolved;lang_tag_py;env_tag_backend}
+merge_process:{deduplicate_nodes;normalize_paths;annotate_nodes_with_lang_env_pkg_folder_changed;no_cross_lang_edges_mvp}
+
+[FEATURES.visualization]
+engine:cytoscape_js
+layouts:elk;fcose
+planes:static;backend_only;diff
+controls:search;collapse_expand;zoom_to_node;filter_by_env_lang;highlight_changed
+styling:{node_color_by_lang_env;changed_red_border;hover_highlight;vendor_dimmed_gray}
+
+[FEATURES.git_diff]
+command:"git diff --name-only base..head"
+effect:mark_changed_nodes_true
+ui_toggle:show_changed_only
+
+[FEATURES.live_reload]
+watcher:chokidar
+watch_paths:src;backend
+on_change:rerun_index_emit_sse_refresh
+
+[API.server]
+GET:/graph -> req:{} res:{graph_json}
+GET:/ -> req:{} res:{react_ui}
+watch_flag:true -> behavior:sse_refresh
+
+[SCHEMAS.graph_json]
+meta:{repoRoot:string;generatedAt:number;tool:string}
+nodes:{id:string;lang:string;env:string;pkg:string;changed:boolean}
+edges:{from:string;to:string;kind:string}
+rules:
+  kinds_allowed:import_only
+  langs_allowed:js;ts;py
+  deduplication:by_normalized_path
+
+[FEATURES.ui]
+framework:react_vite_tailwind_shadcn
+libraries:react;vite;cytoscape;cytoscape_elk;framer_motion;lucide_react
+filters:language(js_ts_python);environment(frontend_backend)
+components:GraphView;Sidebar;Toolbar;Inspector;PlaneSwitcher
+interactions:{click_highlight_edges;search_pan_zoom;filter_by_env_lang;toggle_diff;switch_planes}
+
+[FILE_STRUCTURE]
+root:intellimap/
+packages:cli;py;server;ui
+outputs:.intellimap/graph.json;.intellimap/js-graph.json;.intellimap/py-graph.json
+cli_files:index.js;esbuildGraph.js;mergeGraphs.js;watcher.js
+py_files:indexer.py;resolver.py;requirements.txt
+server_files:server.js;reload.js
+ui_files:App.jsx;GraphView.jsx;Sidebar.jsx;Toolbar.jsx;Inspector.jsx;PlaneSwitcher.jsx;theme.css;vite.config.js
+
+[IMPLEMENTATION.cli]
+commands:index;diff;serve
+options:entry;node_entry;py_root;py_extra_path;out;port;watch
+node_deps:esbuild;fs_extra;fast_glob;commander;chokidar;simple_git
+python_min_version:3.9
+python_modules:ast;importlib;pathlib
+
+[IMPLEMENTATION.server]
+framework:express
+serve_static:ui_build
+serve_data:graph_json
+watch_mode:sse_refresh_on_file_change
+
+[IMPLEMENTATION.react_ui]
+bundler:vite
+libraries:react;cytoscape;cytoscape_elk;framer_motion;lucide_react
+style_system:tailwind;shadcn_ui
+filter_controls:language;env;changed;collapsed
+behavior:highlight_deps;zoom_to_node;collapse_by_lang_env;multiplanar_switch
+
+[STYLE]
+theme:dark_default
+a11y:semantic_roles;aria_labels
+icons:lucide_react
+component_lib:shadcn_ui
+layout_system:tailwind_grid
+
+[UI.contract]
+@APP[theme:dark id:intellimap]
+  @HEADER[h:48 bg:#1e1e1e]
+    "IntelliMap" [Button Reload @click:RUN{index}] [Dropdown Plane:[Static|Backend|Diff]] [Dropdown Filter:[All|JS/TS|Python]]
+  @SIDEBAR_LEFT[w:280 bg:#202020]
+    §FILTERS
+      [Checkbox ShowChanged]
+      [Checkbox CollapseByFolder checked]
+      [Dropdown Language items:[All|JS/TS|Python]]
+      [Dropdown Env items:[All|frontend|backend]]
+    §STRUCTURE
+      @TREEVIEW
+        @TREENODE[label:"frontend(JS/TS)"]
+        @TREENODE[label:"backend(Python)"]
+  @MAIN[bg:#0f0f0f]
+    @TOOLBAR
+      [Button Fit] [Button Center] [Dropdown Layout items:[elk|fcose]]
+    @GRAPH_VIEW[plane:active]
+  @SIDEBAR_RIGHT[w:320 bg:#202020]
+    §DETAILS
+      [Label] Path [Code]
+      [Label] Language [Badge]
+      [Label] Env [Badge]
+      [Label] Imports [Badge]
+      [Label] ImportedBy [Badge]
+  @FOOTER[h:24 bg:#181818] "© 2025 IntelliMap"
+
+[PHASES]
+p1:js_ts_indexer_esbuild;duration:0.5d
+p2:python_ast_indexer;duration:0.5d
+p3:merge_unified_schema;duration:0.25d
+p4:react_ui_cytoscape;duration:0.5d
+p5:git_diff_multiplanar_ui;duration:0.25d
+p6:live_reload_polish;duration:0.25d
+total_duration:~2.25d
+
+[FUTURE]
+hybrid_trace_mode:true
+cross_language_inference:true
+runtime_heatmap_overlay:true
+threejs_3d_view:true
+multi_repo_support:true
+layout_persistence:true
+coverage_integration:node_inspector;c8;python_coverage
+cross_lang_paths:api_to_client
+heatmap_nodes:coverage_intensity
+storage_extensions:runtimeEdges;coverage_stats

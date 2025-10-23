@@ -1,0 +1,24 @@
+{
+  "name": "@intellimap/cli",
+  "version": "0.1.0",
+  "description": "CLI for IntelliMap - code architecture indexer",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "intellimap": "index.js"
+  },
+  "scripts": {
+    "dev": "node index.js",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "esbuild": "^0.19.11",
+    "fast-glob": "^3.3.2",
+    "fs-extra": "^11.2.0",
+    "chokidar": "^3.5.3",
+    "simple-git": "^3.20.0"
+  },
+  "devDependencies": {}
+}
+
