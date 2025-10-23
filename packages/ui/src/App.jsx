@@ -5,6 +5,7 @@ import Toolbar from './components/Toolbar';
 import Inspector from './components/Inspector';
 import PlaneSwitcher from './components/PlaneSwitcher';
 import RepoLoader from './components/RepoLoader';
+import SearchBox from './components/SearchBox';
 
 export default function App() {
   const [graph, setGraph] = useState(null);
@@ -112,7 +113,7 @@ export default function App() {
   return (
     <div className="flex flex-col h-screen bg-dark-900 text-white">
       {/* Header */}
-      <header className="h-12 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4">
+      <header className="h-12 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4 gap-4">
         <div className="flex items-center gap-4">
           <h1 className="text-lg font-bold">🗺️ IntelliMap</h1>
           {currentRepo && (
@@ -121,6 +122,7 @@ export default function App() {
             </span>
           )}
         </div>
+        <SearchBox graph={graph} cyRef={cyRef} onSearch={setSelectedNode} />
         <div className="flex gap-2">
           <button
             onClick={() => setShowRepoLoader(true)}

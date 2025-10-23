@@ -131,16 +131,22 @@ app.get('/api/detect-entry-points', (req, res) => {
 
     // Look for common Node.js entry points
     const nodeCandidates = [
+      'server.cjs',
       'server.js',
       'server.ts',
+      'index.cjs',
       'index.js',
       'index.ts',
+      'app.cjs',
       'app.js',
       'app.ts',
+      'src/server.cjs',
       'src/server.js',
       'src/server.ts',
+      'src/index.cjs',
       'src/index.js',
       'src/index.ts',
+      'src/app.cjs',
       'src/app.js',
       'src/app.ts',
     ];

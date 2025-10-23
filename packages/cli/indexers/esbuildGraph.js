@@ -1,5 +1,46 @@
 import * as esbuild from 'esbuild';
 import fs from 'fs-extra';
+import { globSync } from 'glob';
+
+/**
+ * Scan backend directory for all JS/TS files
+ */
+function scanBackendFiles(backendDir) {
+  const nodes = [];
+  const nodeMap = new Map();
+
+  try {
+    // Find all JS/TS files in backend directory
+    const patterns = [
+      `${backendDir}/**/*.js`,
+      `${backendDir}/**/*.ts`,
+      `${backendDir}/**/*.cjs`,
+      `${backendDir}/**/*.mjs`,
+    ];
+
+    for (const pattern of patterns) {
+      const files = globSync(pattern, { ignore: ['**/node_modules/**', '**/.git/**'] });
+      for (const file of files) {
+        if (!nodeMap.has(file)) {
+          nodeMap.set(file, true);
+          const isTS = file.endsWith('.ts');
+          nodes.push({
+            id: file,
+            lang: isTS ? 'ts' : 'js',
+            env: 'backend',
+            pkg: 'root',
+            folder: file.split('/')[0],
+            changed: false,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️  Error scanning backend files:', error.message);
+  }
+
+  return nodes;
+}
 
 /**
  * Build JS/TS dependency graph using esbuild metafile
@@ -115,6 +156,20 @@ export async function buildJSGraph(options) {
               });
             }
           }
+        }
+      }
+    }
+
+    // Add backend files from filesystem scan if nodeEntry is provided
+    if (nodeEntry) {
+      const backendDir = nodeEntry.split('/')[0];
+      const backendNodes = scanBackendFiles(backendDir);
+
+      // Add backend nodes that aren't already in the graph
+      for (const backendNode of backendNodes) {
+        if (!nodeMap.has(backendNode.id)) {
+          nodeMap.set(backendNode.id, true);
+          nodes.push(backendNode);
         }
       }
     }
