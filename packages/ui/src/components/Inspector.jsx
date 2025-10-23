@@ -71,29 +71,29 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
           <div className="mt-6">
             <h3 className="text-xs font-heading font-bold text-gray-300 mb-2">OUTGOING ({outgoing.length})</h3>
             <ul className="space-y-1 text-xs font-mono">
-              {outgoing.slice(0, 10).map(e => (
+              {outgoing.slice(0, 5).map(e => (
                 <li key={e.to} className="text-gray-400 truncate">
                   → {e.to.split('/').pop()}
                 </li>
               ))}
-              {outgoing.length > 10 && (
-                <li className="text-gray-500">... and {outgoing.length - 10} more</li>
+              {outgoing.length > 5 && (
+                <li className="text-gray-500">... and {outgoing.length - 5} more</li>
               )}
             </ul>
           </div>
         )}
 
         {incoming.length > 0 && (
-          <div className="mt-6">
+          <div className="mt-4">
             <h3 className="text-xs font-heading font-bold text-gray-300 mb-2">INCOMING ({incoming.length})</h3>
             <ul className="space-y-1 text-xs">
-              {incoming.slice(0, 10).map(e => (
+              {incoming.slice(0, 5).map(e => (
                 <li key={e.from} className="text-gray-400 truncate">
                   ← {e.from.split('/').pop()}
                 </li>
               ))}
-              {incoming.length > 10 && (
-                <li className="text-gray-500">... and {incoming.length - 10} more</li>
+              {incoming.length > 5 && (
+                <li className="text-gray-500">... and {incoming.length - 5} more</li>
               )}
             </ul>
           </div>
@@ -101,7 +101,7 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
       </div>
 
       {/* Bottom section - File Preview */}
-      <div className="border-t border-gray-800 flex flex-col overflow-hidden max-h-1/2">
+      <div className="border-t border-gray-800 flex flex-col overflow-hidden h-32">
         <FilePreview filePath={selectedNode.id} currentRepo={currentRepo} />
       </div>
     </aside>

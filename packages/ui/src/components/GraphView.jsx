@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import elk from 'cytoscape-elk';
+import GraphHUD from './GraphHUD';
 
 cytoscape.use(elk);
 
@@ -221,6 +222,11 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     };
   }, [graph, plane, filters, setSelectedNode, clustering]);
 
-  return <div ref={containerRef} className="w-full h-full bg-dark-900" />;
+  return (
+    <div className="relative w-full h-full">
+      <div ref={containerRef} className="w-full h-full bg-dark-900" />
+      <GraphHUD cyRef={cyRef} graph={graph} />
+    </div>
+  );
 }
 
