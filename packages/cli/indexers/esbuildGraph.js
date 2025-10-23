@@ -107,44 +107,56 @@ export async function buildJSGraph(options) {
 
     const external = hasFrontendEntry && hasBackendEntry ? nodeBuiltins : [];
 
-    const result = await esbuild.build({
-      entryPoints,
-      bundle: true,
-      metafile: true,
-      write: false,
-      outdir: '/tmp/intellimap-esbuild', // Required when multiple entry points
-      external,
-      logLevel: 'silent', // Suppress errors for external modules
-      platform: 'browser', // Use browser for analysis, external handles Node modules
-      target: 'es2020',
-      format: 'esm',
-      jsx: 'automatic',
-      jsxImportSource: 'react',
-      absWorkingDir: process.cwd(),
-      resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
-      loader: {
-        '.ts': 'ts',
-        '.tsx': 'tsx',
-        '.js': 'js',
-        '.jsx': 'jsx',
-        '.cjs': 'js',
-        '.mjs': 'js',
-        '.svg': 'dataurl',
-        '.png': 'dataurl',
-        '.jpg': 'dataurl',
-        '.jpeg': 'dataurl',
-        '.gif': 'dataurl',
-        '.webp': 'dataurl',
-        '.mp4': 'dataurl',
-        '.webm': 'dataurl',
-        '.mp3': 'dataurl',
-        '.wav': 'dataurl',
-        '.woff': 'dataurl',
-        '.woff2': 'dataurl',
-        '.ttf': 'dataurl',
-        '.eot': 'dataurl',
-      },
-    });
+    let result;
+    try {
+      result = await esbuild.build({
+        entryPoints,
+        bundle: true,
+        metafile: true,
+        write: false,
+        outdir: '/tmp/intellimap-esbuild', // Required when multiple entry points
+        external,
+        logLevel: 'silent', // Suppress errors for external modules
+        platform: 'browser', // Use browser for analysis, external handles Node modules
+        target: 'es2020',
+        format: 'esm',
+        jsx: 'automatic',
+        jsxImportSource: 'react',
+        absWorkingDir: process.cwd(),
+        resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
+        loader: {
+          '.ts': 'ts',
+          '.tsx': 'tsx',
+          '.js': 'js',
+          '.jsx': 'jsx',
+          '.cjs': 'js',
+          '.mjs': 'js',
+          '.svg': 'dataurl',
+          '.png': 'dataurl',
+          '.jpg': 'dataurl',
+          '.jpeg': 'dataurl',
+          '.gif': 'dataurl',
+          '.webp': 'dataurl',
+          '.mp4': 'dataurl',
+          '.webm': 'dataurl',
+          '.mp3': 'dataurl',
+          '.wav': 'dataurl',
+          '.woff': 'dataurl',
+          '.woff2': 'dataurl',
+          '.ttf': 'dataurl',
+          '.eot': 'dataurl',
+        },
+      });
+    } catch (buildError) {
+      // If build fails, try to extract what we can from the metafile
+      // esbuild still provides partial results even on error
+      if (buildError.errors && buildError.errors.length > 0) {
+        console.warn(`⚠️  esbuild had ${buildError.errors.length} errors, but continuing with partial results`);
+        result = buildError;
+      } else {
+        throw buildError;
+      }
+    }
 
     const metafile = result.metafile;
 
