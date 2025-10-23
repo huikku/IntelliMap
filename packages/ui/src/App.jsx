@@ -24,15 +24,21 @@ export default function App() {
     collapseByFolder: true,
   });
   const cyRef = useRef(null);
+  const selectedNodeRef = useRef(null);
+
+  // Keep selectedNodeRef in sync with selectedNode
+  useEffect(() => {
+    selectedNodeRef.current = selectedNode;
+  }, [selectedNode]);
 
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Press 'f' to focus/zoom to selected node
-      if (e.key === 'f' && selectedNode && cyRef.current) {
+      if (e.key === 'f' && selectedNodeRef.current && cyRef.current) {
         e.preventDefault();
         const cy = cyRef.current;
-        const nodeElement = cy.getElementById(selectedNode.id);
+        const nodeElement = cy.getElementById(selectedNodeRef.current.id);
 
         if (nodeElement.length > 0) {
           cy.animate({
@@ -47,7 +53,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedNode, cyRef]);
+  }, []);
 
   useEffect(() => {
     fetchGraph();
