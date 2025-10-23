@@ -1,5 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
+import cytoscape from 'cytoscape';
+import elk from 'cytoscape-elk';
+import dagre from 'cytoscape-dagre';
+import fcose from 'cytoscape-fcose';
+import euler from 'cytoscape-euler';
+import cola from 'cytoscape-cola';
 import LayoutSpinner from './LayoutSpinner';
+
+// Register layout plugins for background instance
+cytoscape.use(elk);
+cytoscape.use(dagre);
+cytoscape.use(fcose);
+cytoscape.use(euler);
+cytoscape.use(cola);
 
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering }) {
   const [isLayouting, setIsLayouting] = useState(false);
@@ -8,9 +21,10 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   const layoutCacheRef = useRef({});
   const bgLayoutTimeoutRef = useRef(null);
   const bgLayoutIntervalRef = useRef(null);
+  const bgCyRef = useRef(null);
   const lastGraphIdRef = useRef(null);
 
-  // Precompute layouts in background - only once per graph
+  // Precompute layouts in background using hidden Cytoscape instance
   useEffect(() => {
     if (!cy) return;
 
@@ -22,6 +36,12 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       console.log('📊 New graph detected, clearing layout cache');
       layoutCacheRef.current = {};
       lastGraphIdRef.current = graphId;
+
+      // Destroy old background instance
+      if (bgCyRef.current) {
+        bgCyRef.current.destroy();
+        bgCyRef.current = null;
+      }
     }
 
     // Clear any pending background layout
@@ -34,32 +54,47 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
     // Start precomputing other layouts after a delay
     bgLayoutTimeoutRef.current = setTimeout(() => {
+      // Create hidden background Cytoscape instance
+      if (!bgCyRef.current) {
+        console.log('🔧 Creating background Cytoscape instance');
+        const container = document.createElement('div');
+        container.style.display = 'none';
+        document.body.appendChild(container);
+
+        bgCyRef.current = cytoscape({
+          container: container,
+          elements: cy.elements().jsons(),
+          style: cy.style().json(),
+        });
+      }
+
       const layoutsToPrecompute = ['dagre', 'dagreDown', 'fcose', 'euler', 'cola', 'elkDown', 'elkTree', 'grid'];
       let index = 0;
 
       bgLayoutIntervalRef.current = setInterval(() => {
         if (index >= layoutsToPrecompute.length) {
           clearInterval(bgLayoutIntervalRef.current);
+          console.log('✅ All layouts precomputed');
           return;
         }
 
         const layoutName = layoutsToPrecompute[index];
         if (!layoutCacheRef.current[layoutName]) {
           console.log(`🔄 Precomputing layout: ${layoutName}`);
-          const layoutOptions = getLayoutOptions(layoutName, cy);
-          const layout = cy.layout(layoutOptions);
+          const layoutOptions = getLayoutOptions(layoutName, bgCyRef.current);
+          const bgLayout = bgCyRef.current.layout(layoutOptions);
 
-          layout.on('layoutstop', () => {
+          bgLayout.on('layoutstop', () => {
             // Save the positions
             const positions = {};
-            cy.nodes().forEach(n => {
+            bgCyRef.current.nodes().forEach(n => {
               positions[n.id()] = { x: n.position('x'), y: n.position('y') };
             });
             layoutCacheRef.current[layoutName] = positions;
             console.log(`✓ Cached layout: ${layoutName}`);
           });
 
-          layout.run();
+          bgLayout.run();
         }
         index++;
       }, 500); // Stagger by 500ms
