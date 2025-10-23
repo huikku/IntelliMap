@@ -152,10 +152,17 @@ export async function buildJSGraph(options) {
       // esbuild still provides partial results even on error
       if (buildError.errors && buildError.errors.length > 0) {
         console.warn(`⚠️  esbuild had ${buildError.errors.length} errors, but continuing with partial results`);
-        result = buildError;
+        // The error object has the metafile in the same structure
+        result = { metafile: buildError.metafile };
       } else {
         throw buildError;
       }
+    }
+
+    // Handle case where metafile might not exist
+    if (!result || !result.metafile) {
+      console.warn('⚠️  No metafile generated, returning empty graph');
+      return { nodes: [], edges: [] };
     }
 
     const metafile = result.metafile;
