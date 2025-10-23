@@ -1,9 +1,55 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import LayoutSpinner from './LayoutSpinner';
 
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering }) {
   const [isLayouting, setIsLayouting] = useState(false);
   const [sizing, setSizing] = useState('uniform');
+  const layoutCacheRef = useRef({});
+  const bgLayoutTimeoutRef = useRef(null);
+
+  // Precompute layouts in background
+  useEffect(() => {
+    if (!cy) return;
+
+    // Clear any pending background layout
+    if (bgLayoutTimeoutRef.current) {
+      clearTimeout(bgLayoutTimeoutRef.current);
+    }
+
+    // Start precomputing other layouts after a delay
+    bgLayoutTimeoutRef.current = setTimeout(() => {
+      const layoutsToPrecompute = ['dagre', 'dagreDown', 'fcose', 'euler', 'cola', 'elkDown', 'elkTree', 'grid'];
+
+      layoutsToPrecompute.forEach((layoutName, index) => {
+        // Stagger the precomputation to avoid blocking
+        setTimeout(() => {
+          if (!layoutCacheRef.current[layoutName]) {
+            console.log(`🔄 Precomputing layout: ${layoutName}`);
+            const layoutOptions = getLayoutOptions(layoutName, cy);
+            const layout = cy.layout(layoutOptions);
+
+            layout.on('layoutstop', () => {
+              // Save the positions
+              const positions = {};
+              cy.nodes().forEach(n => {
+                positions[n.id()] = { x: n.position('x'), y: n.position('y') };
+              });
+              layoutCacheRef.current[layoutName] = positions;
+              console.log(`✓ Cached layout: ${layoutName}`);
+            });
+
+            layout.run();
+          }
+        }, index * 500); // Stagger by 500ms
+      });
+    }, 2000); // Wait 2 seconds after initial render
+
+    return () => {
+      if (bgLayoutTimeoutRef.current) {
+        clearTimeout(bgLayoutTimeoutRef.current);
+      }
+    };
+  }, [cy]);
 
   const handleFit = () => {
     if (cy) cy.fit();
@@ -13,41 +59,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
     if (cy) cy.center();
   };
 
-  const handleSizingChange = (newSizing) => {
-    if (!cy) return;
-    setSizing(newSizing);
-
-    if (newSizing === 'uniform') {
-      // Reset to uniform sizing
-      cy.style().selector('node').style({
-        'width': node => (node.data('isCluster') ? 'label' : 45),
-        'height': node => (node.data('isCluster') ? 'label' : 45),
-      }).update();
-    } else if (newSizing === 'degree') {
-      // Size by degree (number of connections)
-      cy.nodes().forEach(n => {
-        n.data('degree', n.degree());
-      });
-      cy.style().selector('node').style({
-        'width': node => {
-          if (node.data('isCluster')) return 'label';
-          const degree = node.data('degree') || 0;
-          return Math.max(30, Math.min(100, 30 + (degree * 3)));
-        },
-        'height': node => {
-          if (node.data('isCluster')) return 'label';
-          const degree = node.data('degree') || 0;
-          return Math.max(30, Math.min(100, 30 + (degree * 3)));
-        },
-      }).update();
-    }
-  };
-
-  const handleLayoutChange = (newLayout) => {
-    if (!cy) return;
-    setLayout(newLayout);
-    setIsLayouting(true);
-
+  const getLayoutOptions = (layoutName, cyInstance) => {
     const layoutOptions = {
       elk: {
         name: 'elk',
@@ -76,8 +88,8 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       },
       grid: {
         name: 'grid',
-        rows: Math.ceil(Math.sqrt(cy.nodes().length)),
-        cols: Math.ceil(Math.sqrt(cy.nodes().length)),
+        rows: Math.ceil(Math.sqrt(cyInstance.nodes().length)),
+        cols: Math.ceil(Math.sqrt(cyInstance.nodes().length)),
         spacingFactor: 1.5,
       },
       dagre: {
@@ -128,12 +140,72 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         randomize: false,
       },
     };
+    return layoutOptions[layoutName];
+  };
 
-    const layout = cy.layout(layoutOptions[newLayout]);
-    layout.on('layoutstop', () => {
+  const handleSizingChange = (newSizing) => {
+    if (!cy) return;
+    setSizing(newSizing);
+
+    if (newSizing === 'uniform') {
+      // Reset to uniform sizing
+      cy.style().selector('node').style({
+        'width': node => (node.data('isCluster') ? 'label' : 45),
+        'height': node => (node.data('isCluster') ? 'label' : 45),
+      }).update();
+    } else if (newSizing === 'degree') {
+      // Size by degree (number of connections)
+      cy.nodes().forEach(n => {
+        n.data('degree', n.degree());
+      });
+      cy.style().selector('node').style({
+        'width': node => {
+          if (node.data('isCluster')) return 'label';
+          const degree = node.data('degree') || 0;
+          return Math.max(30, Math.min(100, 30 + (degree * 3)));
+        },
+        'height': node => {
+          if (node.data('isCluster')) return 'label';
+          const degree = node.data('degree') || 0;
+          return Math.max(30, Math.min(100, 30 + (degree * 3)));
+        },
+      }).update();
+    }
+  };
+
+  const handleLayoutChange = (newLayout) => {
+    if (!cy) return;
+    setLayout(newLayout);
+    setIsLayouting(true);
+
+    // Check if layout is cached
+    if (layoutCacheRef.current[newLayout]) {
+      console.log(`⚡ Using cached layout: ${newLayout}`);
+      // Restore cached positions
+      const positions = layoutCacheRef.current[newLayout];
+      cy.nodes().forEach(n => {
+        if (positions[n.id()]) {
+          n.position(positions[n.id()]);
+        }
+      });
       setIsLayouting(false);
-    });
-    layout.run();
+    } else {
+      console.log(`🔄 Computing layout: ${newLayout}`);
+      const layoutOptions = getLayoutOptions(newLayout, cy);
+      const layout = cy.layout(layoutOptions);
+
+      layout.on('layoutstop', () => {
+        // Cache the positions
+        const positions = {};
+        cy.nodes().forEach(n => {
+          positions[n.id()] = { x: n.position('x'), y: n.position('y') };
+        });
+        layoutCacheRef.current[newLayout] = positions;
+        setIsLayouting(false);
+      });
+
+      layout.run();
+    }
   };
 
   return (
