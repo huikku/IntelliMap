@@ -88,7 +88,8 @@ export async function buildJSGraph(options) {
 
         // Determine language and environment
         const isTS = inputPath.endsWith('.ts') || inputPath.endsWith('.tsx');
-        const isBackend = nodeEntry && inputPath.includes(nodeEntry.split('/')[0]);
+        // Check if this file is from the backend entry point
+        const isBackend = nodeEntry && (inputPath.startsWith(nodeEntry.split('/')[0] + '/') || inputPath.startsWith(nodeEntry.split('/')[0]));
 
         nodes.push({
           id: nodeId,

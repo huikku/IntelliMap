@@ -18,19 +18,20 @@ function getNodeType(filename) {
 }
 
 // Helper to get shape based on node type
+// Only use Cytoscape-supported shapes: rectangle, roundrectangle, ellipse, triangle, diamond, pentagon, hexagon, heptagon, octagon, star, vee, rhomboid, polygon
 function getNodeShape(nodeType) {
   const shapes = {
     component: 'ellipse',
     hook: 'diamond',
     util: 'rectangle',
-    config: 'square',
+    config: 'roundrectangle',
     test: 'triangle',
     type: 'pentagon',
     index: 'star',
     service: 'hexagon',
-    module: 'circle',
+    module: 'ellipse',
   };
-  return shapes[nodeType] || 'circle';
+  return shapes[nodeType] || 'ellipse';
 }
 
 // Helper to get color based on language and type
