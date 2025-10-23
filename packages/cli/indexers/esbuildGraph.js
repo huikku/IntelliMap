@@ -15,11 +15,22 @@ export async function buildJSGraph(options) {
   try {
     // Collect entry points
     const entryPoints = [];
+    console.log('🔍 Looking for entry points:', { entry, nodeEntry });
+    console.log('📁 Current directory:', process.cwd());
+
     if (fs.existsSync(entry)) {
-      entryPoints.push(entry);
+      console.log('✓ Found entry:', entry);
+      // Ensure entry point starts with ./ for esbuild
+      const normalizedEntry = entry.startsWith('./') ? entry : `./${entry}`;
+      entryPoints.push(normalizedEntry);
+    } else {
+      console.log('✗ Entry not found:', entry);
     }
+
     if (nodeEntry && fs.existsSync(nodeEntry)) {
-      entryPoints.push(nodeEntry);
+      console.log('✓ Found nodeEntry:', nodeEntry);
+      const normalizedNodeEntry = nodeEntry.startsWith('./') ? nodeEntry : `./${nodeEntry}`;
+      entryPoints.push(normalizedNodeEntry);
     }
 
     if (entryPoints.length === 0) {
@@ -28,15 +39,41 @@ export async function buildJSGraph(options) {
     }
 
     // Build with esbuild to get metafile
+    console.log('🔨 Building with esbuild, entryPoints:', entryPoints);
     const result = await esbuild.build({
       entryPoints,
       bundle: true,
       metafile: true,
       write: false,
       external: [],
-      logLevel: 'silent',
-      platform: 'node',
+      logLevel: 'error',
+      platform: 'browser',
       target: 'es2020',
+      format: 'esm',
+      jsx: 'automatic',
+      jsxImportSource: 'react',
+      absWorkingDir: process.cwd(),
+      resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.json'],
+      loader: {
+        '.ts': 'ts',
+        '.tsx': 'tsx',
+        '.js': 'js',
+        '.jsx': 'jsx',
+        '.svg': 'dataurl',
+        '.png': 'dataurl',
+        '.jpg': 'dataurl',
+        '.jpeg': 'dataurl',
+        '.gif': 'dataurl',
+        '.webp': 'dataurl',
+        '.mp4': 'dataurl',
+        '.webm': 'dataurl',
+        '.mp3': 'dataurl',
+        '.wav': 'dataurl',
+        '.woff': 'dataurl',
+        '.woff2': 'dataurl',
+        '.ttf': 'dataurl',
+        '.eot': 'dataurl',
+      },
     });
 
     const metafile = result.metafile;
