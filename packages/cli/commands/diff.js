@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync } from 'fs-extra';
-import { SimpleGit, simpleGit } from 'simple-git';
+import fs from 'fs-extra';
+import { simpleGit } from 'simple-git';
 
 export async function diffCommand(base, head) {
   console.log(`📊 Computing diff between ${base} and ${head}...`);
@@ -15,7 +15,7 @@ export async function diffCommand(base, head) {
     
     // Read current graph
     const graphPath = '.intellimap/graph.json';
-    const graph = JSON.parse(readFileSync(graphPath, 'utf-8'));
+    const graph = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
     
     // Mark changed nodes
     let markedCount = 0;
@@ -29,7 +29,7 @@ export async function diffCommand(base, head) {
     console.log(`   ✓ Marked ${markedCount} nodes as changed`);
     
     // Write updated graph
-    writeFileSync(graphPath, JSON.stringify(graph, null, 2));
+    fs.writeFileSync(graphPath, JSON.stringify(graph, null, 2));
     console.log(`✅ Diff overlay applied to ${graphPath}`);
     
   } catch (error) {

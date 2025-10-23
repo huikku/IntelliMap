@@ -1,8 +1,8 @@
 import { buildJSGraph } from '../indexers/esbuildGraph.js';
 import { buildPythonGraph } from '../indexers/pythonGraph.js';
 import { mergeGraphs } from '../indexers/mergeGraphs.js';
-import { writeFileSync, ensureDirSync } from 'fs-extra';
-import { dirname } from 'path';
+import fs from 'fs-extra';
+import { dirname } from 'node:path';
 
 export async function indexCommand(options) {
   console.log('🔍 IntelliMap: Indexing code architecture...');
@@ -36,8 +36,8 @@ export async function indexCommand(options) {
     console.log(`   ✓ Merged: ${merged.nodes.length} nodes, ${merged.edges.length} edges`);
     
     // Write output
-    ensureDirSync(dirname(options.out));
-    writeFileSync(options.out, JSON.stringify(merged, null, 2));
+    fs.ensureDirSync(dirname(options.out));
+    fs.writeFileSync(options.out, JSON.stringify(merged, null, 2));
     console.log(`✅ Graph saved to ${options.out}`);
     
   } catch (error) {

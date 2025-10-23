@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import { readFileSync } from 'fs-extra';
-import { resolve } from 'path';
+import fs from 'fs-extra';
+import { resolve } from 'node:path';
 
 const app = express();
 const port = process.env.PORT || 7676;
@@ -14,7 +14,7 @@ app.use(express.json());
 app.get('/graph', (req, res) => {
   try {
     const graphPath = resolve(process.cwd(), '.intellimap/graph.json');
-    const graph = JSON.parse(readFileSync(graphPath, 'utf-8'));
+    const graph = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
     res.json(graph);
   } catch (error) {
     res.status(500).json({ error: 'Failed to load graph', message: error.message });
