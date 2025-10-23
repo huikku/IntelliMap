@@ -34,8 +34,15 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
 
       // Animate to node position
       const pos = nodeElement.position();
+      const w = cy.width();
+      const h = cy.height();
+      const pan = {
+        x: w / 2 - pos.x * 2,  // Account for zoom level 2
+        y: h / 2 - pos.y * 2,
+      };
+
       cy.animate({
-        center: pos,
+        pan: pan,
         zoom: 2,
       }, {
         duration: 500,

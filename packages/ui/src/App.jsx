@@ -41,10 +41,17 @@ export default function App() {
         const nodeElement = cy.getElementById(selectedNodeRef.current.id);
 
         if (nodeElement.length > 0) {
-          // Get node position and animate to it
+          // Get node position and calculate pan to center it
           const pos = nodeElement.position();
+          const w = cy.width();
+          const h = cy.height();
+          const pan = {
+            x: w / 2 - pos.x * 2,  // Account for zoom level 2
+            y: h / 2 - pos.y * 2,
+          };
+
           cy.animate({
-            center: pos,
+            pan: pan,
             zoom: 2,
           }, {
             duration: 500,
