@@ -78,6 +78,103 @@ app.get('/api/browse', (req, res) => {
   }
 });
 
+// Detect entry points in a repository
+app.get('/api/detect-entry-points', (req, res) => {
+  try {
+    const repoPath = req.query.path;
+    if (!repoPath) {
+      return res.status(400).json({ error: 'path is required' });
+    }
+
+    const fullPath = resolve(repoPath);
+
+    // Check if path exists and is a directory
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ error: 'Path not found' });
+    }
+
+    const stats = fs.statSync(fullPath);
+    if (!stats.isDirectory()) {
+      return res.status(400).json({ error: 'Path is not a directory' });
+    }
+
+    const detected = {
+      entry: null,
+      nodeEntry: null,
+      pyRoot: null,
+      pyExtraPath: null,
+    };
+
+    // Look for common frontend entry points
+    const frontendCandidates = [
+      'src/main.tsx',
+      'src/main.ts',
+      'src/main.jsx',
+      'src/main.js',
+      'src/index.tsx',
+      'src/index.ts',
+      'src/index.jsx',
+      'src/index.js',
+      'index.tsx',
+      'index.ts',
+      'index.jsx',
+      'index.js',
+    ];
+
+    for (const candidate of frontendCandidates) {
+      const candidatePath = join(fullPath, candidate);
+      if (fs.existsSync(candidatePath)) {
+        detected.entry = candidate;
+        break;
+      }
+    }
+
+    // Look for common Node.js entry points
+    const nodeCandidates = [
+      'server.js',
+      'server.ts',
+      'index.js',
+      'index.ts',
+      'app.js',
+      'app.ts',
+      'src/server.js',
+      'src/server.ts',
+      'src/index.js',
+      'src/index.ts',
+      'src/app.js',
+      'src/app.ts',
+    ];
+
+    for (const candidate of nodeCandidates) {
+      const candidatePath = join(fullPath, candidate);
+      if (fs.existsSync(candidatePath)) {
+        detected.nodeEntry = candidate;
+        break;
+      }
+    }
+
+    // Look for Python
+    const pythonCandidates = [
+      'main.py',
+      'app.py',
+      'src/main.py',
+      'src/app.py',
+    ];
+
+    for (const candidate of pythonCandidates) {
+      const candidatePath = join(fullPath, candidate);
+      if (fs.existsSync(candidatePath)) {
+        detected.pyRoot = '.';
+        break;
+      }
+    }
+
+    res.json(detected);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to detect entry points', message: error.message });
+  }
+});
+
 // Index a repository
 app.post('/api/index', express.json(), async (req, res) => {
   try {

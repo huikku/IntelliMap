@@ -17,6 +17,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
   const [selectedRepo, setSelectedRepo] = useState(null);
   const [indexing, setIndexing] = useState(false);
   const [pathInput, setPathInput] = useState('');
+  const [step, setStep] = useState('select'); // 'select' or 'configure'
   const [indexConfig, setIndexConfig] = useState({
     entry: '',
     nodeEntry: '',
@@ -43,12 +44,47 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
     }
   };
 
+  const detectEntryPoints = async (repoPath) => {
+    try {
+      const response = await fetch(`/api/detect-entry-points?path=${encodeURIComponent(repoPath)}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Detected entry points:', data);
+        return data;
+      }
+    } catch (err) {
+      console.error('Error detecting entry points:', err);
+    }
+    return null;
+  };
+
+  const handleSelectRepo = async () => {
+    if (!selectedRepo) return;
+
+    // Auto-detect entry points
+    setLoading(true);
+    const detected = await detectEntryPoints(selectedRepo);
+    setLoading(false);
+
+    if (detected) {
+      setIndexConfig({
+        entry: detected.entry || '',
+        nodeEntry: detected.nodeEntry || '',
+        pyRoot: detected.pyRoot || '',
+        pyExtraPath: detected.pyExtraPath || '',
+      });
+    }
+
+    setStep('configure');
+    setError(null);
+  };
+
   const handleIndexRepo = async () => {
     if (!selectedRepo) return;
 
     // Check if at least one entry point is set
     if (!indexConfig.entry && !indexConfig.nodeEntry && !indexConfig.pyRoot) {
-      setError('❌ Please set at least one entry point:\n- Frontend (e.g., src/main.tsx)\n- Node.js (e.g., server.js)\n- Python (e.g., .)');
+      setError('❌ No entry points found. Try manually specifying one:\n- Frontend (e.g., src/main.tsx)\n- Node.js (e.g., server.js)\n- Python (e.g., .)');
       return;
     }
 
@@ -63,12 +99,12 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
           ...indexConfig,
         }),
       });
-      
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message || 'Failed to index repository');
       }
-      
+
       const data = await response.json();
       console.log('✓ Repository indexed successfully');
       console.log('Graph:', data.graph);
@@ -141,7 +177,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-900 rounded-lg w-full max-w-5xl max-h-[90vh] flex flex-col">
+      <div className="bg-gray-900 rounded-lg w-full max-w-5xl h-[90vh] flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-700 bg-gray-800">
           <h2 className="text-lg font-bold">📁 Open Repository</h2>
@@ -191,6 +227,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
         )}
 
         {/* Main Content */}
+        {step === 'select' ? (
         <div className="flex flex-1 overflow-hidden">
           {/* Sidebar */}
           <div className="w-48 bg-gray-800 border-r border-gray-700 overflow-y-auto">
@@ -261,11 +298,75 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
             )}
           </div>
         </div>
+        ) : (
+        <div className="flex-1 overflow-auto p-6 bg-gray-900">
+          <div className="max-w-2xl mx-auto">
+            <h3 className="text-xl font-bold mb-4">⚙️ Configure Entry Points</h3>
+            <p className="text-gray-400 mb-4">Repository: <span className="font-mono text-blue-400">{selectedRepo}</span></p>
 
-        {/* Config Panel */}
-        {selectedRepo && (
-          <div className="border-t border-gray-700 bg-gray-800 p-4 max-h-48 overflow-y-auto">
-            <div className="text-sm font-bold mb-3">📋 Index Configuration</div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">Frontend Entry Point</label>
+                <p className="text-xs text-gray-400 mb-2">Auto-detected: {indexConfig.entry || 'None found'}</p>
+                <input
+                  type="text"
+                  placeholder="e.g., src/main.tsx or src/index.js"
+                  value={indexConfig.entry}
+                  onChange={e => setIndexConfig({ ...indexConfig, entry: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Node.js Entry Point</label>
+                <p className="text-xs text-gray-400 mb-2">Auto-detected: {indexConfig.nodeEntry || 'None found'}</p>
+                <input
+                  type="text"
+                  placeholder="e.g., server/index.js or index.js"
+                  value={indexConfig.nodeEntry}
+                  onChange={e => setIndexConfig({ ...indexConfig, nodeEntry: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Python Root</label>
+                <p className="text-xs text-gray-400 mb-2">Auto-detected: {indexConfig.pyRoot || 'None found'}</p>
+                <input
+                  type="text"
+                  placeholder="e.g., . or backend/ or src/"
+                  value={indexConfig.pyRoot}
+                  onChange={e => setIndexConfig({ ...indexConfig, pyRoot: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Python Extra Path</label>
+                <p className="text-xs text-gray-400 mb-2">Auto-detected: {indexConfig.pyExtraPath || 'None found'}</p>
+                <input
+                  type="text"
+                  placeholder="e.g., .venv/lib/python3.11/site-packages"
+                  value={indexConfig.pyExtraPath}
+                  onChange={e => setIndexConfig({ ...indexConfig, pyExtraPath: e.target.value })}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm"
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="mt-4 p-3 bg-red-900 border border-red-700 rounded text-sm text-red-200 whitespace-pre-wrap">
+                {error}
+              </div>
+            )}
+          </div>
+        </div>
+        )}
+
+        {/* Config Panel - OLD - REMOVE */}
+        {false && selectedRepo && (
+          <div className="border-t border-gray-700 bg-gray-800 p-4">
+            <div className="text-sm font-bold mb-2">📋 Index Configuration</div>
             <div className="space-y-2 text-sm">
               <div>
                 <label className="text-xs text-gray-400">Selected Repository</label>
@@ -279,7 +380,10 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                   type="text"
                   placeholder="e.g., src/main.tsx or src/index.js"
                   value={indexConfig.entry}
-                  onChange={e => setIndexConfig({ ...indexConfig, entry: e.target.value })}
+                  onChange={e => {
+                    console.log('Frontend entry changed to:', e.target.value);
+                    setIndexConfig({ ...indexConfig, entry: e.target.value });
+                  }}
                   className="w-full px-2 py-1 bg-gray-700 border border-gray-600 rounded text-xs"
                 />
               </div>
@@ -319,19 +423,45 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
 
         {/* Footer */}
         <div className="flex gap-2 p-4 border-t border-gray-700 bg-gray-800">
-          <button
-            onClick={handleIndexRepo}
-            disabled={!selectedRepo || indexing}
-            className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 rounded text-white font-medium transition"
-          >
-            {indexing ? '⏳ Indexing...' : '✓ Load Repository'}
-          </button>
-          <button
-            onClick={onClose}
-            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white transition"
-          >
-            Cancel
-          </button>
+          {step === 'select' ? (
+            <>
+              <button
+                onClick={handleSelectRepo}
+                disabled={!selectedRepo || loading}
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 rounded text-white font-medium transition"
+              >
+                {loading ? '🔍 Detecting...' : '→ Next: Configure'}
+              </button>
+              <button
+                onClick={onClose}
+                className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white transition"
+              >
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setStep('select')}
+                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white transition"
+              >
+                ← Back
+              </button>
+              <button
+                onClick={handleIndexRepo}
+                disabled={indexing}
+                className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 rounded text-white font-medium transition"
+              >
+                {indexing ? '⏳ Indexing...' : '✓ Load Repository'}
+              </button>
+              <button
+                onClick={onClose}
+                className="px-6 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white transition"
+              >
+                Cancel
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
