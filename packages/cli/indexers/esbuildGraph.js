@@ -130,7 +130,11 @@ export async function buildJSGraph(options) {
         // Determine language and environment
         const isTS = inputPath.endsWith('.ts') || inputPath.endsWith('.tsx');
         // Check if this file is from the backend entry point
-        const isBackend = nodeEntry && (inputPath.startsWith(nodeEntry.split('/')[0] + '/') || inputPath.startsWith(nodeEntry.split('/')[0]));
+        let isBackend = false;
+        if (nodeEntry) {
+          const nodeEntryDir = nodeEntry.includes('/') ? nodeEntry.split('/')[0] : '.';
+          isBackend = inputPath.startsWith(nodeEntryDir + '/') || inputPath === nodeEntryDir || inputPath.startsWith('./');
+        }
 
         nodes.push({
           id: nodeId,
@@ -162,8 +166,11 @@ export async function buildJSGraph(options) {
 
     // Add backend files from filesystem scan if nodeEntry is provided
     if (nodeEntry) {
-      const backendDir = nodeEntry.split('/')[0];
-      const backendNodes = scanBackendFiles(backendDir);
+      // Get the directory containing the nodeEntry file
+      // If nodeEntry is 'server.cjs', scan the root directory
+      // If nodeEntry is 'backend/server.js', scan the 'backend' directory
+      const nodeEntryDir = nodeEntry.includes('/') ? nodeEntry.split('/')[0] : '.';
+      const backendNodes = scanBackendFiles(nodeEntryDir);
 
       // Add backend nodes that aren't already in the graph
       for (const backendNode of backendNodes) {
