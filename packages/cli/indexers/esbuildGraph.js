@@ -86,9 +86,26 @@ export async function buildJSGraph(options) {
     const hasBackendEntry = entryPoints.some(ep => ep.endsWith('.cjs') || ep.endsWith('.mjs'));
     const hasFrontendEntry = entryPoints.some(ep => !ep.endsWith('.cjs') && !ep.endsWith('.mjs'));
 
-    // Use appropriate platform and format
-    const platform = hasBackendEntry && !hasFrontendEntry ? 'node' : 'browser';
-    const format = hasBackendEntry && !hasFrontendEntry ? 'cjs' : 'esm';
+    // When we have both frontend and backend, mark Node.js built-ins as external
+    // This allows esbuild to analyze both without trying to bundle Node modules
+    const nodeBuiltins = [
+      'fs', 'path', 'crypto', 'events', 'stream', 'util', 'os', 'http', 'https',
+      'net', 'url', 'querystring', 'zlib', 'buffer', 'child_process', 'cluster',
+      'dgram', 'dns', 'domain', 'http2', 'inspector', 'module', 'perf_hooks',
+      'process', 'punycode', 'readline', 'repl', 'tls', 'tty', 'v8', 'vm',
+      'worker_threads', 'assert', 'async_hooks', 'console', 'constants', 'debugger',
+      'errors', 'fs/promises', 'node:fs', 'node:path', 'node:crypto', 'node:events',
+      'node:stream', 'node:util', 'node:os', 'node:http', 'node:https', 'node:net',
+      'node:url', 'node:querystring', 'node:zlib', 'node:buffer', 'node:child_process',
+      'node:cluster', 'node:dgram', 'node:dns', 'node:domain', 'node:http2',
+      'node:inspector', 'node:module', 'node:perf_hooks', 'node:process', 'node:punycode',
+      'node:readline', 'node:repl', 'node:tls', 'node:tty', 'node:v8', 'node:vm',
+      'node:worker_threads', 'node:assert', 'node:async_hooks', 'node:console',
+      'node:constants', 'node:debugger', 'node:errors', 'node:fs/promises',
+      'node:string_decoder',
+    ];
+
+    const external = hasFrontendEntry && hasBackendEntry ? nodeBuiltins : [];
 
     const result = await esbuild.build({
       entryPoints,
@@ -96,11 +113,11 @@ export async function buildJSGraph(options) {
       metafile: true,
       write: false,
       outdir: '/tmp/intellimap-esbuild', // Required when multiple entry points
-      external: [],
+      external,
       logLevel: 'error',
-      platform,
+      platform: 'browser', // Use browser for analysis, external handles Node modules
       target: 'es2020',
-      format,
+      format: 'esm',
       jsx: 'automatic',
       jsxImportSource: 'react',
       absWorkingDir: process.cwd(),
