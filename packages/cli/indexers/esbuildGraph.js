@@ -114,7 +114,7 @@ export async function buildJSGraph(options) {
       write: false,
       outdir: '/tmp/intellimap-esbuild', // Required when multiple entry points
       external,
-      logLevel: 'error',
+      logLevel: 'silent', // Suppress errors for external modules
       platform: 'browser', // Use browser for analysis, external handles Node modules
       target: 'es2020',
       format: 'esm',
