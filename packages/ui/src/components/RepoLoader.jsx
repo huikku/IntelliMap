@@ -19,7 +19,10 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
     setError(null);
     try {
       const response = await fetch(`/api/browse?path=${encodeURIComponent(path)}`);
-      if (!response.ok) throw new Error('Failed to browse directory');
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Failed to browse directory');
+      }
       const data = await response.json();
       setCurrentPath(data.path);
       setItems(data.items);
@@ -60,17 +63,18 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
     }
   };
 
-  // Initialize with home directory
+  // Initialize with root directory
   if (!currentPath) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-gray-900 rounded-lg p-6 max-w-2xl w-full max-h-96 flex flex-col">
           <h2 className="text-xl font-bold mb-4">📁 Load Repository</h2>
+          <p className="text-sm text-gray-400 mb-4">Click to start browsing from root directory</p>
           <button
-            onClick={() => browsePath(process.env.HOME || '/home')}
+            onClick={() => browsePath('/')}
             className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded text-white"
           >
-            Browse Home Directory
+            Browse System
           </button>
           <button
             onClick={onClose}
@@ -103,19 +107,22 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
         )}
 
         <div className="mb-4">
-          <p className="text-sm text-gray-400 mb-2">Current: {currentPath}</p>
+          <p className="text-sm text-gray-400 mb-2 truncate">Current: <code className="text-xs">{currentPath}</code></p>
           <div className="flex gap-2">
             <button
-              onClick={() => browsePath(currentPath.split('/').slice(0, -1).join('/') || '/')}
+              onClick={() => browsePath('/')}
+              className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
+            >
+              / Root
+            </button>
+            <button
+              onClick={() => {
+                const parent = currentPath.split('/').slice(0, -1).join('/') || '/';
+                if (parent !== currentPath) browsePath(parent);
+              }}
               className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
             >
               ↑ Up
-            </button>
-            <button
-              onClick={() => browsePath(process.env.HOME || '/home')}
-              className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
-            >
-              🏠 Home
             </button>
           </div>
         </div>

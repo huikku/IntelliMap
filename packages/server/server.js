@@ -35,23 +35,38 @@ app.get('/graph', (req, res) => {
 // Browse directories
 app.get('/api/browse', (req, res) => {
   try {
-    const homeDir = process.env.HOME || '/home/john';
-    const path = req.query.path || homeDir;
+    const path = req.query.path || '/';
     const fullPath = resolve(path);
 
-    // Security: prevent directory traversal outside home
-    if (!fullPath.startsWith(homeDir) && fullPath !== '/') {
-      return res.status(403).json({ error: 'Access denied' });
+    // Check if path exists and is a directory
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ error: 'Path not found' });
+    }
+
+    const stats = fs.statSync(fullPath);
+    if (!stats.isDirectory()) {
+      return res.status(400).json({ error: 'Path is not a directory' });
     }
 
     const items = fs.readdirSync(fullPath, { withFileTypes: true })
-      .filter(item => !item.name.startsWith('.'))
-      .map(item => ({
-        name: item.name,
-        path: join(fullPath, item.name),
-        isDirectory: item.isDirectory(),
-        isFile: item.isFile(),
-      }))
+      .filter(item => {
+        // Skip hidden files and system files
+        if (item.name.startsWith('.')) return false;
+        return true;
+      })
+      .map(item => {
+        try {
+          return {
+            name: item.name,
+            path: join(fullPath, item.name),
+            isDirectory: item.isDirectory(),
+            isFile: item.isFile(),
+          };
+        } catch {
+          return null;
+        }
+      })
+      .filter(item => item !== null)
       .sort((a, b) => {
         if (a.isDirectory !== b.isDirectory) return b.isDirectory - a.isDirectory;
         return a.name.localeCompare(b.name);
@@ -72,12 +87,16 @@ app.post('/api/index', express.json(), async (req, res) => {
       return res.status(400).json({ error: 'repoPath is required' });
     }
 
-    const homeDir = process.env.HOME || '/home/john';
     const fullPath = resolve(repoPath);
 
-    // Security: prevent directory traversal outside home
-    if (!fullPath.startsWith(homeDir) && fullPath !== '/') {
-      return res.status(403).json({ error: 'Access denied' });
+    // Check if path exists and is a directory
+    if (!fs.existsSync(fullPath)) {
+      return res.status(404).json({ error: 'Path not found' });
+    }
+
+    const stats = fs.statSync(fullPath);
+    if (!stats.isDirectory()) {
+      return res.status(400).json({ error: 'Path is not a directory' });
     }
 
     // Change to repo directory
