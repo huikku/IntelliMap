@@ -161,7 +161,6 @@ export async function buildJSGraph(options) {
           metafile: true,
           write: false,
           outdir: '/tmp/intellimap-esbuild-backend',
-          external: nodeBuiltins,
           logLevel: 'silent',
           platform: 'node', // Use node platform for backend
           target: 'es2020',
