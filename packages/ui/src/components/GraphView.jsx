@@ -170,13 +170,12 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         {
           selector: 'node:selected',
           style: {
-            'border-width': 3,
+            'border-width': 4,
             'border-color': '#fbbf24',
-            'shadow-blur': 15,
-            'shadow-color': '#fbbf24',
-            'shadow-opacity': 0.8,
-            'shadow-offset-x': 0,
-            'shadow-offset-y': 0,
+            'background-color': node => {
+              if (node.data('isCluster')) return '#2d3748';
+              return getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed'));
+            },
           },
         },
         {
