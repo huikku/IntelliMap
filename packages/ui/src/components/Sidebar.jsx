@@ -183,17 +183,49 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
     // Find unused files (exports but never imported)
     const unusedFiles = nodeMetrics.filter(n => n.inDegree === 0 && n.outDegree > 0);
 
-    // Calculate max depth (longest path)
-    let maxDepth = 0;
-    nodes.forEach(node => {
+    // Calculate instability metric (I = fan-out / (fan-in + fan-out))
+    // High instability (close to 1) = many dependencies, few dependents = risky
+    const instabilityMetrics = nodeMetrics
+      .filter(n => n.totalDegree > 0)
+      .map(n => ({
+        id: n.id,
+        instability: n.totalDegree > 0 ? n.outDegree / n.totalDegree : 0,
+        inDegree: n.inDegree,
+        outDegree: n.outDegree,
+      }));
+
+    // Find unstable dependencies (high instability + high fan-in = risky)
+    const unstableDeps = instabilityMetrics
+      .filter(n => n.instability > 0.7 && n.inDegree >= 3)
+      .sort((a, b) => b.instability - a.instability)
+      .slice(0, 10);
+
+    // Calculate dependency depth for each node (longest path from any root)
+    const depthMap = new Map();
+
+    // Find root nodes (no incoming edges)
+    const rootNodes = nodes.filter(n => n.indegree() === 0);
+
+    // BFS from each root to calculate depths
+    rootNodes.forEach(root => {
       const bfs = cy.elements().bfs({
-        root: node,
+        root: root,
         directed: true,
+        visit: (v, e, u, i, depth) => {
+          const currentDepth = depthMap.get(v.id()) || 0;
+          depthMap.set(v.id(), Math.max(currentDepth, depth));
+        },
       });
-      if (bfs.path.length > maxDepth) {
-        maxDepth = bfs.path.length;
-      }
     });
+
+    // Find deep dependency chains
+    const deepChains = Array.from(depthMap.entries())
+      .map(([id, depth]) => ({ id, depth }))
+      .filter(n => n.depth >= 5)
+      .sort((a, b) => b.depth - a.depth)
+      .slice(0, 10);
+
+    const maxDepth = Math.max(...Array.from(depthMap.values()), 0);
 
     // Generate report
     let report = `# Code Architecture Analysis\n\n`;
@@ -238,6 +270,37 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
       report += `\n⚠️ Consider splitting these files into smaller modules.\n`;
     } else {
       report += `✅ No god files detected\n`;
+    }
+
+    report += `\n### Unstable Dependencies (High Risk)\n`;
+    report += `Files with high instability that many others depend on:\n\n`;
+    if (unstableDeps.length > 0) {
+      unstableDeps.forEach(node => {
+        report += `- **${node.id}**\n`;
+        report += `  - Instability: ${(node.instability * 100).toFixed(1)}%\n`;
+        report += `  - Imports: ${node.outDegree} files\n`;
+        report += `  - Imported by: ${node.inDegree} files\n`;
+      });
+      report += `\n⚠️ **High instability + high fan-in = risky!** Consider:\n`;
+      report += `- Extract interfaces to invert dependencies\n`;
+      report += `- Split into stable core + unstable adapters\n`;
+      report += `- Reduce coupling by introducing facades\n`;
+    } else {
+      report += `✅ No unstable dependencies detected\n`;
+    }
+
+    report += `\n### Deep Dependency Chains\n`;
+    report += `Files with long import paths (potential fragility):\n\n`;
+    if (deepChains.length > 0) {
+      deepChains.forEach(node => {
+        report += `- **${node.id}** (depth: ${node.depth} levels)\n`;
+      });
+      report += `\n⚠️ **Deep chains increase fragility.** Consider:\n`;
+      report += `- Flatten abstractions\n`;
+      report += `- Cache intermediate results\n`;
+      report += `- Introduce direct dependencies where appropriate\n`;
+    } else {
+      report += `✅ No excessively deep chains\n`;
     }
 
     report += `\n### Orphan Files (Disconnected)\n`;
