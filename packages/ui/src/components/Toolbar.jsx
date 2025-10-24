@@ -652,15 +652,20 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
     // Highlight cycles
     let totalCycleNodes = 0;
+    let cycleNodes = cy.collection();
+    let cycleEdges = cy.collection();
+
     components.forEach(component => {
       component.forEach(node => {
         node.addClass('in-cycle');
+        cycleNodes = cycleNodes.union(node);
         totalCycleNodes++;
 
         // Highlight edges within the cycle
         node.outgoers('edge').forEach(edge => {
           if (component.includes(edge.target())) {
             edge.addClass('in-cycle');
+            cycleEdges = cycleEdges.union(edge);
           }
         });
       });
@@ -668,7 +673,26 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
     if (components.length > 0) {
       console.log(`🔴 Found ${components.length} cycles with ${totalCycleNodes} nodes`);
-      alert(`Found ${components.length} circular dependencies involving ${totalCycleNodes} files!`);
+
+      // Fade all nodes and edges
+      cy.nodes().style('opacity', 0.15);
+      cy.edges().style('opacity', 0.05);
+
+      // Highlight cycle nodes and edges
+      cycleNodes.style('opacity', 1);
+      cycleEdges.style('opacity', 0.8);
+
+      // Fit viewport to show all cycles
+      cy.animate({
+        fit: {
+          eles: cycleNodes,
+          padding: 50,
+        },
+      }, {
+        duration: 500,
+      });
+
+      alert(`Found ${components.length} circular dependencies involving ${totalCycleNodes} files!\n\nCycles are now highlighted in red. Press 'f' to re-focus on them.`);
     } else {
       console.log('✅ No cycles detected');
       alert('No circular dependencies found! 🎉');

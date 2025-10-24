@@ -145,11 +145,15 @@ export default function App() {
         e.preventDefault();
         const cy = cyRef.current;
 
-        // Get all visible (non-faded) nodes
-        const visibleNodes = cy.nodes().filter(node => !node.hasClass('faded'));
+        // Get all visible nodes (opacity > 0.5 means highlighted, not faded)
+        // This works with both class-based fading and opacity-based highlighting
+        const visibleNodes = cy.nodes().filter(node => {
+          const opacity = node.style('opacity');
+          return opacity > 0.5; // Highlighted nodes have opacity 1, faded have 0.15
+        });
 
-        if (visibleNodes.length > 0) {
-          // Fit to all visible nodes
+        if (visibleNodes.length > 0 && visibleNodes.length < cy.nodes().length) {
+          // Fit to highlighted nodes (not all nodes)
           cy.animate({
             fit: {
               eles: visibleNodes,
@@ -158,9 +162,9 @@ export default function App() {
           }, {
             duration: 500,
           });
-          console.log(`🔍 Fitted to ${visibleNodes.length} visible nodes`);
+          console.log(`🔍 Fitted to ${visibleNodes.length} highlighted nodes`);
         } else if (selectedNodeRef.current) {
-          // Fallback: if no visible nodes, zoom to selected node
+          // Fallback: if no filtering active, zoom to selected node
           const nodeElement = cy.getElementById(selectedNodeRef.current.id);
           if (nodeElement.length > 0) {
             cy.animate({
@@ -173,6 +177,10 @@ export default function App() {
             });
             console.log(`🔍 Fitted to selected node: ${selectedNodeRef.current.id}`);
           }
+        } else {
+          // No selection, fit all nodes
+          cy.fit(cy.nodes(), 50);
+          console.log(`🔍 Fitted to all nodes`);
         }
       }
     };

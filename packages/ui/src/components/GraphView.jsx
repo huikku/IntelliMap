@@ -481,7 +481,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         },
       },
       // Zoom configuration
-      wheelSensitivity: 0.1, // Reduce mouse wheel zoom speed (default is 1)
+      wheelSensitivity: 0.2, // Reduce mouse wheel zoom speed (default is 1)
       minZoom: 0.1,
       maxZoom: 3,
     });
