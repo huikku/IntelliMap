@@ -500,12 +500,17 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
       const data = await response.json();
 
       if (data.success) {
+        // Check if we actually got coverage data
+        const hasRealData = data.output && !data.output.includes('No coverage data');
+
         setRuntimeStatus(prev => ({
           ...prev,
           collectRunning: false,
           hasData: true,
-          message: '✅ Coverage collected! Click "View Analysis" to see results.',
-          error: false
+          message: hasRealData
+            ? '✅ Coverage collected! Click "View Analysis" to see results.'
+            : '⚠️ No tests found. Add tests to your project first.',
+          error: !hasRealData
         }));
       } else {
         setRuntimeStatus(prev => ({

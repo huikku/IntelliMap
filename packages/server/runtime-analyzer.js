@@ -209,6 +209,55 @@ function generateRuntimeReport(graph) {
   const deadCode = analyzeDeadCode(graph);
 
   let report = '# Runtime Analysis Report\n\n';
+
+  // Check if there's actually any coverage data
+  const hasNoCoverage = metrics.executedEdges === 0 && metrics.executedNodes === 0;
+
+  if (hasNoCoverage) {
+    report += '## ⚠️ No Test Coverage Found\n\n';
+    report += 'The coverage collection ran successfully, but **no code was executed**.\n\n';
+    report += '### Possible Reasons:\n\n';
+    report += '1. **No tests exist** - This project doesn\'t have any test files yet\n';
+    report += '2. **Tests didn\'t run** - The test command failed or found no tests\n';
+    report += '3. **Wrong test command** - Check your `package.json` test script\n\n';
+    report += '### How to Fix:\n\n';
+    report += '**For JavaScript/TypeScript:**\n';
+    report += '```bash\n';
+    report += '# 1. Add a test framework (if you don\'t have one)\n';
+    report += 'npm install --save-dev jest\n\n';
+    report += '# 2. Create a test file (e.g., src/app.test.js)\n';
+    report += '# 3. Add test script to package.json:\n';
+    report += '# "scripts": { "test": "jest" }\n\n';
+    report += '# 4. Run tests to verify they work:\n';
+    report += 'npm test\n\n';
+    report += '# 5. Collect coverage again from IntelliMap UI\n';
+    report += '```\n\n';
+    report += '**For Python:**\n';
+    report += '```bash\n';
+    report += '# 1. Create test files (e.g., test_app.py)\n';
+    report += '# 2. Run tests to verify they work:\n';
+    report += 'pytest\n\n';
+    report += '# 3. Collect coverage again from IntelliMap UI\n';
+    report += '```\n\n';
+    report += '### Example Test File:\n\n';
+    report += '**JavaScript (Jest):**\n';
+    report += '```javascript\n';
+    report += '// src/utils.test.js\n';
+    report += 'const { add } = require(\'./utils\');\n\n';
+    report += 'test(\'adds 1 + 2 to equal 3\', () => {\n';
+    report += '  expect(add(1, 2)).toBe(3);\n';
+    report += '});\n';
+    report += '```\n\n';
+    report += '**Python (pytest):**\n';
+    report += '```python\n';
+    report += '# test_utils.py\n';
+    report += 'from utils import add\n\n';
+    report += 'def test_add():\n';
+    report += '    assert add(1, 2) == 3\n';
+    report += '```\n\n';
+    report += '---\n\n';
+    report += '## Raw Coverage Data (for debugging)\n\n';
+  }
   
   // Metadata
   if (graph.runtime.metadata) {
