@@ -378,45 +378,6 @@ app.get('/api/file-content', (req, res) => {
   }
 });
 
-// Serve static UI from dist
-const uiDistPath = join(__dirname, '../ui/dist');
-if (fs.existsSync(uiDistPath)) {
-  app.use(express.static(uiDistPath));
-
-  // SPA fallback
-  app.get('/', (req, res) => {
-    res.sendFile(join(uiDistPath, 'index.html'));
-  });
-} else {
-  // Fallback UI if dist doesn't exist
-  app.get('/', (req, res) => {
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>IntelliMap</title>
-          <style>
-            body { font-family: sans-serif; margin: 0; padding: 20px; background: #101010; color: #fff; }
-            h1 { color: #4ade80; }
-            .status { background: #202020; padding: 10px; border-radius: 4px; margin: 10px 0; }
-            .ready { color: #4ade80; }
-            .loading { color: #fbbf24; }
-          </style>
-        </head>
-        <body>
-          <h1>🗺️ IntelliMap</h1>
-          <div class="status">
-            <p class="loading">⏳ React UI needs to be built...</p>
-            <p>Run: <code>npm run build -w @intellimap/ui</code></p>
-            <p>Server is running on port ${port}</p>
-            <p>Graph endpoint: <code>GET /graph</code></p>
-          </div>
-        </body>
-      </html>
-    `);
-  });
-}
-
 // Runtime trace upload endpoint
 app.post('/api/runtime-trace', async (req, res) => {
   try {
@@ -542,6 +503,45 @@ app.get('/api/runtime-traces', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', port });
 });
+
+// Serve static UI from dist
+const uiDistPath = join(__dirname, '../ui/dist');
+if (fs.existsSync(uiDistPath)) {
+  app.use(express.static(uiDistPath));
+
+  // SPA fallback
+  app.get('/', (req, res) => {
+    res.sendFile(join(uiDistPath, 'index.html'));
+  });
+} else {
+  // Fallback UI if dist doesn't exist
+  app.get('/', (req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>IntelliMap</title>
+          <style>
+            body { font-family: sans-serif; margin: 0; padding: 20px; background: #101010; color: #fff; }
+            h1 { color: #4ade80; }
+            .status { background: #202020; padding: 10px; border-radius: 4px; margin: 10px 0; }
+            .ready { color: #4ade80; }
+            .loading { color: #fbbf24; }
+          </style>
+        </head>
+        <body>
+          <h1>🗺️ IntelliMap</h1>
+          <div class="status">
+            <p class="loading">⏳ React UI needs to be built...</p>
+            <p>Run: <code>npm run build -w @intellimap/ui</code></p>
+            <p>Server is running on port ${port}</p>
+            <p>Graph endpoint: <code>GET /graph</code></p>
+          </div>
+        </body>
+      </html>
+    `);
+  });
+}
 
 const server = app.listen(port, () => {
   console.log(`✅ IntelliMap server running on http://localhost:${port}`);
