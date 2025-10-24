@@ -72,28 +72,33 @@ Overlay git diff information on the graph.
 npm run cli -- diff HEAD~1 HEAD
 ```
 
-### Runtime Analysis (100% Automated!)
-Collect **real** test coverage and analyze runtime behavior.
+### Runtime Analysis (Run from the App!)
+Collect **real** test coverage and analyze runtime behavior - **all from the browser!**
 
+**In-App Workflow (Recommended):**
+1. Start IntelliMap: `npm run serve`
+2. Click **📊 Analysis** tab
+3. Click **🔧 Setup Runtime** (one-time, ~30 seconds)
+4. Click **📊 Collect Coverage** (runs your tests)
+5. Click **⚡ View Analysis** (see results)
+
+**CLI Workflow (Alternative):**
 ```bash
-# One-time setup (installs NYC, coverage.py in venv, creates configs)
-npm run runtime:setup
-
-# Collect coverage from your tests (auto-detects framework)
-npm run runtime:collect
-
-# Or run everything at once
-npm run runtime:all
+npm run runtime:setup    # One-time setup
+npm run runtime:collect  # Collect coverage
+npm run serve            # View in UI
 ```
 
-Then click **⚡ Runtime Analysis** in the UI to view:
-- **Real coverage metrics** (edges & nodes from actual tests)
-- **Performance hotspots** (top 10 slowest modules)
-- **Dead code analysis** (files never executed)
-- **Dynamic dependencies** (runtime-only imports)
+**What You Get:**
+- ✅ **Real coverage metrics** (edges & nodes from actual tests)
+- ✅ **Performance hotspots** (top 10 slowest modules)
+- ✅ **Dead code analysis** (files never executed)
+- ✅ **Dynamic dependencies** (runtime-only imports)
+- ✅ **Git integration** (branch, commit, timestamp)
 
 **Supports:** Jest, Mocha, Vitest, pytest, unittest, and more!
-**See:** `docs/AUTOMATED-RUNTIME-ANALYSIS.md` for full guide
+**See:** `docs/IN-APP-RUNTIME-GUIDE.md` for the in-app guide
+**See:** `docs/AUTOMATED-RUNTIME-ANALYSIS.md` for CLI automation
 
 ## Project Structure
 
