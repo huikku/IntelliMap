@@ -501,6 +501,26 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             'opacity': 1,
           },
         },
+        {
+          selector: 'node.highlighted',
+          style: {
+            'border-width': 4,
+            'border-color': '#10b981',
+            'border-opacity': 1,
+            'background-color': '#065f46',
+            'z-index': 999,
+          },
+        },
+        {
+          selector: 'edge.highlighted',
+          style: {
+            'line-color': '#10b981',
+            'target-arrow-color': '#10b981',
+            'width': 3,
+            'opacity': 1,
+            'z-index': 999,
+          },
+        },
       ],
       layout: {
         name: 'elk',

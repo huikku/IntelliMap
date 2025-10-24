@@ -11,6 +11,10 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   const [isResizing, setIsResizing] = useState(false);
   const resizeRef = useRef(null);
 
+  // Store analysis data for interactive file lists
+  const [analysisData, setAnalysisData] = useState(null);
+  const [cycleData, setCycleData] = useState(null);
+
   // Handle resizing
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -163,6 +167,10 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
     }
 
     setCycleReport(report);
+    setCycleData({
+      cycles: components.map(comp => comp.map(n => n.id())),
+      totalFiles: new Set(components.flat().map(n => n.id())).size,
+    });
     setReportType('cycles');
     setActiveSection('analysis');
   };
@@ -211,6 +219,39 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
 
     // Find unused files (exports but never imported)
     const unusedFiles = nodeMetrics.filter(n => n.inDegree === 0 && n.outDegree > 0);
+
+    // Detect monolithic files (large files that should be refactored)
+    // Get file sizes from graph data if available
+    const monolithicFiles = [];
+    if (graph?.nodes) {
+      graph.nodes.forEach(node => {
+        const nodeData = nodeMetrics.find(n => n.id === node.id);
+        if (!nodeData) return;
+
+        // A file is monolithic if it has:
+        // 1. High total degree (>10 connections)
+        // 2. Both imports and exports (not just a hub or leaf)
+        // 3. Optionally: large file size (if available in metadata)
+        const isMonolithic =
+          nodeData.totalDegree > 10 &&
+          nodeData.inDegree >= 3 &&
+          nodeData.outDegree >= 3;
+
+        if (isMonolithic) {
+          monolithicFiles.push({
+            id: node.id,
+            totalDegree: nodeData.totalDegree,
+            inDegree: nodeData.inDegree,
+            outDegree: nodeData.outDegree,
+            size: node.size || null, // File size if available
+          });
+        }
+      });
+    }
+
+    // Sort by total degree (most connected first)
+    monolithicFiles.sort((a, b) => b.totalDegree - a.totalDegree);
+    const topMonolithic = monolithicFiles.slice(0, 10);
 
     // Calculate instability metric (I = fan-out / (fan-in + fan-out))
     // High instability (close to 1) = many dependencies, few dependents = risky
@@ -318,6 +359,27 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
       report += `✅ No unstable dependencies detected\n`;
     }
 
+    report += `\n### Monolithic Files (Should Be Refactored)\n`;
+    report += `Large, highly-connected files that do too much:\n\n`;
+    if (topMonolithic.length > 0) {
+      topMonolithic.forEach(node => {
+        report += `- **${node.id}**\n`;
+        report += `  - Total connections: ${node.totalDegree}\n`;
+        report += `  - Imports: ${node.outDegree} files\n`;
+        report += `  - Imported by: ${node.inDegree} files\n`;
+        if (node.size) {
+          report += `  - Size: ${(node.size / 1024).toFixed(1)} KB\n`;
+        }
+      });
+      report += `\n⚠️ **Monolithic files are hard to maintain and test.** Consider:\n`;
+      report += `- Split by responsibility (Single Responsibility Principle)\n`;
+      report += `- Extract reusable utilities to separate modules\n`;
+      report += `- Separate concerns (UI, logic, data access)\n`;
+      report += `- Create smaller, focused modules\n`;
+    } else {
+      report += `✅ No monolithic files detected\n`;
+    }
+
     report += `\n### Deep Dependency Chains\n`;
     report += `Files with long import paths (potential fragility):\n\n`;
     if (deepChains.length > 0) {
@@ -353,6 +415,16 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
     }
 
     setAnalysisReport(report);
+    setAnalysisData({
+      hubNodes: hubNodes.map(n => n.id),
+      leafNodes: leafNodes.map(n => n.id),
+      godFiles: godFiles.map(n => n.id),
+      monolithicFiles: topMonolithic.map(n => n.id),
+      unstableDeps: unstableDeps.map(n => n.id),
+      deepChains: deepChains.map(n => n.id),
+      orphanNodes: orphanNodes.map(n => n.id),
+      unusedFiles: unusedFiles.map(n => n.id),
+    });
     setReportType('analysis');
     setActiveSection('analysis');
   };
@@ -360,6 +432,58 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   const copyReport = () => {
     const report = reportType === 'cycles' ? cycleReport : analysisReport;
     navigator.clipboard.writeText(report);
+  };
+
+  // Highlight and focus on a file in the graph
+  const highlightFile = (fileId) => {
+    if (!cy) return;
+
+    // Reset all highlighting
+    cy.nodes().removeClass('highlighted');
+    cy.edges().removeClass('highlighted');
+
+    // Find and highlight the node
+    const node = cy.getElementById(fileId);
+    if (node.length > 0) {
+      node.addClass('highlighted');
+
+      // Highlight connected edges
+      node.connectedEdges().addClass('highlighted');
+
+      // Center on the node
+      cy.animate({
+        center: { eles: node },
+        zoom: 1.5,
+        duration: 500,
+      });
+    }
+  };
+
+  // Highlight multiple files
+  const highlightFiles = (fileIds) => {
+    if (!cy) return;
+
+    // Reset all highlighting
+    cy.nodes().removeClass('highlighted');
+    cy.edges().removeClass('highlighted');
+
+    // Highlight all nodes
+    fileIds.forEach(fileId => {
+      const node = cy.getElementById(fileId);
+      if (node.length > 0) {
+        node.addClass('highlighted');
+        node.connectedEdges().addClass('highlighted');
+      }
+    });
+
+    // Fit to highlighted nodes
+    const highlightedNodes = cy.nodes('.highlighted');
+    if (highlightedNodes.length > 0) {
+      cy.animate({
+        fit: { eles: highlightedNodes, padding: 50 },
+        duration: 500,
+      });
+    }
   };
 
   return (
@@ -516,9 +640,162 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                 <textarea
                   readOnly
                   value={reportType === 'cycles' ? cycleReport : analysisReport}
-                  className="w-full h-96 p-3 bg-gray-800 border border-gray-700 rounded text-xs font-mono text-gray-300 resize-none"
+                  className="w-full h-64 p-3 bg-gray-800 border border-gray-700 rounded text-xs font-mono text-gray-300 resize-none"
                   style={{ fontFamily: 'monospace' }}
                 />
+
+                {/* Interactive File Lists */}
+                {reportType === 'analysis' && analysisData && (
+                  <div className="space-y-3 mt-4">
+                    <h3 className="text-xs text-gray-400 font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
+
+                    {analysisData.monolithicFiles?.length > 0 && (
+                      <div className="bg-gray-800 border border-orange-900 rounded p-2">
+                        <div className="text-xs font-semibold text-orange-400 mb-1">
+                          🏗️ Monolithic Files ({analysisData.monolithicFiles.length})
+                        </div>
+                        <div className="space-y-1">
+                          {analysisData.monolithicFiles.slice(0, 5).map(fileId => (
+                            <button
+                              key={fileId}
+                              onClick={() => highlightFile(fileId)}
+                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              title={`Click to view ${fileId} in graph`}
+                            >
+                              {fileId}
+                            </button>
+                          ))}
+                          {analysisData.monolithicFiles.length > 5 && (
+                            <button
+                              onClick={() => highlightFiles(analysisData.monolithicFiles)}
+                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
+                            >
+                              + {analysisData.monolithicFiles.length - 5} more (click to view all)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysisData.godFiles?.length > 0 && (
+                      <div className="bg-gray-800 border border-red-900 rounded p-2">
+                        <div className="text-xs font-semibold text-red-400 mb-1">
+                          ⚠️ God Files ({analysisData.godFiles.length})
+                        </div>
+                        <div className="space-y-1">
+                          {analysisData.godFiles.slice(0, 5).map(fileId => (
+                            <button
+                              key={fileId}
+                              onClick={() => highlightFile(fileId)}
+                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              title={`Click to view ${fileId} in graph`}
+                            >
+                              {fileId}
+                            </button>
+                          ))}
+                          {analysisData.godFiles.length > 5 && (
+                            <button
+                              onClick={() => highlightFiles(analysisData.godFiles)}
+                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
+                            >
+                              + {analysisData.godFiles.length - 5} more (click to view all)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysisData.unstableDeps?.length > 0 && (
+                      <div className="bg-gray-800 border border-yellow-900 rounded p-2">
+                        <div className="text-xs font-semibold text-yellow-400 mb-1">
+                          ⚡ Unstable Dependencies ({analysisData.unstableDeps.length})
+                        </div>
+                        <div className="space-y-1">
+                          {analysisData.unstableDeps.slice(0, 5).map(fileId => (
+                            <button
+                              key={fileId}
+                              onClick={() => highlightFile(fileId)}
+                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              title={`Click to view ${fileId} in graph`}
+                            >
+                              {fileId}
+                            </button>
+                          ))}
+                          {analysisData.unstableDeps.length > 5 && (
+                            <button
+                              onClick={() => highlightFiles(analysisData.unstableDeps)}
+                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
+                            >
+                              + {analysisData.unstableDeps.length - 5} more (click to view all)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysisData.deepChains?.length > 0 && (
+                      <div className="bg-gray-800 border border-purple-900 rounded p-2">
+                        <div className="text-xs font-semibold text-purple-400 mb-1">
+                          🔗 Deep Chains ({analysisData.deepChains.length})
+                        </div>
+                        <div className="space-y-1">
+                          {analysisData.deepChains.slice(0, 5).map(fileId => (
+                            <button
+                              key={fileId}
+                              onClick={() => highlightFile(fileId)}
+                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              title={`Click to view ${fileId} in graph`}
+                            >
+                              {fileId}
+                            </button>
+                          ))}
+                          {analysisData.deepChains.length > 5 && (
+                            <button
+                              onClick={() => highlightFiles(analysisData.deepChains)}
+                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
+                            >
+                              + {analysisData.deepChains.length - 5} more (click to view all)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {reportType === 'cycles' && cycleData && cycleData.cycles?.length > 0 && (
+                  <div className="space-y-3 mt-4">
+                    <h3 className="text-xs text-gray-400 font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
+
+                    {cycleData.cycles.map((cycle, idx) => (
+                      <div key={idx} className="bg-gray-800 border border-red-900 rounded p-2">
+                        <div className="text-xs font-semibold text-red-400 mb-1">
+                          🔴 Cycle {idx + 1} ({cycle.length} files)
+                        </div>
+                        <div className="space-y-1">
+                          {cycle.slice(0, 3).map(fileId => (
+                            <button
+                              key={fileId}
+                              onClick={() => highlightFile(fileId)}
+                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              title={`Click to view ${fileId} in graph`}
+                            >
+                              {fileId}
+                            </button>
+                          ))}
+                          {cycle.length > 3 && (
+                            <button
+                              onClick={() => highlightFiles(cycle)}
+                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
+                            >
+                              + {cycle.length - 3} more (click to view all)
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
