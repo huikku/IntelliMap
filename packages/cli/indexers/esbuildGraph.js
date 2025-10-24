@@ -94,8 +94,17 @@ export async function buildJSGraph(options) {
     console.log('🔨 Building with esbuild, entryPoints:', entryPoints);
 
     // Build frontend and backend separately to avoid conflicts
-    const frontendEntries = entryPoints.filter(ep => !ep.endsWith('.cjs') && !ep.endsWith('.mjs'));
-    const backendEntries = entryPoints.filter(ep => ep.endsWith('.cjs') || ep.endsWith('.mjs'));
+    // Backend: .cjs, .mjs, or files with 'server' in the path/name
+    const isBackendFile = (ep) => {
+      return ep.endsWith('.cjs') ||
+             ep.endsWith('.mjs') ||
+             ep.includes('server') ||
+             ep.includes('backend') ||
+             ep.includes('api/');
+    };
+
+    const backendEntries = entryPoints.filter(isBackendFile);
+    const frontendEntries = entryPoints.filter(ep => !isBackendFile(ep));
 
     let metafile = { inputs: {} };
 
