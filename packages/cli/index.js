@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { indexCommand } from './commands/index.js';
 import { diffCommand } from './commands/diff.js';
 import { serveCommand } from './commands/serve.js';
+import { runCommand } from './commands/run.js';
 
 const program = new Command();
 
@@ -35,6 +36,12 @@ program
   .option('--port <number>', 'Server port (default: 7676)', '7676')
   .option('--watch', 'Enable live reload on file changes', false)
   .action(serveCommand);
+
+program
+  .command('run')
+  .description('Run your app with runtime analysis (captures actual execution)')
+  .argument('<command...>', 'Command to run (e.g., "npm start", "node server.js")')
+  .action((command) => runCommand(command));
 
 program.parse(process.argv);
 

@@ -19,6 +19,7 @@
     "index": "node packages/cli/index.js index",
     "diff": "node packages/cli/index.js diff",
     "serve": "node packages/cli/index.js serve",
+    "run": "node packages/cli/index.js run",
     "generate-trace": "node packages/cli/generate-sample-trace.js",
     "runtime:setup": "node scripts/setup-runtime.js",
     "runtime:collect": "node scripts/collect-runtime.js",
