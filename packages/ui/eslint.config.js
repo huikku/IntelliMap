@@ -52,7 +52,10 @@ export default [
       'react-hooks/exhaustive-deps': 'warn',
 
       // General rules
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['warn', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^React$' // Allow unused React import (needed for React.StrictMode, etc.)
+      }],
       'no-console': 'off', // We use console for debugging
       'prefer-const': 'warn',
       'no-var': 'error',

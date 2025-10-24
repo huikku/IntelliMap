@@ -555,17 +555,21 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     }
 
     // Initialize minimap navigator
-    const nav = cy.navigator({
-      container: false, // Use default container
-      viewLiveFramerate: 0, // Update on graph changes
-      thumbnailEventFramerate: 30,
-      thumbnailLiveFramerate: false,
-      dblClickDelay: 200,
-      removeCustomContainer: true,
-      rerenderDelay: 100,
-    });
-
-    console.log('🗺️ Minimap navigator initialized');
+    let nav = null;
+    try {
+      nav = cy.navigator({
+        container: false, // Use default container
+        viewLiveFramerate: 0, // Update on graph changes
+        thumbnailEventFramerate: 30,
+        thumbnailLiveFramerate: false,
+        dblClickDelay: 200,
+        removeCustomContainer: true,
+        rerenderDelay: 100,
+      });
+      console.log('🗺️ Minimap navigator initialized');
+    } catch (error) {
+      console.error('❌ Failed to initialize navigator:', error);
+    }
 
     return () => {
       if (nav && nav.destroy) {
