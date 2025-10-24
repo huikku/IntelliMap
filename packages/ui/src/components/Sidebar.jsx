@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import ReportViewer from './ReportViewer';
 
 export default function Sidebar({ filters, setFilters, graph, cy }) {
@@ -7,6 +7,35 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   const [cycleReport, setCycleReport] = useState('');
   const [reportType, setReportType] = useState('cycles');
   const [showReportModal, setShowReportModal] = useState(false);
+  const [width, setWidth] = useState(320); // Default width
+  const [isResizing, setIsResizing] = useState(false);
+  const resizeRef = useRef(null);
+
+  // Handle resizing
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isResizing) return;
+
+      const newWidth = e.clientX;
+      if (newWidth >= 280 && newWidth <= 600) {
+        setWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing]);
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -334,7 +363,18 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   };
 
   return (
-    <aside className="w-80 h-full bg-gray-900 border-r border-gray-800 flex flex-col">
+    <aside
+      style={{ width: `${width}px` }}
+      className="h-full bg-gray-900 border-r border-gray-800 flex flex-col relative"
+    >
+      {/* Resize handle */}
+      <div
+        ref={resizeRef}
+        onMouseDown={() => setIsResizing(true)}
+        className="absolute right-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-blue-500 transition-colors z-10"
+        title="Drag to resize"
+      />
+
       {/* Section Tabs */}
       <div className="flex border-b border-gray-800">
         <button
