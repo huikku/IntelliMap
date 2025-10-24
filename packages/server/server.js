@@ -327,16 +327,49 @@ app.get('/api/file-content', (req, res) => {
 
     // Limit file size to 1MB for preview
     if (stats.size > 1024 * 1024) {
-      return res.status(413).json({ error: 'File too large for preview (max 1MB)' });
+      return res.status(413).json({
+        error: 'File too large for preview',
+        message: `This file is ${(stats.size / 1024 / 1024).toFixed(2)} MB. Preview is limited to 1 MB.`,
+        reason: 'too_large',
+      });
+    }
+
+    // Check if file is binary or minified
+    const isBinaryExt = /\.(jpg|jpeg|png|gif|bmp|ico|pdf|zip|tar|gz|exe|dll|so|dylib|wasm)$/i.test(file);
+    const isMinified = /\.min\.(js|css)$/i.test(file) || file.includes('/dist/') || file.includes('/build/');
+
+    if (isBinaryExt) {
+      return res.status(415).json({
+        error: 'Cannot preview binary file',
+        message: 'This is a binary file (image, archive, executable, etc.) and cannot be displayed as text.',
+        reason: 'binary',
+      });
     }
 
     // Read file content
-    const content = fs.readFileSync(fullPath, 'utf-8');
+    let content;
+    try {
+      content = fs.readFileSync(fullPath, 'utf-8');
+    } catch (readError) {
+      // If UTF-8 fails, it's likely a binary file
+      return res.status(415).json({
+        error: 'Cannot preview binary file',
+        message: 'This file contains binary data and cannot be displayed as text.',
+        reason: 'binary',
+      });
+    }
+
+    // Warn if file is minified/bundled
+    let warning = null;
+    if (isMinified) {
+      warning = 'This is a minified/bundled build artifact. It contains compressed code that is not human-readable. Check the source files in src/ instead.';
+    }
 
     res.json({
       content,
       size: stats.size,
       path: file,
+      warning,
     });
   } catch (error) {
     console.error('Error reading file:', error);
