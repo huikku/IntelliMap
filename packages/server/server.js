@@ -618,8 +618,12 @@ const uiDistPath = join(__dirname, '../ui/dist');
 if (fs.existsSync(uiDistPath)) {
   app.use(express.static(uiDistPath));
 
-  // SPA fallback
-  app.get('/', (req, res) => {
+  // SPA fallback - only for non-API routes
+  app.get('*', (req, res, next) => {
+    // Don't serve index.html for API routes
+    if (req.path.startsWith('/api/') || req.path.startsWith('/graph') || req.path.startsWith('/health')) {
+      return next();
+    }
     res.sendFile(join(uiDistPath, 'index.html'));
   });
 } else {
