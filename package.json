@@ -17,6 +17,7 @@
     "index": "node packages/cli/index.js index",
     "diff": "node packages/cli/index.js diff",
     "serve": "node packages/cli/index.js serve",
+    "generate-trace": "node packages/cli/generate-sample-trace.js",
     "clean": "rm -rf .intellimap node_modules packages/*/node_modules packages/ui/dist"
   },
   "keywords": [

@@ -14,6 +14,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   // Store analysis data for interactive file lists
   const [analysisData, setAnalysisData] = useState(null);
   const [cycleData, setCycleData] = useState(null);
+  const [runtimeData, setRuntimeData] = useState(null);
 
   // Handle resizing
   useEffect(() => {
@@ -429,6 +430,30 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
     setActiveSection('analysis');
   };
 
+  const runRuntimeAnalysis = async () => {
+    try {
+      const response = await fetch('/api/runtime-analysis');
+      const data = await response.json();
+
+      if (data.runtime) {
+        setAnalysisReport(data.report);
+        setRuntimeData(data.runtime);
+        setReportType('runtime');
+        setActiveSection('analysis');
+      } else {
+        setAnalysisReport(data.report);
+        setRuntimeData(null);
+        setReportType('runtime');
+        setActiveSection('analysis');
+      }
+    } catch (error) {
+      console.error('Error fetching runtime analysis:', error);
+      setAnalysisReport('⚠️ Error loading runtime analysis: ' + error.message);
+      setReportType('runtime');
+      setActiveSection('analysis');
+    }
+  };
+
   const copyReport = () => {
     const report = reportType === 'cycles' ? cycleReport : analysisReport;
     navigator.clipboard.writeText(report);
@@ -611,6 +636,13 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
               >
                 📊 Architecture Analysis
               </button>
+              <button
+                onClick={runRuntimeAnalysis}
+                className="w-full px-3 py-2 bg-purple-800 hover:bg-purple-700 rounded text-sm font-semibold transition flex items-center justify-center gap-2"
+                title="Analyze runtime coverage and performance"
+              >
+                ⚡ Runtime Analysis
+              </button>
             </div>
 
             {/* Report Display */}
@@ -618,7 +650,9 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs text-gray-400 font-semibold">
-                    {reportType === 'cycles' ? '🔴 Cycle Report' : '📊 Analysis Report'}
+                    {reportType === 'cycles' ? '🔴 Cycle Report' :
+                     reportType === 'runtime' ? '⚡ Runtime Report' :
+                     '📊 Analysis Report'}
                   </h3>
                   <div className="flex gap-1">
                     <button

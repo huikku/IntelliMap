@@ -7,6 +7,7 @@ import { setupSSE, notifyClients } from './reload.js';
 import { buildJSGraph } from '../cli/indexers/esbuildGraph.js';
 import { buildPythonGraph } from '../cli/indexers/pythonGraph.js';
 import { mergeGraphs } from '../cli/indexers/mergeGraphs.js';
+import { mergeRuntimeData, generateRuntimeReport } from './runtime-analyzer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -415,6 +416,127 @@ if (fs.existsSync(uiDistPath)) {
     `);
   });
 }
+
+// Runtime trace upload endpoint
+app.post('/api/runtime-trace', async (req, res) => {
+  try {
+    const { trace, metadata } = req.body;
+
+    if (!trace) {
+      return res.status(400).json({ error: 'No trace data provided' });
+    }
+
+    // Save runtime trace
+    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    await fs.ensureDir(runtimeDir);
+
+    const timestamp = Date.now();
+    const traceFile = join(runtimeDir, `trace-${timestamp}.json`);
+
+    await fs.writeJson(traceFile, {
+      metadata: {
+        ...metadata,
+        timestamp,
+        uploadedAt: new Date().toISOString(),
+      },
+      ...trace,
+    }, { spaces: 2 });
+
+    console.log(`✅ Runtime trace saved: ${traceFile}`);
+    res.json({ success: true, file: traceFile, timestamp });
+  } catch (error) {
+    console.error('Error saving runtime trace:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get runtime analysis
+app.get('/api/runtime-analysis', async (req, res) => {
+  try {
+    // Load static graph
+    const graphPath = resolve(process.cwd(), '.intellimap/graph.json');
+    if (!fs.existsSync(graphPath)) {
+      return res.status(404).json({ error: 'No static graph found. Run indexing first.' });
+    }
+
+    const staticGraph = await fs.readJson(graphPath);
+
+    // Load latest runtime trace
+    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    if (!fs.existsSync(runtimeDir)) {
+      return res.json({
+        graph: staticGraph,
+        runtime: null,
+        report: generateRuntimeReport({ ...staticGraph, runtime: null }),
+      });
+    }
+
+    const traceFiles = (await fs.readdir(runtimeDir))
+      .filter(f => f.startsWith('trace-') && f.endsWith('.json'))
+      .sort()
+      .reverse();
+
+    if (traceFiles.length === 0) {
+      return res.json({
+        graph: staticGraph,
+        runtime: null,
+        report: generateRuntimeReport({ ...staticGraph, runtime: null }),
+      });
+    }
+
+    // Load latest trace
+    const latestTrace = await fs.readJson(join(runtimeDir, traceFiles[0]));
+
+    // Merge runtime data with static graph
+    const mergedGraph = mergeRuntimeData(staticGraph, latestTrace);
+
+    // Generate report
+    const report = generateRuntimeReport(mergedGraph);
+
+    res.json({
+      graph: mergedGraph,
+      runtime: mergedGraph.runtime,
+      report,
+      traceFile: traceFiles[0],
+    });
+  } catch (error) {
+    console.error('Error generating runtime analysis:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// List available runtime traces
+app.get('/api/runtime-traces', async (req, res) => {
+  try {
+    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    if (!fs.existsSync(runtimeDir)) {
+      return res.json({ traces: [] });
+    }
+
+    const traceFiles = (await fs.readdir(runtimeDir))
+      .filter(f => f.startsWith('trace-') && f.endsWith('.json'))
+      .sort()
+      .reverse();
+
+    const traces = await Promise.all(
+      traceFiles.map(async (file) => {
+        const trace = await fs.readJson(join(runtimeDir, file));
+        return {
+          file,
+          timestamp: trace.metadata?.timestamp,
+          branch: trace.metadata?.branch,
+          commit: trace.metadata?.commit,
+          runId: trace.metadata?.runId,
+        };
+      })
+    );
+
+    res.json({ traces });
+  } catch (error) {
+    console.error('Error listing runtime traces:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Health check
 app.get('/health', (req, res) => {
