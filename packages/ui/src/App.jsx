@@ -25,6 +25,15 @@ export default function App() {
   });
   const cyRef = useRef(null);
   const selectedNodeRef = useRef(null);
+  const [cyInstance, setCyInstance] = useState(null);
+
+  // Edge and curve settings that should persist across view changes
+  const [edgeOpacity, setEdgeOpacity] = useState(1.0);
+  const [curveStyle, setCurveStyle] = useState('bezier-tight');
+
+  // Node sizing settings that should persist across view changes
+  const [sizing, setSizing] = useState('uniform');
+  const [sizeExaggeration, setSizeExaggeration] = useState(1);
 
   // Keep selectedNodeRef in sync with selectedNode
   useEffect(() => {
@@ -188,13 +197,29 @@ export default function App() {
         />
       )}
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar */}
-        <Sidebar filters={filters} setFilters={setFilters} graph={graph} />
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Left Sidebar - Fixed width */}
+        <div className="flex-shrink-0">
+          <Sidebar filters={filters} setFilters={setFilters} graph={graph} />
+        </div>
 
-        {/* Main Content */}
-        <main className="flex-1 flex flex-col">
-          <Toolbar cy={cyRef.current} layout={layout} setLayout={setLayout} clustering={clustering} setClustering={setClustering} />
+        {/* Main Content - Fills remaining space */}
+        <main className="flex-1 flex flex-col min-w-0">
+          <Toolbar
+            cy={cyInstance}
+            layout={layout}
+            setLayout={setLayout}
+            clustering={clustering}
+            setClustering={setClustering}
+            edgeOpacity={edgeOpacity}
+            setEdgeOpacity={setEdgeOpacity}
+            curveStyle={curveStyle}
+            setCurveStyle={setCurveStyle}
+            sizing={sizing}
+            setSizing={setSizing}
+            sizeExaggeration={sizeExaggeration}
+            setSizeExaggeration={setSizeExaggeration}
+          />
           <GraphView
             graph={graph}
             plane={plane}
@@ -203,11 +228,16 @@ export default function App() {
             setSelectedNode={setSelectedNode}
             cyRef={cyRef}
             clustering={clustering}
+            setCyInstance={setCyInstance}
+            edgeOpacity={edgeOpacity}
+            curveStyle={curveStyle}
           />
         </main>
 
-        {/* Right Sidebar */}
-        <Inspector selectedNode={selectedNode} graph={graph} currentRepo={currentRepo} />
+        {/* Right Sidebar - Resizable, positioned absolutely won't affect left */}
+        <div className="flex-shrink-0">
+          <Inspector selectedNode={selectedNode} graph={graph} currentRepo={currentRepo} />
+        </div>
       </div>
 
       {/* Footer */}

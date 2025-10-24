@@ -4,7 +4,7 @@ export default function Sidebar({ filters, setFilters, graph }) {
   };
 
   return (
-    <aside className="w-64 bg-gray-900 border-r border-gray-800 overflow-y-auto">
+    <aside className="w-64 h-full bg-gray-900 border-r border-gray-800 overflow-y-auto">
       <div className="p-4">
         <h2 className="text-sm font-bold text-gray-300 mb-4">FILTERS</h2>
 

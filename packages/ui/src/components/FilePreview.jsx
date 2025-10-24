@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function FilePreview({ filePath, currentRepo }) {
+export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
   const [content, setContent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -71,7 +71,6 @@ export default function FilePreview({ filePath, currentRepo }) {
   }
 
   // Truncate content if too large
-  const maxLines = 50;
   const lines = content.split('\n');
   const isTruncated = lines.length > maxLines;
   const displayLines = lines.slice(0, maxLines);
