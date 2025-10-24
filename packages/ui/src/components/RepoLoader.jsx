@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 const QUICK_PATHS = [
   { name: '📁 Home', path: process.env.HOME || '/home/john' },
