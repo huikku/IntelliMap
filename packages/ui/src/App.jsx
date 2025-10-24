@@ -140,28 +140,39 @@ export default function App() {
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Press 'f' to focus/zoom to selected node
-      if (e.key === 'f' && selectedNodeRef.current && cyRef.current) {
+      // Press 'f' to focus/fit all visible nodes (or selected node if none are highlighted)
+      if (e.key === 'f' && cyRef.current) {
         e.preventDefault();
         const cy = cyRef.current;
-        const nodeElement = cy.getElementById(selectedNodeRef.current.id);
 
-        if (nodeElement.length > 0) {
-          // Get node position and calculate pan to center it
-          const pos = nodeElement.position();
-          const w = cy.width();
-          const h = cy.height();
-          const pan = {
-            x: w / 2 - pos.x * 2,  // Account for zoom level 2
-            y: h / 2 - pos.y * 2,
-          };
+        // Get all visible (non-faded) nodes
+        const visibleNodes = cy.nodes().filter(node => !node.hasClass('faded'));
 
+        if (visibleNodes.length > 0) {
+          // Fit to all visible nodes
           cy.animate({
-            pan: pan,
-            zoom: 2,
+            fit: {
+              eles: visibleNodes,
+              padding: 50,
+            },
           }, {
             duration: 500,
           });
+          console.log(`🔍 Fitted to ${visibleNodes.length} visible nodes`);
+        } else if (selectedNodeRef.current) {
+          // Fallback: if no visible nodes, zoom to selected node
+          const nodeElement = cy.getElementById(selectedNodeRef.current.id);
+          if (nodeElement.length > 0) {
+            cy.animate({
+              fit: {
+                eles: nodeElement,
+                padding: 100,
+              },
+            }, {
+              duration: 500,
+            });
+            console.log(`🔍 Fitted to selected node: ${selectedNodeRef.current.id}`);
+          }
         }
       }
     };

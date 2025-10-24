@@ -351,38 +351,62 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       console.error('Stack:', err.stack);
     }
     } else if (sizeMode === 'centrality') {
-      console.log('⭐ Starting centrality mode');
-
-      // Calculate betweenness centrality for all nodes
       const nodes = cyInstance.nodes().filter(n => !n.data('isCluster'));
+      const nodeCount = nodes.length;
+
+      console.log(`⭐ Starting centrality mode for ${nodeCount} nodes`);
+
+      // Warn if graph is large (centrality is O(n³))
+      if (nodeCount > 100) {
+        const estimated = Math.round((nodeCount ** 3) / 1000000);
+        console.warn(`⚠️ Large graph detected (${nodeCount} nodes). Centrality calculation may take ~${estimated}s...`);
+      }
+
       const centralities = new Map();
 
-      // Simple betweenness centrality calculation
-      // For each pair of nodes, find shortest paths and count how many pass through each node
-      nodes.forEach(node => {
-        let betweenness = 0;
-
-        // For each other pair of nodes
-        nodes.forEach(source => {
-          if (source === node) return;
-
-          nodes.forEach(target => {
-            if (target === node || target === source) return;
-
-            // Find all shortest paths from source to target
-            const dijkstra = cyInstance.elements().dijkstra(source, () => 1);
-            const pathToTarget = dijkstra.pathTo(target);
-
-            // Check if our node is on this path
-            if (pathToTarget && pathToTarget.contains(node)) {
-              betweenness += 1;
-            }
-          });
+      // Use degree centrality instead of betweenness for large graphs (much faster)
+      if (nodeCount > 100) {
+        console.log('📊 Using degree centrality (fast approximation)');
+        nodes.forEach(node => {
+          // Degree centrality = number of connections (in + out)
+          const degree = node.degree(false); // false = don't include loops
+          centralities.set(node.id(), degree);
+          node.data('centrality', degree);
         });
+      } else {
+        // Use betweenness centrality for smaller graphs (more accurate but slower)
+        console.log('📊 Using betweenness centrality (accurate but slow)');
 
-        centralities.set(node.id(), betweenness);
-        node.data('centrality', betweenness);
-      });
+        // Calculate betweenness centrality for all nodes
+        nodes.forEach((node, idx) => {
+          if (idx % 10 === 0) {
+            console.log(`⭐ Processing node ${idx + 1}/${nodeCount}...`);
+          }
+
+          let betweenness = 0;
+
+          // For each other pair of nodes
+          nodes.forEach(source => {
+            if (source === node) return;
+
+            nodes.forEach(target => {
+              if (target === node || target === source) return;
+
+              // Find all shortest paths from source to target
+              const dijkstra = cyInstance.elements().dijkstra(source, () => 1);
+              const pathToTarget = dijkstra.pathTo(target);
+
+              // Check if our node is on this path
+              if (pathToTarget && pathToTarget.contains(node)) {
+                betweenness += 1;
+              }
+            });
+          });
+
+          centralities.set(node.id(), betweenness);
+          node.data('centrality', betweenness);
+        });
+      }
 
       // Normalize centralities
       const centralityValues = Array.from(centralities.values());
