@@ -81,31 +81,37 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     }
 
     console.log('🎨 GraphView rendering with', graph.nodes?.length || 0, 'nodes');
+    console.log('📊 Graph object:', graph);
+    console.log('📊 Plane:', plane, 'Filters:', filters);
 
     // Filter nodes based on plane and filters
     let filteredNodes = graph.nodes;
     let filteredEdges = graph.edges;
 
-    if (plane === 'backend') {
-      filteredNodes = graph.nodes.filter(n => n.env === 'backend');
-    } else if (plane === 'diff') {
-      filteredNodes = graph.nodes.filter(n => n.changed);
-    }
+    // TEMPORARY: Show all nodes regardless of plane to debug
+    // if (plane === 'backend') {
+    //   filteredNodes = graph.nodes.filter(n => n.env === 'backend');
+    // } else if (plane === 'diff') {
+    //   filteredNodes = graph.nodes.filter(n => n.changed);
+    // }
 
-    if (filters.language !== 'all') {
-      filteredNodes = filteredNodes.filter(n => n.lang === filters.language);
-    }
+    // TEMPORARY: Disable all filters to debug
+    // if (filters.language !== 'all') {
+    //   filteredNodes = filteredNodes.filter(n => n.lang === filters.language);
+    // }
 
-    if (filters.env !== 'all') {
-      filteredNodes = filteredNodes.filter(n => n.env === filters.env);
-    }
+    // if (filters.env !== 'all') {
+    //   filteredNodes = filteredNodes.filter(n => n.env === filters.env);
+    // }
 
-    if (filters.showChanged) {
-      filteredNodes = filteredNodes.filter(n => n.changed);
-    }
+    // if (filters.showChanged) {
+    //   filteredNodes = filteredNodes.filter(n => n.changed);
+    // }
 
     const nodeIds = new Set(filteredNodes.map(n => n.id));
     filteredEdges = filteredEdges.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));
+
+    console.log('🔍 After filtering: nodes=', filteredNodes.length, 'edges=', filteredEdges.length);
 
     // Build node map for quick lookup
     const nodeMap = new Map();
@@ -286,6 +292,9 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
 
       elements = [...clusterElements, ...elements];
     }
+
+    console.log('🎨 Creating Cytoscape with', elements.length, 'elements');
+    console.log('📊 First 3 elements:', elements.slice(0, 3));
 
     // Initialize Cytoscape
     const cy = cytoscape({

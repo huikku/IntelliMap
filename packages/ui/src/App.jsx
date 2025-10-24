@@ -30,9 +30,9 @@ export default function App() {
   const [clustering, setClustering] = useState(persistedSettings.clustering || false);
   const [currentRepo, setCurrentRepo] = useState(null);
   const [showRepoLoader, setShowRepoLoader] = useState(false);
-  const [filters, setFilters] = useState(persistedSettings.filters || {
+  const [filters, setFilters] = useState({
     language: 'all',
-    env: 'all',
+    env: 'all', // Always default to 'all' to avoid filtering out nodes
     showChanged: false,
     collapseByFolder: true,
   });
@@ -102,17 +102,31 @@ export default function App() {
 
     cyInstance.on('zoom pan', handleViewportChange);
 
-    // Restore viewport on mount
+    // Restore viewport on mount, but only if graph hasn't changed
     try {
       const saved = localStorage.getItem('intellimap-viewport');
-      if (saved) {
+      const savedGraphId = localStorage.getItem('intellimap-graph-id');
+      const currentGraphId = graph ? `${graph.nodes?.length || 0}-${graph.edges?.length || 0}` : null;
+
+      if (saved && savedGraphId === currentGraphId) {
         const viewport = JSON.parse(saved);
         cyInstance.zoom(viewport.zoom);
         cyInstance.pan(viewport.pan);
         console.log('📍 Viewport restored from localStorage');
+      } else {
+        // New graph or first load - fit to view
+        cyInstance.fit(undefined, 50);
+        console.log('📍 Fitting to new graph');
+
+        // Save the new graph ID
+        if (currentGraphId) {
+          localStorage.setItem('intellimap-graph-id', currentGraphId);
+        }
       }
     } catch (e) {
       console.error('Failed to restore viewport:', e);
+      // Fallback to fit
+      cyInstance.fit(undefined, 50);
     }
 
     return () => {
