@@ -16,6 +16,16 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   const [cycleData, setCycleData] = useState(null);
   const [runtimeData, setRuntimeData] = useState(null);
 
+  // Runtime analysis status
+  const [runtimeStatus, setRuntimeStatus] = useState({
+    setupComplete: false,
+    setupRunning: false,
+    collectRunning: false,
+    hasData: false,
+    message: '',
+    error: false
+  });
+
   // Handle resizing
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -430,6 +440,91 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
     setActiveSection('analysis');
   };
 
+  // Check runtime status on mount
+  useEffect(() => {
+    checkRuntimeStatus();
+  }, []);
+
+  const checkRuntimeStatus = async () => {
+    try {
+      const response = await fetch('/api/runtime-status');
+      const data = await response.json();
+      setRuntimeStatus(prev => ({
+        ...prev,
+        setupComplete: data.setupComplete,
+        hasData: data.hasData
+      }));
+    } catch (error) {
+      console.error('Error checking runtime status:', error);
+    }
+  };
+
+  const setupRuntime = async () => {
+    setRuntimeStatus(prev => ({ ...prev, setupRunning: true, message: '', error: false }));
+
+    try {
+      const response = await fetch('/api/runtime-setup', { method: 'POST' });
+      const data = await response.json();
+
+      if (data.success) {
+        setRuntimeStatus(prev => ({
+          ...prev,
+          setupRunning: false,
+          setupComplete: true,
+          message: '✅ Setup complete! Ready to collect coverage.',
+          error: false
+        }));
+      } else {
+        setRuntimeStatus(prev => ({
+          ...prev,
+          setupRunning: false,
+          message: `❌ Setup failed: ${data.error}`,
+          error: true
+        }));
+      }
+    } catch (error) {
+      setRuntimeStatus(prev => ({
+        ...prev,
+        setupRunning: false,
+        message: `❌ Setup failed: ${error.message}`,
+        error: true
+      }));
+    }
+  };
+
+  const collectRuntime = async () => {
+    setRuntimeStatus(prev => ({ ...prev, collectRunning: true, message: '', error: false }));
+
+    try {
+      const response = await fetch('/api/runtime-collect', { method: 'POST' });
+      const data = await response.json();
+
+      if (data.success) {
+        setRuntimeStatus(prev => ({
+          ...prev,
+          collectRunning: false,
+          hasData: true,
+          message: '✅ Coverage collected! Click "View Analysis" to see results.',
+          error: false
+        }));
+      } else {
+        setRuntimeStatus(prev => ({
+          ...prev,
+          collectRunning: false,
+          message: `❌ Collection failed: ${data.error}`,
+          error: true
+        }));
+      }
+    } catch (error) {
+      setRuntimeStatus(prev => ({
+        ...prev,
+        collectRunning: false,
+        message: `❌ Collection failed: ${error.message}`,
+        error: true
+      }));
+    }
+  };
+
   const runRuntimeAnalysis = async () => {
     try {
       const response = await fetch('/api/runtime-analysis');
@@ -636,13 +731,46 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
               >
                 📊 Architecture Analysis
               </button>
-              <button
-                onClick={runRuntimeAnalysis}
-                className="w-full px-3 py-2 bg-purple-800 hover:bg-purple-700 rounded text-sm font-semibold transition flex items-center justify-center gap-2"
-                title="Analyze runtime coverage and performance"
-              >
-                ⚡ Runtime Analysis
-              </button>
+
+              {/* Runtime Analysis Section */}
+              <div className="border border-purple-700 rounded p-3 space-y-2 bg-purple-950/30">
+                <div className="text-xs font-bold text-purple-300 mb-2">RUNTIME ANALYSIS</div>
+
+                <button
+                  onClick={setupRuntime}
+                  disabled={runtimeStatus.setupRunning}
+                  className="w-full px-3 py-2 bg-purple-900 hover:bg-purple-800 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-xs font-semibold transition flex items-center justify-center gap-2"
+                  title="Install coverage tools and create configs (one-time setup)"
+                >
+                  {runtimeStatus.setupRunning ? '⏳ Setting up...' : '🔧 Setup Runtime'}
+                </button>
+
+                <button
+                  onClick={collectRuntime}
+                  disabled={runtimeStatus.collectRunning || !runtimeStatus.setupComplete}
+                  className="w-full px-3 py-2 bg-purple-800 hover:bg-purple-700 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-xs font-semibold transition flex items-center justify-center gap-2"
+                  title="Run tests with coverage and collect data"
+                >
+                  {runtimeStatus.collectRunning ? '⏳ Collecting...' : '📊 Collect Coverage'}
+                </button>
+
+                <button
+                  onClick={runRuntimeAnalysis}
+                  disabled={!runtimeStatus.hasData}
+                  className="w-full px-3 py-2 bg-purple-700 hover:bg-purple-600 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-xs font-semibold transition flex items-center justify-center gap-2"
+                  title="View runtime analysis report"
+                >
+                  ⚡ View Analysis
+                </button>
+
+                {runtimeStatus.message && (
+                  <div className={`text-xs p-2 rounded ${
+                    runtimeStatus.error ? 'bg-red-900/50 text-red-300' : 'bg-green-900/50 text-green-300'
+                  }`}>
+                    {runtimeStatus.message}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Report Display */}

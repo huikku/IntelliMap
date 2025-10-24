@@ -378,6 +378,115 @@ app.get('/api/file-content', (req, res) => {
   }
 });
 
+// Runtime status check
+app.get('/api/runtime-status', async (req, res) => {
+  try {
+    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    const nycrcPath = resolve(process.cwd(), '.nycrc.json');
+    const venvPath = resolve(process.cwd(), '.venv-intellimap');
+
+    const setupComplete = fs.existsSync(nycrcPath) || fs.existsSync(venvPath);
+    const hasData = fs.existsSync(runtimeDir) &&
+                    (await fs.readdir(runtimeDir)).some(f => f.startsWith('trace-'));
+
+    res.json({ setupComplete, hasData });
+  } catch (error) {
+    res.json({ setupComplete: false, hasData: false });
+  }
+});
+
+// Runtime setup endpoint
+app.post('/api/runtime-setup', async (req, res) => {
+  try {
+    const { spawn } = await import('node:child_process');
+    const setupScript = resolve(process.cwd(), 'scripts/setup-runtime.js');
+
+    console.log('🚀 Running runtime setup...');
+
+    const child = spawn('node', [setupScript], {
+      cwd: process.cwd(),
+      stdio: 'pipe'
+    });
+
+    let output = '';
+    let errorOutput = '';
+
+    child.stdout.on('data', (data) => {
+      output += data.toString();
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+      console.error(data.toString());
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        console.log('✅ Runtime setup complete');
+        res.json({ success: true, output });
+      } else {
+        console.error('❌ Runtime setup failed');
+        res.status(500).json({ success: false, error: errorOutput || 'Setup failed', output });
+      }
+    });
+
+    child.on('error', (error) => {
+      console.error('❌ Failed to start setup:', error);
+      res.status(500).json({ success: false, error: error.message });
+    });
+  } catch (error) {
+    console.error('Error running setup:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Runtime collection endpoint
+app.post('/api/runtime-collect', async (req, res) => {
+  try {
+    const { spawn } = await import('node:child_process');
+    const collectScript = resolve(process.cwd(), 'scripts/collect-runtime.js');
+
+    console.log('📊 Running runtime collection...');
+
+    const child = spawn('node', [collectScript], {
+      cwd: process.cwd(),
+      stdio: 'pipe'
+    });
+
+    let output = '';
+    let errorOutput = '';
+
+    child.stdout.on('data', (data) => {
+      output += data.toString();
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+      console.error(data.toString());
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        console.log('✅ Runtime collection complete');
+        res.json({ success: true, output });
+      } else {
+        console.error('❌ Runtime collection failed');
+        res.status(500).json({ success: false, error: errorOutput || 'Collection failed', output });
+      }
+    });
+
+    child.on('error', (error) => {
+      console.error('❌ Failed to start collection:', error);
+      res.status(500).json({ success: false, error: error.message });
+    });
+  } catch (error) {
+    console.error('Error running collection:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Runtime trace upload endpoint
 app.post('/api/runtime-trace', async (req, res) => {
   try {
