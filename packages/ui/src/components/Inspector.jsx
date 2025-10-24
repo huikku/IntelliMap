@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import FilePreview from './FilePreview';
 
 export default function Inspector({ selectedNode, graph, currentRepo, onNavigate }) {
   const [width, setWidth] = useState(320); // 80 * 4 = 320px (w-80)
