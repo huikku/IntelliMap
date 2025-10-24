@@ -235,6 +235,46 @@ export default function App() {
     }
   };
 
+  const handleReloadRepo = async () => {
+    if (!currentRepo) {
+      // No repo loaded, just reload the default graph
+      fetchGraph();
+      return;
+    }
+
+    // Re-index the current repository
+    try {
+      setLoading(true);
+      console.log('🔄 Reloading repository:', currentRepo);
+
+      // Trigger re-indexing by calling the index endpoint
+      const response = await fetch('/api/index', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          path: currentRepo,
+          // Use the same config that was used to load it
+          // (we could store this in state if needed)
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to reload repository');
+      }
+
+      const data = await response.json();
+      setGraph(data);
+      setError(null);
+      console.log('✅ Repository reloaded successfully');
+    } catch (err) {
+      setError(err.message);
+      console.error('Error reloading repository:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-dark-900 text-white">
@@ -291,16 +331,16 @@ export default function App() {
           <button
             onClick={() => setShowRepoLoader(true)}
             className="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded text-sm"
-            title="Open repository"
+            title="Open a different repository"
           >
             📁 Open Repo
           </button>
           <button
-            onClick={fetchGraph}
-            className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm"
-            title="Reindex"
+            onClick={handleReloadRepo}
+            className="px-3 py-1 bg-green-700 hover:bg-green-600 rounded text-sm"
+            title={currentRepo ? `Reload ${currentRepo.split('/').pop()}` : 'Reload current graph'}
           >
-            ⟳ Reload
+            🔄 Reload
           </button>
           <PlaneSwitcher plane={plane} setPlane={setPlane} />
         </div>
@@ -316,7 +356,7 @@ export default function App() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar - Fixed width */}
         <div className="flex-shrink-0">
-          <Sidebar filters={filters} setFilters={setFilters} graph={graph} />
+          <Sidebar filters={filters} setFilters={setFilters} graph={graph} cy={cyInstance} />
         </div>
 
         {/* Main Content - Fills remaining space */}

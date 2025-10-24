@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import CycleModal from './CycleModal';
 
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration, currentRepo }) {
   const [nodeSpacing, setNodeSpacing] = useState(50);
   const [autoPack, setAutoPack] = useState(true);
-  const [cycleModalData, setCycleModalData] = useState(null);
 
   // Apply node sizing whenever cy, sizing, or sizeExaggeration changes
   useEffect(() => {
@@ -597,121 +595,6 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
     console.log(`💾 Graph exported as JSON: ${filename}`);
   };
 
-  const handleDetectCycles = () => {
-    if (!cy) return;
-
-    // Reset previous cycle highlighting
-    cy.nodes().removeClass('in-cycle');
-    cy.edges().removeClass('in-cycle');
-
-    // Find strongly connected components (SCCs)
-    // A cycle exists if an SCC has more than one node
-    const components = [];
-    const visited = new Set();
-    const stack = [];
-    const lowLink = new Map();
-    const index = new Map();
-    let currentIndex = 0;
-
-    const strongConnect = (node) => {
-      index.set(node.id(), currentIndex);
-      lowLink.set(node.id(), currentIndex);
-      currentIndex++;
-      stack.push(node);
-      visited.add(node.id());
-
-      // Visit successors
-      node.outgoers('node').forEach(successor => {
-        if (!index.has(successor.id())) {
-          strongConnect(successor);
-          lowLink.set(node.id(), Math.min(lowLink.get(node.id()), lowLink.get(successor.id())));
-        } else if (stack.includes(successor)) {
-          lowLink.set(node.id(), Math.min(lowLink.get(node.id()), index.get(successor.id())));
-        }
-      });
-
-      // If node is a root node, pop the stack and create an SCC
-      if (lowLink.get(node.id()) === index.get(node.id())) {
-        const component = [];
-        let w;
-        do {
-          w = stack.pop();
-          component.push(w);
-        } while (w !== node);
-
-        if (component.length > 1) {
-          components.push(component);
-        }
-      }
-    };
-
-    // Run Tarjan's algorithm on all nodes
-    cy.nodes().forEach(node => {
-      if (!visited.has(node.id())) {
-        strongConnect(node);
-      }
-    });
-
-    // Highlight cycles
-    let totalCycleNodes = 0;
-    let cycleNodes = cy.collection();
-    let cycleEdges = cy.collection();
-
-    components.forEach(component => {
-      component.forEach(node => {
-        node.addClass('in-cycle');
-        cycleNodes = cycleNodes.union(node);
-        totalCycleNodes++;
-
-        // Highlight edges within the cycle
-        node.outgoers('edge').forEach(edge => {
-          if (component.includes(edge.target())) {
-            edge.addClass('in-cycle');
-            cycleEdges = cycleEdges.union(edge);
-          }
-        });
-      });
-    });
-
-    if (components.length > 0) {
-      console.log(`🔴 Found ${components.length} cycles with ${totalCycleNodes} nodes`);
-
-      // Fade all nodes and edges
-      cy.nodes().style('opacity', 0.15);
-      cy.edges().style('opacity', 0.05);
-
-      // Highlight cycle nodes and edges
-      cycleNodes.style('opacity', 1);
-      cycleEdges.style('opacity', 0.8);
-
-      // Fit viewport to show all cycles
-      cy.animate({
-        fit: {
-          eles: cycleNodes,
-          padding: 50,
-        },
-      }, {
-        duration: 500,
-      });
-
-      // Convert components to cycle paths (list of file IDs)
-      const cycleDetails = components.map(component => {
-        return component.map(node => node.id());
-      });
-
-      // Show modal with cycle details
-      setCycleModalData({
-        cycleCount: components.length,
-        nodeCount: totalCycleNodes,
-        cycles: cycleDetails,
-      });
-    } else {
-      console.log('✅ No cycles detected');
-      // Show modal
-      setCycleModalData({ cycleCount: 0, nodeCount: 0, cycles: [] });
-    }
-  };
-
   return (
     <div className="h-10 bg-gray-900 border-b border-gray-800 flex items-center gap-2 px-4">
       <button
@@ -741,13 +624,6 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         title="Export graph as JSON"
       >
         💾 JSON
-      </button>
-      <button
-        onClick={handleDetectCycles}
-        className="px-3 py-1 bg-red-800 hover:bg-red-700 rounded text-sm transition"
-        title="Detect circular dependencies"
-      >
-        🔴 Cycles
       </button>
 
       <div className="ml-2 flex items-center gap-2">
@@ -884,16 +760,6 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       <div className="ml-auto text-xs text-gray-500">
         ✓ Ready
       </div>
-
-      {/* Cycle Detection Modal */}
-      {cycleModalData && (
-        <CycleModal
-          cycleCount={cycleModalData.cycleCount}
-          nodeCount={cycleModalData.nodeCount}
-          cycles={cycleModalData.cycles}
-          onClose={() => setCycleModalData(null)}
-        />
-      )}
     </div>
   );
 }
