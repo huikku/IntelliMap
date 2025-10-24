@@ -105,7 +105,7 @@ app.get('/api/detect-entry-points', (req, res) => {
       pyExtraPath: null,
     };
 
-    // Look for common frontend entry points
+    // Look for common frontend entry points (including monorepo patterns)
     const frontendCandidates = [
       'src/main.tsx',
       'src/main.ts',
@@ -119,6 +119,23 @@ app.get('/api/detect-entry-points', (req, res) => {
       'index.ts',
       'index.jsx',
       'index.js',
+      // Monorepo patterns
+      'packages/ui/src/main.tsx',
+      'packages/ui/src/main.ts',
+      'packages/ui/src/main.jsx',
+      'packages/ui/src/main.js',
+      'packages/ui/src/index.tsx',
+      'packages/ui/src/index.ts',
+      'packages/ui/src/index.jsx',
+      'packages/ui/src/index.js',
+      'packages/frontend/src/main.tsx',
+      'packages/frontend/src/main.ts',
+      'packages/frontend/src/main.jsx',
+      'packages/frontend/src/main.js',
+      'packages/client/src/main.tsx',
+      'packages/client/src/main.ts',
+      'packages/client/src/main.jsx',
+      'packages/client/src/main.js',
     ];
 
     for (const candidate of frontendCandidates) {
@@ -129,7 +146,7 @@ app.get('/api/detect-entry-points', (req, res) => {
       }
     }
 
-    // Look for common Node.js entry points
+    // Look for common Node.js entry points (including monorepo patterns)
     const nodeCandidates = [
       'server.cjs',
       'server.js',
@@ -149,6 +166,25 @@ app.get('/api/detect-entry-points', (req, res) => {
       'src/app.cjs',
       'src/app.js',
       'src/app.ts',
+      // Monorepo patterns
+      'packages/server/server.cjs',
+      'packages/server/server.js',
+      'packages/server/server.ts',
+      'packages/server/index.cjs',
+      'packages/server/index.js',
+      'packages/server/index.ts',
+      'packages/backend/server.cjs',
+      'packages/backend/server.js',
+      'packages/backend/server.ts',
+      'packages/backend/index.cjs',
+      'packages/backend/index.js',
+      'packages/backend/index.ts',
+      'packages/api/server.cjs',
+      'packages/api/server.js',
+      'packages/api/server.ts',
+      'packages/api/index.cjs',
+      'packages/api/index.js',
+      'packages/api/index.ts',
     ];
 
     for (const candidate of nodeCandidates) {
