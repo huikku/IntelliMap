@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import LoadingSpinner from './LoadingSpinner';
 
 const QUICK_PATHS = [
   { name: '📁 Home', path: process.env.HOME || '/home/john' },
@@ -367,7 +366,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
         )}
 
         {/* Config Panel - OLD - REMOVE */}
-        {false && selectedRepo && (
+        {false /* eslint-disable-line no-constant-binary-expression */ && selectedRepo && (
           <div className="border-t border-gray-700 bg-gray-800 p-4">
             <div className="text-sm font-bold mb-2">📋 Index Configuration</div>
             <div className="space-y-2 text-sm">

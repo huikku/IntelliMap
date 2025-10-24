@@ -1,25 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import Fuse from 'fuse.js';
 
 export default function SearchBox({ graph, cyRef, onSearch }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
+  // Create fuzzy search index
+  const fuse = useMemo(() => {
+    if (!graph || !graph.nodes) return null;
+
+    return new Fuse(graph.nodes, {
+      keys: ['id', 'name', 'folder'],
+      threshold: 0.3, // Lower = more strict matching
+      includeScore: true,
+      includeMatches: true,
+    });
+  }, [graph]);
+
   useEffect(() => {
-    if (!graph || !searchTerm.trim()) {
+    if (!fuse || !searchTerm.trim()) {
       setResults([]);
       setSelectedIndex(-1);
       return;
     }
 
-    const term = searchTerm.toLowerCase();
-    const matches = graph.nodes.filter(node =>
-      node.id.toLowerCase().includes(term)
-    );
+    const fuzzyResults = fuse.search(searchTerm);
+    const matches = fuzzyResults.map(result => result.item);
 
-    setResults(matches);
+    setResults(matches.slice(0, 10)); // Limit to 10 results
     setSelectedIndex(-1);
-  }, [searchTerm, graph]);
+  }, [searchTerm, fuse]);
 
   const handleSelectResult = (node) => {
     if (!cyRef.current) return;
@@ -32,20 +43,28 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
       cy.elements().unselect();
       nodeElement.select();
 
-      // Animate to node position
+      // Highlight the node with a temporary glow effect
+      nodeElement.addClass('search-highlight');
+      setTimeout(() => {
+        nodeElement.removeClass('search-highlight');
+      }, 2000);
+
+      // Animate to node position with smooth zoom
       const pos = nodeElement.position();
       const w = cy.width();
       const h = cy.height();
+      const targetZoom = 2.5;
       const pan = {
-        x: w / 2 - pos.x * 2,  // Account for zoom level 2
-        y: h / 2 - pos.y * 2,
+        x: w / 2 - pos.x * targetZoom,
+        y: h / 2 - pos.y * targetZoom,
       };
 
       cy.animate({
         pan: pan,
-        zoom: 2,
+        zoom: targetZoom,
       }, {
-        duration: 500,
+        duration: 600,
+        easing: 'ease-in-out-cubic',
       });
 
       onSearch?.(node);

@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import cytoscape from 'cytoscape';
 import elk from 'cytoscape-elk';
+import cytoscapeNavigator from 'cytoscape-navigator';
+import 'cytoscape-navigator/cytoscape.js-navigator.css';
 import dagre from 'cytoscape-dagre';
 import fcose from 'cytoscape-fcose';
 import euler from 'cytoscape-euler';
@@ -12,6 +14,7 @@ cytoscape.use(dagre);
 cytoscape.use(fcose);
 cytoscape.use(euler);
 cytoscape.use(cola);
+cytoscape.use(cytoscapeNavigator);
 
 // Helper to classify node type based on filename
 function getNodeType(filename) {
@@ -57,63 +60,7 @@ function getNodeColor(lang, nodeType, changed) {
   return langColors[nodeType] || langColors.default;
 }
 
-/**
- * Get semantic edge color based on relationship type and languages
- * Uses meaningful colors that convey information:
- * - Same-language imports: blue (normal flow)
- * - Cross-language imports: purple (boundary crossing)
- * - Frontend→Backend: amber (API calls)
- * - Backend→Frontend: red (unusual, potential issue)
- * - Changed file involved: brighter/saturated
- */
-function getEdgeColor(edge, sourceNode, targetNode) {
-  if (!sourceNode || !targetNode) return '#6b7280'; // gray-500 fallback
-
-  const sourceLang = sourceNode.data('lang');
-  const targetLang = targetNode.data('lang');
-  const sourceEnv = sourceNode.data('env');
-  const targetEnv = targetNode.data('env');
-  const sourceChanged = sourceNode.data('changed');
-  const targetChanged = targetNode.data('changed');
-
-  // Check if either file changed (higher saturation)
-  const isChanged = sourceChanged || targetChanged;
-
-  // Frontend → Backend (API boundary crossing)
-  if (sourceEnv === 'frontend' && targetEnv === 'backend') {
-    return isChanged ? '#fbbf24' : '#f59e0b'; // amber-400 : amber-500
-  }
-
-  // Backend → Frontend (unusual, potential issue)
-  if (sourceEnv === 'backend' && targetEnv === 'frontend') {
-    return isChanged ? '#f87171' : '#ef4444'; // red-400 : red-500
-  }
-
-  // Cross-language imports (same env, different lang)
-  if (sourceLang !== targetLang) {
-    return isChanged ? '#a78bfa' : '#8b5cf6'; // violet-400 : violet-500
-  }
-
-  // TypeScript imports (same lang)
-  if (sourceLang === 'ts' || sourceLang === 'tsx') {
-    return isChanged ? '#60a5fa' : '#3b82f6'; // blue-400 : blue-500
-  }
-
-  // JavaScript imports
-  if (sourceLang === 'js' || sourceLang === 'jsx') {
-    return isChanged ? '#fbbf24' : '#eab308'; // amber-400 : yellow-500
-  }
-
-  // Python imports
-  if (sourceLang === 'py') {
-    return isChanged ? '#34d399' : '#10b981'; // emerald-400 : emerald-500
-  }
-
-  // Default: neutral gray
-  return isChanged ? '#9ca3af' : '#6b7280'; // gray-400 : gray-500
-}
-
-export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef, clustering = false, setCyInstance, edgeOpacity = 1.0, curveStyle = 'bezier-tight' }) {
+export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef, clustering = false, setCyInstance, edgeOpacity = 1.0, curveStyle = 'bezier-tight', navigationMode = null }) {
   const containerRef = useRef(null);
   const edgeOpacityRef = useRef(edgeOpacity);
   const curveStyleRef = useRef(curveStyle);
@@ -494,6 +441,35 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             'opacity': 1,
           },
         },
+        {
+          selector: '.search-highlight',
+          style: {
+            'border-width': 4,
+            'border-color': '#fbbf24',
+            'border-opacity': 1,
+            'background-color': '#fbbf24',
+            'transition-property': 'border-width, border-color, background-color',
+            'transition-duration': '0.3s',
+          },
+        },
+        {
+          selector: 'node.in-cycle',
+          style: {
+            'border-width': 3,
+            'border-color': '#ef4444',
+            'border-opacity': 1,
+            'background-color': '#7f1d1d',
+          },
+        },
+        {
+          selector: 'edge.in-cycle',
+          style: {
+            'line-color': '#ef4444',
+            'target-arrow-color': '#ef4444',
+            'width': 3,
+            'opacity': 1,
+          },
+        },
       ],
       layout: {
         name: 'elk',
@@ -504,6 +480,10 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
         },
       },
+      // Zoom configuration
+      wheelSensitivity: 0.1, // Reduce mouse wheel zoom speed (default is 1)
+      minZoom: 0.1,
+      maxZoom: 3,
     });
 
     cy.on('tap', 'node', e => {
@@ -574,9 +554,26 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
       setCyInstance(cy);
     }
 
+    // Initialize minimap navigator
+    const nav = cy.navigator({
+      container: false, // Use default container
+      viewLiveFramerate: 0, // Update on graph changes
+      thumbnailEventFramerate: 30,
+      thumbnailLiveFramerate: false,
+      dblClickDelay: 200,
+      removeCustomContainer: true,
+      rerenderDelay: 100,
+    });
+
+    console.log('🗺️ Minimap navigator initialized');
+
     return () => {
+      if (nav && nav.destroy) {
+        nav.destroy();
+      }
       cy.destroy();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graph, plane, filters, setSelectedNode, clustering, setCyInstance]);
 
   // Separate effect for edge opacity - updates without recreating the graph
@@ -590,6 +587,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
       const newOpacity = baseOpacity * edgeOpacity;
       edge.style('opacity', newOpacity);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [edgeOpacity]);
 
   // Separate effect for curve style - updates without recreating the graph
@@ -653,10 +651,129 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         'segment-weights': [0.33, 0.67],
       }).update();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [curveStyle]);
+
+  // Separate effect for navigation mode - highlights/fades nodes based on dependencies
+  useEffect(() => {
+    const cy = cyRef.current;
+    if (!cy || !navigationMode || !selectedNode || !selectedNode.id) {
+      // Reset all nodes and edges to normal when no navigation mode
+      if (cy && !navigationMode) {
+        cy.nodes().removeClass('faded highlighted');
+        cy.edges().removeClass('faded highlighted');
+        cy.nodes().style('opacity', 1);
+        cy.edges().forEach(edge => {
+          const baseOpacity = edge.data('edgeOpacity') || 0.5;
+          edge.style('opacity', baseOpacity * edgeOpacityRef.current);
+        });
+      }
+      return;
+    }
+
+    console.log(`🧭 Applying navigation mode: ${navigationMode} for node ${selectedNode.id}`);
+
+    const targetNode = cy.getElementById(selectedNode.id);
+    if (!targetNode || targetNode.length === 0) {
+      console.warn('Selected node not found in graph');
+      return;
+    }
+
+    let relevantNodes;
+    let relevantEdges;
+
+    switch (navigationMode) {
+      case 'upstream':
+        // All nodes that depend on this node (incoming edges, recursively)
+        relevantNodes = targetNode.predecessors('node');
+        relevantEdges = targetNode.predecessors('edge');
+        break;
+
+      case 'downstream':
+        // All nodes this node depends on (outgoing edges, recursively)
+        relevantNodes = targetNode.successors('node');
+        relevantEdges = targetNode.successors('edge');
+        break;
+
+      case 'parents':
+        // Direct parents only (1 level up)
+        relevantNodes = targetNode.incomers('node');
+        relevantEdges = targetNode.incomers('edge');
+        break;
+
+      case 'children':
+        // Direct children only (1 level down)
+        relevantNodes = targetNode.outgoers('node');
+        relevantEdges = targetNode.outgoers('edge');
+        break;
+
+      case 'focus': {
+        // Focus mode: Show all reachable nodes (both upstream and downstream)
+        const downstream = targetNode.successors();
+        const upstream = targetNode.predecessors();
+        relevantNodes = downstream.union(upstream).nodes();
+        relevantEdges = downstream.union(upstream).edges();
+        break;
+      }
+
+      default:
+        return;
+    }
+
+    // Add the selected node itself to relevant nodes
+    relevantNodes = relevantNodes.union(targetNode);
+
+    // Fade all nodes and edges
+    cy.nodes().style('opacity', 0.15);
+    cy.edges().style('opacity', 0.05);
+
+    // Highlight relevant nodes and edges
+    relevantNodes.style('opacity', 1);
+    relevantEdges.forEach(edge => {
+      const baseOpacity = edge.data('edgeOpacity') || 0.5;
+      edge.style('opacity', baseOpacity * edgeOpacityRef.current);
+    });
+
+    // Make the selected node stand out even more
+    targetNode.style('opacity', 1);
+
+    console.log(`✅ Highlighted ${relevantNodes.length} nodes and ${relevantEdges.length} edges`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigationMode, selectedNode]);
 
   return (
     <div className="relative w-full h-full">
+      <style>{`
+        /* Style the cytoscape navigator minimap */
+        .cytoscape-navigator {
+          position: absolute !important;
+          bottom: 20px !important;
+          left: 20px !important;
+          top: auto !important;
+          right: auto !important;
+          width: 200px !important;
+          height: 200px !important;
+          background: rgba(17, 24, 39, 0.95) !important;
+          border: 1px solid #374151 !important;
+          border-radius: 8px !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+          z-index: 10 !important;
+        }
+
+        .cytoscape-navigator > canvas {
+          background: #1f2937 !important;
+          border-radius: 6px !important;
+        }
+
+        .cytoscape-navigatorView {
+          border: 2px solid #3b82f6 !important;
+          background: rgba(59, 130, 246, 0.1) !important;
+        }
+
+        .cytoscape-navigatorOverlay {
+          background: rgba(17, 24, 39, 0.7) !important;
+        }
+      `}</style>
       <div ref={containerRef} className="w-full h-full bg-dark-900" />
       <GraphHUD cyRef={cyRef} graph={graph} />
     </div>

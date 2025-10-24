@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import FilePreview from './FilePreview';
+import { useState, useRef, useEffect } from 'react';
 
-export default function Inspector({ selectedNode, graph, currentRepo }) {
+export default function Inspector({ selectedNode, graph, currentRepo, onNavigate }) {
   const [width, setWidth] = useState(320); // 80 * 4 = 320px (w-80)
   const [isResizing, setIsResizing] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -238,9 +237,22 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
         <div className="space-y-3 text-sm">
           <div>
             <label className="text-xs text-gray-400 font-condensed">Path</label>
-            <code className="block bg-gray-800 p-2 rounded text-xs mt-1 break-all font-mono">
-              {selectedNode.id}
-            </code>
+            <div className="flex items-center gap-2 mt-1">
+              <code className="flex-1 bg-gray-800 p-2 rounded text-xs break-all font-mono">
+                {selectedNode.id}
+              </code>
+              <button
+                onClick={() => {
+                  const fullPath = currentRepo ? `${currentRepo}/${selectedNode.id}` : selectedNode.id;
+                  window.location.href = `vscode://file/${fullPath}`;
+                  console.log(`🚀 Opening in VS Code: ${fullPath}`);
+                }}
+                className="px-2 py-1.5 bg-blue-800 hover:bg-blue-700 rounded text-xs transition flex-shrink-0"
+                title="Open file in VS Code"
+              >
+                📝 VS Code
+              </button>
+            </div>
           </div>
 
           <div>
@@ -277,6 +289,55 @@ export default function Inspector({ selectedNode, graph, currentRepo }) {
               ⚠️ This file has changed
             </div>
           )}
+
+          {/* Dependency Navigation Buttons */}
+          <div className="pt-3 border-t border-gray-800">
+            <label className="text-xs text-gray-400 font-condensed mb-2 block">NAVIGATE DEPENDENCIES</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                onClick={() => onNavigate && onNavigate('upstream')}
+                className="px-2 py-1.5 bg-blue-800 hover:bg-blue-700 rounded text-xs transition flex items-center justify-center gap-1"
+                title="Show all nodes that depend on this file (incoming edges)"
+              >
+                ⬆️ Upstream
+              </button>
+              <button
+                onClick={() => onNavigate && onNavigate('downstream')}
+                className="px-2 py-1.5 bg-green-800 hover:bg-green-700 rounded text-xs transition flex items-center justify-center gap-1"
+                title="Show all nodes this file depends on (outgoing edges)"
+              >
+                ⬇️ Downstream
+              </button>
+              <button
+                onClick={() => onNavigate && onNavigate('parents')}
+                className="px-2 py-1.5 bg-purple-800 hover:bg-purple-700 rounded text-xs transition flex items-center justify-center gap-1"
+                title="Show direct parents (1 level up)"
+              >
+                ↑ Parents
+              </button>
+              <button
+                onClick={() => onNavigate && onNavigate('children')}
+                className="px-2 py-1.5 bg-indigo-800 hover:bg-indigo-700 rounded text-xs transition flex items-center justify-center gap-1"
+                title="Show direct children (1 level down)"
+              >
+                ↓ Children
+              </button>
+              <button
+                onClick={() => onNavigate && onNavigate('focus')}
+                className="px-2 py-1.5 bg-yellow-800 hover:bg-yellow-700 rounded text-xs transition flex items-center justify-center gap-1 col-span-2"
+                title="Focus mode: Show this node and all reachable nodes"
+              >
+                🎯 Focus Mode
+              </button>
+            </div>
+            <button
+              onClick={() => onNavigate && onNavigate('reset')}
+              className="w-full mt-2 px-2 py-1.5 bg-gray-800 hover:bg-gray-700 rounded text-xs transition"
+              title="Reset to full graph view"
+            >
+              🔄 Reset View
+            </button>
+          </div>
         </div>
 
         {outgoing.length > 0 && (

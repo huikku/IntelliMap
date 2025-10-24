@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-export default function Toolbar({ cy, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration }) {
+export default function Toolbar({ cy, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration, currentRepo }) {
   const [nodeSpacing, setNodeSpacing] = useState(50);
   const [autoPack, setAutoPack] = useState(true);
 
@@ -22,6 +22,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         removeOverlaps(cy);
       }, 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cy, sizing, sizeExaggeration, autoPack]);
 
   const handleFit = () => {
@@ -349,6 +350,70 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       console.error('❌ Error applying filesize styles:', err);
       console.error('Stack:', err.stack);
     }
+    } else if (sizeMode === 'centrality') {
+      console.log('⭐ Starting centrality mode');
+
+      // Calculate betweenness centrality for all nodes
+      const nodes = cyInstance.nodes().filter(n => !n.data('isCluster'));
+      const centralities = new Map();
+
+      // Simple betweenness centrality calculation
+      // For each pair of nodes, find shortest paths and count how many pass through each node
+      nodes.forEach(node => {
+        let betweenness = 0;
+
+        // For each other pair of nodes
+        nodes.forEach(source => {
+          if (source === node) return;
+
+          nodes.forEach(target => {
+            if (target === node || target === source) return;
+
+            // Find all shortest paths from source to target
+            const dijkstra = cyInstance.elements().dijkstra(source, () => 1);
+            const pathToTarget = dijkstra.pathTo(target);
+
+            // Check if our node is on this path
+            if (pathToTarget && pathToTarget.contains(node)) {
+              betweenness += 1;
+            }
+          });
+        });
+
+        centralities.set(node.id(), betweenness);
+        node.data('centrality', betweenness);
+      });
+
+      // Normalize centralities
+      const centralityValues = Array.from(centralities.values());
+      const minCentrality = Math.min(...centralityValues);
+      const maxCentrality = Math.max(...centralityValues);
+      const centralityRange = maxCentrality - minCentrality || 1;
+
+      console.log(`⭐ Centrality range: ${minCentrality} - ${maxCentrality}`);
+
+      // Apply sizing based on centrality
+      cyInstance.style().selector('node').style({
+        'width': node => {
+          if (node.data('isCluster')) return 'label';
+          const centrality = node.data('centrality') || 0;
+          const normalized = (centrality - minCentrality) / centralityRange;
+          const size = Math.max(30, Math.min(150, 30 + (normalized * 120))) * exaggeration;
+          return size;
+        },
+        'height': node => {
+          if (node.data('isCluster')) return 'label';
+          const centrality = node.data('centrality') || 0;
+          const normalized = (centrality - minCentrality) / centralityRange;
+          const size = Math.max(30, Math.min(150, 30 + (normalized * 120))) * exaggeration;
+          return size;
+        },
+      }).update();
+
+      // Force font size recalculation
+      cyInstance.nodes().forEach(n => n.updateStyle());
+
+      console.log('✅ Centrality sizing applied');
     }
   };
 
@@ -460,6 +525,132 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
     layoutInstance.run();
   };
 
+  const handleExportPNG = () => {
+    if (!cy) return;
+
+    const png = cy.png({
+      output: 'blob',
+      bg: '#111827', // gray-900
+      full: true,
+      scale: 2, // 2x resolution for better quality
+    });
+
+    // Generate filename: repo_intellimap_timestamp.png
+    const repoName = currentRepo ? currentRepo.split('/').pop() : 'unknown';
+    const timestamp = Date.now();
+    const filename = `${repoName}_intellimap_${timestamp}.png`;
+
+    const url = URL.createObjectURL(png);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    console.log(`📸 Graph exported as PNG: ${filename}`);
+  };
+
+  const handleExportJSON = () => {
+    if (!cy) return;
+
+    const data = cy.json();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+
+    // Generate filename: repo_intellimap_timestamp.json
+    const repoName = currentRepo ? currentRepo.split('/').pop() : 'unknown';
+    const timestamp = Date.now();
+    const filename = `${repoName}_intellimap_${timestamp}.json`;
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(url);
+
+    console.log(`💾 Graph exported as JSON: ${filename}`);
+  };
+
+  const handleDetectCycles = () => {
+    if (!cy) return;
+
+    // Reset previous cycle highlighting
+    cy.nodes().removeClass('in-cycle');
+    cy.edges().removeClass('in-cycle');
+
+    // Find strongly connected components (SCCs)
+    // A cycle exists if an SCC has more than one node
+    const components = [];
+    const visited = new Set();
+    const stack = [];
+    const lowLink = new Map();
+    const index = new Map();
+    let currentIndex = 0;
+
+    const strongConnect = (node) => {
+      index.set(node.id(), currentIndex);
+      lowLink.set(node.id(), currentIndex);
+      currentIndex++;
+      stack.push(node);
+      visited.add(node.id());
+
+      // Visit successors
+      node.outgoers('node').forEach(successor => {
+        if (!index.has(successor.id())) {
+          strongConnect(successor);
+          lowLink.set(node.id(), Math.min(lowLink.get(node.id()), lowLink.get(successor.id())));
+        } else if (stack.includes(successor)) {
+          lowLink.set(node.id(), Math.min(lowLink.get(node.id()), index.get(successor.id())));
+        }
+      });
+
+      // If node is a root node, pop the stack and create an SCC
+      if (lowLink.get(node.id()) === index.get(node.id())) {
+        const component = [];
+        let w;
+        do {
+          w = stack.pop();
+          component.push(w);
+        } while (w !== node);
+
+        if (component.length > 1) {
+          components.push(component);
+        }
+      }
+    };
+
+    // Run Tarjan's algorithm on all nodes
+    cy.nodes().forEach(node => {
+      if (!visited.has(node.id())) {
+        strongConnect(node);
+      }
+    });
+
+    // Highlight cycles
+    let totalCycleNodes = 0;
+    components.forEach(component => {
+      component.forEach(node => {
+        node.addClass('in-cycle');
+        totalCycleNodes++;
+
+        // Highlight edges within the cycle
+        node.outgoers('edge').forEach(edge => {
+          if (component.includes(edge.target())) {
+            edge.addClass('in-cycle');
+          }
+        });
+      });
+    });
+
+    if (components.length > 0) {
+      console.log(`🔴 Found ${components.length} cycles with ${totalCycleNodes} nodes`);
+      alert(`Found ${components.length} circular dependencies involving ${totalCycleNodes} files!`);
+    } else {
+      console.log('✅ No cycles detected');
+      alert('No circular dependencies found! 🎉');
+    }
+  };
+
   return (
     <div className="h-10 bg-gray-900 border-b border-gray-800 flex items-center gap-2 px-4">
       <button
@@ -475,6 +666,27 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         title="Center view"
       >
         ⊙ Center
+      </button>
+      <button
+        onClick={handleExportPNG}
+        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        title="Export graph as PNG"
+      >
+        📸 PNG
+      </button>
+      <button
+        onClick={handleExportJSON}
+        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        title="Export graph as JSON"
+      >
+        💾 JSON
+      </button>
+      <button
+        onClick={handleDetectCycles}
+        className="px-3 py-1 bg-red-800 hover:bg-red-700 rounded text-sm transition"
+        title="Detect circular dependencies"
+      >
+        🔴 Cycles
       </button>
 
       <div className="ml-2 flex items-center gap-2">
@@ -526,6 +738,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           <option value="uniform">📏 Uniform</option>
           <option value="degree">🔗 By Degree</option>
           <option value="filesize">📁 By File Size</option>
+          <option value="centrality">⭐ By Centrality</option>
         </select>
 
         <input

@@ -8,16 +8,29 @@ import RepoLoader from './components/RepoLoader';
 import SearchBox from './components/SearchBox';
 
 export default function App() {
+  // Load persisted settings from localStorage
+  const loadPersistedSettings = () => {
+    try {
+      const saved = localStorage.getItem('intellimap-settings');
+      return saved ? JSON.parse(saved) : {};
+    } catch (e) {
+      console.error('Failed to load settings:', e);
+      return {};
+    }
+  };
+
+  const persistedSettings = loadPersistedSettings();
+
   const [graph, setGraph] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedNode, setSelectedNode] = useState(null);
-  const [plane, setPlane] = useState('static');
-  const [layout, setLayout] = useState('elk');
-  const [clustering, setClustering] = useState(false);
+  const [plane, setPlane] = useState(persistedSettings.plane || 'static');
+  const [layout, setLayout] = useState(persistedSettings.layout || 'elk');
+  const [clustering, setClustering] = useState(persistedSettings.clustering || false);
   const [currentRepo, setCurrentRepo] = useState(null);
   const [showRepoLoader, setShowRepoLoader] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState(persistedSettings.filters || {
     language: 'all',
     env: 'all',
     showChanged: false,
@@ -28,17 +41,101 @@ export default function App() {
   const [cyInstance, setCyInstance] = useState(null);
 
   // Edge and curve settings that should persist across view changes
-  const [edgeOpacity, setEdgeOpacity] = useState(1.0);
-  const [curveStyle, setCurveStyle] = useState('bezier-tight');
+  const [edgeOpacity, setEdgeOpacity] = useState(persistedSettings.edgeOpacity || 1.0);
+  const [curveStyle, setCurveStyle] = useState(persistedSettings.curveStyle || 'bezier-tight');
 
   // Node sizing settings that should persist across view changes
-  const [sizing, setSizing] = useState('uniform');
-  const [sizeExaggeration, setSizeExaggeration] = useState(1);
+  const [sizing, setSizing] = useState(persistedSettings.sizing || 'uniform');
+  const [sizeExaggeration, setSizeExaggeration] = useState(persistedSettings.sizeExaggeration || 1);
+
+  // Dependency navigation state
+  const [navigationMode, setNavigationMode] = useState(null); // 'upstream', 'downstream', 'parents', 'children', or null
 
   // Keep selectedNodeRef in sync with selectedNode
   useEffect(() => {
     selectedNodeRef.current = selectedNode;
   }, [selectedNode]);
+
+  // Persist settings to localStorage whenever they change
+  useEffect(() => {
+    const settings = {
+      plane,
+      layout,
+      clustering,
+      filters,
+      edgeOpacity,
+      curveStyle,
+      sizing,
+      sizeExaggeration,
+    };
+
+    try {
+      localStorage.setItem('intellimap-settings', JSON.stringify(settings));
+      console.log('💾 Settings saved to localStorage');
+    } catch (e) {
+      console.error('Failed to save settings:', e);
+    }
+  }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration]);
+
+  // Persist zoom and pan when cy instance changes
+  useEffect(() => {
+    if (!cyInstance) return;
+
+    const saveViewport = () => {
+      try {
+        const viewport = {
+          zoom: cyInstance.zoom(),
+          pan: cyInstance.pan(),
+        };
+        localStorage.setItem('intellimap-viewport', JSON.stringify(viewport));
+      } catch (e) {
+        console.error('Failed to save viewport:', e);
+      }
+    };
+
+    // Save viewport on zoom/pan changes (debounced)
+    let timeout;
+    const handleViewportChange = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(saveViewport, 500);
+    };
+
+    cyInstance.on('zoom pan', handleViewportChange);
+
+    // Restore viewport on mount
+    try {
+      const saved = localStorage.getItem('intellimap-viewport');
+      if (saved) {
+        const viewport = JSON.parse(saved);
+        cyInstance.zoom(viewport.zoom);
+        cyInstance.pan(viewport.pan);
+        console.log('📍 Viewport restored from localStorage');
+      }
+    } catch (e) {
+      console.error('Failed to restore viewport:', e);
+    }
+
+    return () => {
+      cyInstance.off('zoom pan', handleViewportChange);
+      clearTimeout(timeout);
+    };
+  }, [cyInstance]);
+
+  // Handle dependency navigation
+  const handleNavigate = (mode) => {
+    if (mode === 'reset') {
+      setNavigationMode(null);
+      return;
+    }
+
+    if (!selectedNode || !selectedNode.id) {
+      console.warn('No node selected for navigation');
+      return;
+    }
+
+    setNavigationMode(mode);
+    console.log(`🧭 Navigation mode: ${mode} for node ${selectedNode.id}`);
+  };
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -219,6 +316,7 @@ export default function App() {
             setSizing={setSizing}
             sizeExaggeration={sizeExaggeration}
             setSizeExaggeration={setSizeExaggeration}
+            currentRepo={currentRepo}
           />
           <GraphView
             graph={graph}
@@ -231,12 +329,18 @@ export default function App() {
             setCyInstance={setCyInstance}
             edgeOpacity={edgeOpacity}
             curveStyle={curveStyle}
+            navigationMode={navigationMode}
           />
         </main>
 
         {/* Right Sidebar - Resizable, positioned absolutely won't affect left */}
         <div className="flex-shrink-0">
-          <Inspector selectedNode={selectedNode} graph={graph} currentRepo={currentRepo} />
+          <Inspector
+            selectedNode={selectedNode}
+            graph={graph}
+            currentRepo={currentRepo}
+            onNavigate={handleNavigate}
+          />
         </div>
       </div>
 

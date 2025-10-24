@@ -32,6 +32,7 @@ export default function GraphHUD({ cyRef, graph }) {
         clearInterval(updateIntervalRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cyRef?.current]);
 
   useEffect(() => {
