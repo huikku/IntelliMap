@@ -18,6 +18,10 @@
     "diff": "node packages/cli/index.js diff",
     "serve": "node packages/cli/index.js serve",
     "generate-trace": "node packages/cli/generate-sample-trace.js",
+    "runtime:setup": "node scripts/setup-runtime.js",
+    "runtime:collect": "node scripts/collect-runtime.js",
+    "runtime:convert": "node scripts/nyc-to-intellimap.js",
+    "runtime:all": "npm run runtime:setup && npm run runtime:collect && npm run runtime:convert",
     "clean": "rm -rf .intellimap node_modules packages/*/node_modules packages/ui/dist"
   },
   "keywords": [
@@ -32,7 +36,9 @@
   "author": "IntelliMap Contributors",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "nyc": "^15.1.0",
+    "c8": "^8.0.1"
   }
 }
 

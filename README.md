@@ -72,22 +72,28 @@ Overlay git diff information on the graph.
 npm run cli -- diff HEAD~1 HEAD
 ```
 
-### Runtime Analysis
-Generate and analyze runtime execution traces.
+### Runtime Analysis (100% Automated!)
+Collect **real** test coverage and analyze runtime behavior.
 
 ```bash
-# Generate a sample trace (for testing)
-npm run generate-trace
+# One-time setup (installs NYC, coverage.py in venv, creates configs)
+npm run runtime:setup
 
-# Or upload your own trace from test coverage
-# See docs/runtime-analysis-guide.md for details
+# Collect coverage from your tests (auto-detects framework)
+npm run runtime:collect
+
+# Or run everything at once
+npm run runtime:all
 ```
 
 Then click **⚡ Runtime Analysis** in the UI to view:
-- Coverage metrics (edges & nodes)
-- Performance hotspots (top 10 slowest modules)
-- Dead code analysis (by directory)
-- Dynamic dependencies (runtime-only imports)
+- **Real coverage metrics** (edges & nodes from actual tests)
+- **Performance hotspots** (top 10 slowest modules)
+- **Dead code analysis** (files never executed)
+- **Dynamic dependencies** (runtime-only imports)
+
+**Supports:** Jest, Mocha, Vitest, pytest, unittest, and more!
+**See:** `docs/AUTOMATED-RUNTIME-ANALYSIS.md` for full guide
 
 ## Project Structure
 

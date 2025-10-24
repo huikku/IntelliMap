@@ -43,3 +43,11 @@ venv/
 dist/
 build/
 
+
+.nyc_output/
+.c8_output/
+coverage/
+.coverage
+.coverage.*
+.venv-intellimap/
+.intellimap/runtime/

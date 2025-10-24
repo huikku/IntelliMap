@@ -1,0 +1,15 @@
+[run]
+source = .
+omit =
+    */tests/*
+    */test_*
+    */.venv*/*
+    */node_modules/*
+    */dist/*
+    */build/*
+
+[report]
+precision = 2
+
+[json]
+output = .coverage.json

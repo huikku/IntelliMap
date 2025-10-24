@@ -1,0 +1,21 @@
+{
+  "all": true,
+  "include": [
+    "src/**/*.js",
+    "src/**/*.ts",
+    "packages/*/src/**/*.js",
+    "packages/*/src/**/*.ts"
+  ],
+  "exclude": [
+    "**/*.test.js",
+    "**/*.spec.js",
+    "**/node_modules/**",
+    "**/dist/**"
+  ],
+  "reporter": [
+    "json",
+    "text",
+    "html"
+  ],
+  "reports-dir": ".c8_output"
+}

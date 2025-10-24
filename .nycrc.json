@@ -1,0 +1,30 @@
+{
+  "all": true,
+  "include": [
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.jsx",
+    "src/**/*.tsx",
+    "packages/*/src/**/*.js",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.jsx",
+    "packages/*/src/**/*.tsx"
+  ],
+  "exclude": [
+    "**/*.test.js",
+    "**/*.spec.js",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.venv*/**"
+  ],
+  "reporter": [
+    "json",
+    "text",
+    "html"
+  ],
+  "report-dir": ".nyc_output",
+  "temp-dir": ".nyc_output/.cache"
+}
