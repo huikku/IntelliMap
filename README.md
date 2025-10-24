@@ -4,6 +4,7 @@ Local-only full-stack code architecture visualizer for JavaScript/TypeScript and
 
 ## Features
 
+### Core Visualization
 - 📊 **Static Import Graph** - Visualize dependencies in your codebase
 - 🔍 **Multi-language Support** - JS/TS (frontend + Node) and Python (backend)
 - 🎨 **Interactive Visualization** - Cytoscape.js with ELK/fcose layouts
@@ -11,6 +12,15 @@ Local-only full-stack code architecture visualizer for JavaScript/TypeScript and
 - 🎯 **Multiplanar Views** - Static, Backend-only, and Diff planes
 - ⚡ **Live Reload** - Auto-refresh on file changes
 - 🏠 **Local-only** - No cloud, no auth, no tracking
+
+### Code Analysis
+- 🔴 **Cycle Detection** - Find circular dependencies with Tarjan's algorithm
+- 🏗️ **Architecture Analysis** - Detect god files, monolithic modules, unstable dependencies
+- ⚡ **Runtime Analysis** - Merge test coverage with static graph for:
+  - Coverage gaps (dead code detection)
+  - Performance hotspots (slowest modules)
+  - Dynamic dependencies (runtime-only imports)
+  - Dead code analysis by directory
 
 ## Quick Start
 
@@ -61,6 +71,23 @@ Overlay git diff information on the graph.
 ```bash
 npm run cli -- diff HEAD~1 HEAD
 ```
+
+### Runtime Analysis
+Generate and analyze runtime execution traces.
+
+```bash
+# Generate a sample trace (for testing)
+npm run generate-trace
+
+# Or upload your own trace from test coverage
+# See docs/runtime-analysis-guide.md for details
+```
+
+Then click **⚡ Runtime Analysis** in the UI to view:
+- Coverage metrics (edges & nodes)
+- Performance hotspots (top 10 slowest modules)
+- Dead code analysis (by directory)
+- Dynamic dependencies (runtime-only imports)
 
 ## Project Structure
 
