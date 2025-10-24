@@ -113,11 +113,19 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
       nodeMap.set(n.id, n);
     });
 
+    // Detect unconnected nodes (nodes with no edges)
+    const connectedNodeIds = new Set();
+    filteredEdges.forEach(e => {
+      connectedNodeIds.add(e.from);
+      connectedNodeIds.add(e.to);
+    });
+
     // Build Cytoscape elements with enhanced metadata
     let elements = [
       ...filteredNodes.map(n => {
         const filename = n.id.split('/').pop();
         const nodeType = getNodeType(filename);
+        const isUnconnected = !connectedNodeIds.has(n.id);
 
         // Split filename and extension for multi-line label
         const lastDot = filename.lastIndexOf('.');
@@ -137,6 +145,7 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             folder: n.folder,
             pkg: n.pkg,
             fileSize: n.size || 0,
+            isUnconnected,
             // parent will be set later if clustering is enabled
           },
         };
@@ -288,6 +297,10 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           style: {
             'background-color': node => {
               if (node.data('isCluster')) return '#1f2937';
+
+              // Darken unconnected nodes
+              const isUnconnected = node.data('isUnconnected');
+
               // Color code by file extension
               const ext = node.data('ext') || '';
               const extColors = {
@@ -330,7 +343,25 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
                 '.h': '#555555',
                 '.hpp': '#f34b7d',
               };
-              return extColors[ext.toLowerCase()] || getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed'));
+
+              let color = extColors[ext.toLowerCase()] || getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed'));
+
+              // Darken unconnected nodes by reducing brightness
+              if (isUnconnected) {
+                // Convert hex to RGB, reduce brightness by 50%, convert back
+                const hex = color.replace('#', '');
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+
+                const darkenedR = Math.floor(r * 0.4);
+                const darkenedG = Math.floor(g * 0.4);
+                const darkenedB = Math.floor(b * 0.4);
+
+                color = `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`;
+              }
+
+              return color;
             },
             'shape': node => {
               if (node.data('isCluster')) return 'rectangle';
