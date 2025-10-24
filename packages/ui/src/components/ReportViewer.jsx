@@ -29,6 +29,7 @@ export default function ReportViewer({ report, reportType, onClose }) {
 
   const getTitle = () => {
     if (reportType === 'cycles') return '🔴 Circular Dependency Report';
+    if (reportType === 'runtime') return '⚡ Runtime Analysis Report';
     if (reportType === 'analysis') return '📊 Architecture Analysis Report';
     return '📋 Report';
   };
@@ -75,8 +76,8 @@ export default function ReportViewer({ report, reportType, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-hidden bg-gray-950">
-          <pre className="h-full overflow-auto p-6 text-sm font-mono text-gray-300 leading-relaxed">
+        <div className="flex-1 overflow-y-auto overflow-x-auto bg-gray-950 p-6">
+          <pre className="text-sm font-mono text-gray-300 leading-relaxed whitespace-pre-wrap">
             {report}
           </pre>
         </div>
