@@ -18,6 +18,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import { convertV8ToRuntime } from '../runtime/enhanced-v8-converter.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,10 +36,15 @@ export async function runWithCoverage(command, options = {}) {
   await fs.ensureDir(runtimeDir);
 
   console.log('🚀 Starting your app with runtime analysis...');
-  console.log(`📂 Coverage will be saved to: ${coverageDir}`);
+  console.log(`📂 Runtime data will be saved to: ${runtimeDir}`);
   console.log(`📊 Command: ${command}`);
   console.log('');
-  console.log('💡 Use your app normally, then press Ctrl+C to stop and generate report');
+  console.log('💡 Instrumentation will track:');
+  console.log('   - Module loads (which files are imported)');
+  console.log('   - Runtime errors (exceptions, rejections)');
+  console.log('   - Performance (load times)');
+  console.log('');
+  console.log('💡 Use your app normally, then press Ctrl+C to stop');
   console.log('');
 
   // Parse command (handle quoted commands like "npm start")
@@ -57,7 +63,7 @@ export async function runWithCoverage(command, options = {}) {
     args = parts.slice(1);
   }
 
-  // Set up environment with V8 coverage
+  // Use V8 coverage (reliable and works with all Node.js apps)
   const env = {
     ...process.env,
     NODE_V8_COVERAGE: coverageDir,
@@ -76,28 +82,31 @@ export async function runWithCoverage(command, options = {}) {
   
   const cleanup = async () => {
     console.log('');
-    console.log('🛑 Stopping app and processing coverage data...');
-    
-    // Kill child process
-    child.kill('SIGTERM');
-    
-    // Wait a bit for coverage to be written
+    console.log('🛑 Stopping app and processing runtime data...');
+
+    // Send SIGINT to child process (allows graceful shutdown)
+    child.kill('SIGINT');
+
+    // Wait for V8 coverage to be written
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Convert V8 coverage to IntelliMap format
+
+    // Convert V8 coverage to enhanced runtime trace
     try {
-      await convertV8Coverage(coverageDir, runtimeDir, cwd);
+      const staticGraphPath = path.join(cwd, '.intellimap', 'graph.json');
+      await convertV8ToRuntime(coverageDir, runtimeDir, cwd, staticGraphPath);
+
       console.log('✅ Runtime analysis complete!');
       console.log('');
       console.log('📊 Next steps:');
       console.log('   1. npm run serve');
       console.log('   2. Open http://localhost:7676');
       console.log('   3. Click "⚡ Runtime Analysis"');
+      console.log('');
     } catch (error) {
-      console.error('❌ Error processing coverage:', error.message);
+      console.error('❌ Error processing runtime data:', error.message);
       exitCode = 1;
     }
-    
+
     process.exit(exitCode);
   };
 
