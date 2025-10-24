@@ -694,12 +694,21 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         duration: 500,
       });
 
-      // Show modal
-      setCycleModalData({ cycleCount: components.length, nodeCount: totalCycleNodes });
+      // Convert components to cycle paths (list of file IDs)
+      const cycleDetails = components.map(component => {
+        return component.map(node => node.id());
+      });
+
+      // Show modal with cycle details
+      setCycleModalData({
+        cycleCount: components.length,
+        nodeCount: totalCycleNodes,
+        cycles: cycleDetails,
+      });
     } else {
       console.log('✅ No cycles detected');
       // Show modal
-      setCycleModalData({ cycleCount: 0, nodeCount: 0 });
+      setCycleModalData({ cycleCount: 0, nodeCount: 0, cycles: [] });
     }
   };
 
@@ -881,6 +890,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         <CycleModal
           cycleCount={cycleModalData.cycleCount}
           nodeCount={cycleModalData.nodeCount}
+          cycles={cycleModalData.cycles}
           onClose={() => setCycleModalData(null)}
         />
       )}
