@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import CycleModal from './CycleModal';
 
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration, currentRepo }) {
   const [nodeSpacing, setNodeSpacing] = useState(50);
   const [autoPack, setAutoPack] = useState(true);
+  const [cycleModalData, setCycleModalData] = useState(null);
 
   // Apply node sizing whenever cy, sizing, or sizeExaggeration changes
   useEffect(() => {
@@ -692,10 +694,12 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         duration: 500,
       });
 
-      alert(`Found ${components.length} circular dependencies involving ${totalCycleNodes} files!\n\nCycles are now highlighted in red. Press 'f' to re-focus on them.`);
+      // Show modal
+      setCycleModalData({ cycleCount: components.length, nodeCount: totalCycleNodes });
     } else {
       console.log('✅ No cycles detected');
-      alert('No circular dependencies found! 🎉');
+      // Show modal
+      setCycleModalData({ cycleCount: 0, nodeCount: 0 });
     }
   };
 
@@ -871,6 +875,15 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       <div className="ml-auto text-xs text-gray-500">
         ✓ Ready
       </div>
+
+      {/* Cycle Detection Modal */}
+      {cycleModalData && (
+        <CycleModal
+          cycleCount={cycleModalData.cycleCount}
+          nodeCount={cycleModalData.nodeCount}
+          onClose={() => setCycleModalData(null)}
+        />
+      )}
     </div>
   );
 }
