@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import ReportViewer from './ReportViewer';
 
 export default function Sidebar({ filters, setFilters, graph, cy }) {
   const [activeSection, setActiveSection] = useState('filters');
   const [analysisReport, setAnalysisReport] = useState('');
   const [cycleReport, setCycleReport] = useState('');
   const [reportType, setReportType] = useState('cycles');
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
@@ -391,13 +393,22 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                   <h3 className="text-xs text-gray-400 font-semibold">
                     {reportType === 'cycles' ? '🔴 Cycle Report' : '📊 Analysis Report'}
                   </h3>
-                  <button
-                    onClick={copyReport}
-                    className="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-xs transition"
-                    title="Copy report to clipboard"
-                  >
-                    📋 Copy
-                  </button>
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => setShowReportModal(true)}
+                      className="px-2 py-1 bg-blue-700 hover:bg-blue-600 rounded text-xs transition"
+                      title="Expand report in modal"
+                    >
+                      ⛶ Expand
+                    </button>
+                    <button
+                      onClick={copyReport}
+                      className="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-xs transition"
+                      title="Copy report to clipboard"
+                    >
+                      📋 Copy
+                    </button>
+                  </div>
                 </div>
                 <textarea
                   readOnly
@@ -417,6 +428,15 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
           </>
         )}
       </div>
+
+      {/* Report Viewer Modal */}
+      {showReportModal && (
+        <ReportViewer
+          report={reportType === 'cycles' ? cycleReport : analysisReport}
+          reportType={reportType}
+          onClose={() => setShowReportModal(false)}
+        />
+      )}
     </aside>
   );
 }
