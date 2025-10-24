@@ -651,11 +651,15 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
 
                     {analysisData.monolithicFiles?.length > 0 && (
                       <div className="bg-gray-800 border border-orange-900 rounded p-2">
-                        <div className="text-xs font-semibold text-orange-400 mb-1">
+                        <button
+                          onClick={() => highlightFiles(analysisData.monolithicFiles)}
+                          className="w-full text-left text-xs font-semibold text-orange-400 mb-1 hover:text-orange-300 transition"
+                          title="Click to highlight all monolithic files in graph"
+                        >
                           🏗️ Monolithic Files ({analysisData.monolithicFiles.length})
-                        </div>
-                        <div className="space-y-1">
-                          {analysisData.monolithicFiles.slice(0, 5).map(fileId => (
+                        </button>
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {analysisData.monolithicFiles.map(fileId => (
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
@@ -665,25 +669,21 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                               {fileId}
                             </button>
                           ))}
-                          {analysisData.monolithicFiles.length > 5 && (
-                            <button
-                              onClick={() => highlightFiles(analysisData.monolithicFiles)}
-                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
-                            >
-                              + {analysisData.monolithicFiles.length - 5} more (click to view all)
-                            </button>
-                          )}
                         </div>
                       </div>
                     )}
 
                     {analysisData.godFiles?.length > 0 && (
                       <div className="bg-gray-800 border border-red-900 rounded p-2">
-                        <div className="text-xs font-semibold text-red-400 mb-1">
+                        <button
+                          onClick={() => highlightFiles(analysisData.godFiles)}
+                          className="w-full text-left text-xs font-semibold text-red-400 mb-1 hover:text-red-300 transition"
+                          title="Click to highlight all god files in graph"
+                        >
                           ⚠️ God Files ({analysisData.godFiles.length})
-                        </div>
-                        <div className="space-y-1">
-                          {analysisData.godFiles.slice(0, 5).map(fileId => (
+                        </button>
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {analysisData.godFiles.map(fileId => (
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
@@ -693,25 +693,21 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                               {fileId}
                             </button>
                           ))}
-                          {analysisData.godFiles.length > 5 && (
-                            <button
-                              onClick={() => highlightFiles(analysisData.godFiles)}
-                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
-                            >
-                              + {analysisData.godFiles.length - 5} more (click to view all)
-                            </button>
-                          )}
                         </div>
                       </div>
                     )}
 
                     {analysisData.unstableDeps?.length > 0 && (
                       <div className="bg-gray-800 border border-yellow-900 rounded p-2">
-                        <div className="text-xs font-semibold text-yellow-400 mb-1">
+                        <button
+                          onClick={() => highlightFiles(analysisData.unstableDeps)}
+                          className="w-full text-left text-xs font-semibold text-yellow-400 mb-1 hover:text-yellow-300 transition"
+                          title="Click to highlight all unstable dependencies in graph"
+                        >
                           ⚡ Unstable Dependencies ({analysisData.unstableDeps.length})
-                        </div>
-                        <div className="space-y-1">
-                          {analysisData.unstableDeps.slice(0, 5).map(fileId => (
+                        </button>
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {analysisData.unstableDeps.map(fileId => (
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
@@ -721,25 +717,21 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                               {fileId}
                             </button>
                           ))}
-                          {analysisData.unstableDeps.length > 5 && (
-                            <button
-                              onClick={() => highlightFiles(analysisData.unstableDeps)}
-                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
-                            >
-                              + {analysisData.unstableDeps.length - 5} more (click to view all)
-                            </button>
-                          )}
                         </div>
                       </div>
                     )}
 
                     {analysisData.deepChains?.length > 0 && (
                       <div className="bg-gray-800 border border-purple-900 rounded p-2">
-                        <div className="text-xs font-semibold text-purple-400 mb-1">
+                        <button
+                          onClick={() => highlightFiles(analysisData.deepChains)}
+                          className="w-full text-left text-xs font-semibold text-purple-400 mb-1 hover:text-purple-300 transition"
+                          title="Click to highlight all deep chains in graph"
+                        >
                           🔗 Deep Chains ({analysisData.deepChains.length})
-                        </div>
-                        <div className="space-y-1">
-                          {analysisData.deepChains.slice(0, 5).map(fileId => (
+                        </button>
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {analysisData.deepChains.map(fileId => (
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
@@ -749,14 +741,6 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                               {fileId}
                             </button>
                           ))}
-                          {analysisData.deepChains.length > 5 && (
-                            <button
-                              onClick={() => highlightFiles(analysisData.deepChains)}
-                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
-                            >
-                              + {analysisData.deepChains.length - 5} more (click to view all)
-                            </button>
-                          )}
                         </div>
                       </div>
                     )}
@@ -768,12 +752,16 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                     <h3 className="text-xs text-gray-400 font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
 
                     {cycleData.cycles.map((cycle, idx) => (
-                      <div key={idx} className="bg-gray-800 border border-red-900 rounded p-2">
-                        <div className="text-xs font-semibold text-red-400 mb-1">
+                      <div key={`cycle-${idx}-${cycle[0]}`} className="bg-gray-800 border border-red-900 rounded p-2">
+                        <button
+                          onClick={() => highlightFiles(cycle)}
+                          className="w-full text-left text-xs font-semibold text-red-400 mb-1 hover:text-red-300 transition"
+                          title="Click to highlight all files in this cycle"
+                        >
                           🔴 Cycle {idx + 1} ({cycle.length} files)
-                        </div>
-                        <div className="space-y-1">
-                          {cycle.slice(0, 3).map(fileId => (
+                        </button>
+                        <div className="space-y-1 max-h-48 overflow-y-auto">
+                          {cycle.map(fileId => (
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
@@ -783,14 +771,6 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                               {fileId}
                             </button>
                           ))}
-                          {cycle.length > 3 && (
-                            <button
-                              onClick={() => highlightFiles(cycle)}
-                              className="w-full text-left px-2 py-1 text-xs text-blue-400 hover:text-blue-300 transition"
-                            >
-                              + {cycle.length - 3} more (click to view all)
-                            </button>
-                          )}
                         </div>
                       </div>
                     ))}
