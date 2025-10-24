@@ -163,7 +163,8 @@ export async function buildJSGraph(options) {
         'dgram', 'dns', 'domain', 'http2', 'inspector', 'module', 'perf_hooks',
         'process', 'punycode', 'readline', 'repl', 'tls', 'tty', 'v8', 'vm',
         'worker_threads', 'assert', 'async_hooks', 'console', 'constants', 'debugger',
-        'errors', 'fs/promises', 'node:fs', 'node:path', 'node:crypto', 'node:events',
+        'errors', 'fs/promises', 'string_decoder', 'timers', 'timers/promises',
+        'node:fs', 'node:path', 'node:crypto', 'node:events',
         'node:stream', 'node:util', 'node:os', 'node:http', 'node:https', 'node:net',
         'node:url', 'node:querystring', 'node:zlib', 'node:buffer', 'node:child_process',
         'node:cluster', 'node:dgram', 'node:dns', 'node:domain', 'node:http2',
@@ -171,7 +172,7 @@ export async function buildJSGraph(options) {
         'node:readline', 'node:repl', 'node:tls', 'node:tty', 'node:v8', 'node:vm',
         'node:worker_threads', 'node:assert', 'node:async_hooks', 'node:console',
         'node:constants', 'node:debugger', 'node:errors', 'node:fs/promises',
-        'node:string_decoder',
+        'node:string_decoder', 'node:timers', 'node:timers/promises',
       ];
 
       let backendResult;
@@ -184,12 +185,13 @@ export async function buildJSGraph(options) {
           outdir: '/tmp/intellimap-esbuild-backend',
           external: nodeBuiltins,
           logLevel: 'silent', // Suppress all messages
-          platform: 'browser', // Use browser to avoid bundling node_modules
+          platform: 'node', // Use node platform to properly handle node_modules
           target: 'es2020',
           format: 'esm',
           jsx: 'automatic',
           jsxImportSource: 'react',
           absWorkingDir: process.cwd(),
+          packages: 'external', // Don't bundle any node_modules packages
           resolveExtensions: ['.tsx', '.ts', '.jsx', '.js', '.cjs', '.mjs', '.json'],
           loader: {
             '.ts': 'ts',
