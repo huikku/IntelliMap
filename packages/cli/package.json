@@ -8,8 +8,7 @@
     "intellimap": "index.js"
   },
   "scripts": {
-    "dev": "node index.js",
-    "test": "echo 'No tests yet'"
+    "dev": "node index.js"
   },
   "dependencies": {
     "commander": "^11.1.0",

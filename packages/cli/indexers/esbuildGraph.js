@@ -249,11 +249,30 @@ export async function buildJSGraph(options) {
 
         // Determine language and environment
         const isTS = inputPath.endsWith('.ts') || inputPath.endsWith('.tsx');
+
         // Check if this file is from the backend entry point
         let isBackend = false;
-        if (nodeEntry) {
-          const nodeEntryDir = nodeEntry.includes('/') ? nodeEntry.split('/')[0] : '.';
-          isBackend = inputPath.startsWith(nodeEntryDir + '/') || inputPath === nodeEntryDir || inputPath.startsWith('./');
+        if (nodeEntry && entry) {
+          // Get the directory containing each entry point
+          const backendDir = nodeEntry.split('/').slice(0, -1).join('/');
+          const frontendDir = entry.split('/').slice(0, -1).join('/');
+
+          // Check which entry point's directory this file belongs to
+          if (backendDir && inputPath.startsWith(backendDir + '/')) {
+            isBackend = true;
+          } else if (frontendDir && inputPath.startsWith(frontendDir + '/')) {
+            isBackend = false;
+          } else {
+            // Fallback: check path-based heuristics
+            if (inputPath.includes('/server/') || inputPath.includes('/cli/') || inputPath.includes('/backend/')) {
+              isBackend = true;
+            } else if (inputPath.includes('/ui/') || inputPath.includes('/frontend/') || inputPath.includes('/client/')) {
+              isBackend = false;
+            } else {
+              // Default to backend for ambiguous files
+              isBackend = true;
+            }
+          }
         }
 
         // Get file size in bytes

@@ -83,7 +83,7 @@ async function runJavaScriptCoverage(framework) {
       
     case 'jest':
       console.log('  Using Jest with coverage...');
-      success = run('npx jest --coverage');
+      success = run('npm run test:coverage');
       break;
       
     case 'mocha':

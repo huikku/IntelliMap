@@ -88,25 +88,25 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     let filteredNodes = graph.nodes;
     let filteredEdges = graph.edges;
 
-    // TEMPORARY: Show all nodes regardless of plane to debug
-    // if (plane === 'backend') {
-    //   filteredNodes = graph.nodes.filter(n => n.env === 'backend');
-    // } else if (plane === 'diff') {
-    //   filteredNodes = graph.nodes.filter(n => n.changed);
-    // }
+    // Filter by plane (static/backend/diff)
+    if (plane === 'backend') {
+      filteredNodes = graph.nodes.filter(n => n.env === 'backend');
+    } else if (plane === 'diff') {
+      filteredNodes = graph.nodes.filter(n => n.changed);
+    }
 
-    // TEMPORARY: Disable all filters to debug
-    // if (filters.language !== 'all') {
-    //   filteredNodes = filteredNodes.filter(n => n.lang === filters.language);
-    // }
+    // Apply additional filters
+    if (filters.language !== 'all') {
+      filteredNodes = filteredNodes.filter(n => n.lang === filters.language);
+    }
 
-    // if (filters.env !== 'all') {
-    //   filteredNodes = filteredNodes.filter(n => n.env === filters.env);
-    // }
+    if (filters.env !== 'all') {
+      filteredNodes = filteredNodes.filter(n => n.env === filters.env);
+    }
 
-    // if (filters.showChanged) {
-    //   filteredNodes = filteredNodes.filter(n => n.changed);
-    // }
+    if (filters.showChanged) {
+      filteredNodes = filteredNodes.filter(n => n.changed);
+    }
 
     const nodeIds = new Set(filteredNodes.map(n => n.id));
     filteredEdges = filteredEdges.filter(e => nodeIds.has(e.from) && nodeIds.has(e.to));

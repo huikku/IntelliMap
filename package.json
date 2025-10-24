@@ -12,7 +12,9 @@
   "scripts": {
     "dev": "npm run dev --workspaces",
     "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage",
     "cli": "node packages/cli/index.js",
     "index": "node packages/cli/index.js index",
     "diff": "node packages/cli/index.js diff",
@@ -36,9 +38,11 @@
   "author": "IntelliMap Contributors",
   "license": "MIT",
   "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "@types/jest": "^30.0.0",
+    "c8": "^8.0.1",
     "concurrently": "^8.2.0",
-    "nyc": "^15.1.0",
-    "c8": "^8.0.1"
+    "jest": "^30.2.0",
+    "nyc": "^15.1.0"
   }
 }
-

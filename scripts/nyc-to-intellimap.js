@@ -16,11 +16,38 @@ import { execSync } from 'node:child_process';
 async function convertNYCToIntelliMap() {
   console.log('🔬 Converting NYC coverage to IntelliMap runtime trace...');
 
-  // Check if NYC coverage exists
-  const nycCoveragePath = resolve('.nyc_output/coverage-final.json');
-  if (!fs.existsSync(nycCoveragePath)) {
-    console.error('❌ No NYC coverage found at .nyc_output/coverage-final.json');
-    console.error('   Run your tests with coverage first: nyc npm test');
+  // Check if NYC/Jest coverage exists
+  let nycCoveragePath = resolve('.nyc_output/coverage-final.json');
+  let nycData = null;
+
+  // Try NYC location first
+  if (fs.existsSync(nycCoveragePath)) {
+    try {
+      nycData = await fs.readJson(nycCoveragePath);
+      if (Object.keys(nycData).length === 0) {
+        nycData = null; // Empty coverage file
+      }
+    } catch (e) {
+      nycData = null;
+    }
+  }
+
+  // If NYC location is empty or doesn't exist, try Jest location
+  if (!nycData) {
+    nycCoveragePath = resolve('coverage/coverage-final.json');
+    if (fs.existsSync(nycCoveragePath)) {
+      try {
+        nycData = await fs.readJson(nycCoveragePath);
+      } catch (e) {
+        nycData = null;
+      }
+    }
+  }
+
+  if (!nycData || Object.keys(nycData).length === 0) {
+    console.error('❌ No coverage data found');
+    console.error('   Checked: .nyc_output/coverage-final.json and coverage/coverage-final.json');
+    console.error('   Run your tests with coverage first: npm run test:coverage');
     process.exit(1);
   }
 
@@ -32,16 +59,18 @@ async function convertNYCToIntelliMap() {
     process.exit(1);
   }
 
-  // Read NYC coverage data
-  const nycData = await fs.readJson(nycCoveragePath);
+  // nycData is already loaded above
+  console.log(`📂 Using coverage from: ${nycCoveragePath}`);
+  console.log(`📂 Coverage data has ${Object.keys(nycData).length} files`);
+
   const staticGraph = await fs.readJson(graphPath);
-  
+
   const nodes = [];
   const edges = [];
   const executionMap = new Map();
   const cwd = process.cwd();
 
-  console.log(`📊 Processing ${Object.keys(nycData).length} files from NYC coverage...`);
+  console.log(`📊 Processing ${Object.keys(nycData || {}).length} files from NYC coverage...`);
 
   // Process each file in coverage
   for (const [filePath, coverage] of Object.entries(nycData)) {

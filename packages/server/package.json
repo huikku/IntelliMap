@@ -5,8 +5,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
-    "test": "echo 'No tests yet'"
+    "dev": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
