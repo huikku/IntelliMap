@@ -243,11 +243,12 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
     }
 
     if (sizeMode === 'uniform') {
-      // Reset to uniform sizing
-      const baseSize = 45 * exaggeration;
+      // Reset to uniform sizing - RECTANGLES
+      const baseWidth = 120 * exaggeration;
+      const baseHeight = 30;
       cyInstance.style().selector('node').style({
-        'width': node => (node.data('isCluster') ? 'label' : baseSize),
-        'height': node => (node.data('isCluster') ? 'label' : baseSize),
+        'width': node => (node.data('isCluster') ? 'label' : baseWidth),
+        'height': node => (node.data('isCluster') ? 'label' : baseHeight),
       }).update();
 
       // Force font size recalculation
@@ -255,7 +256,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
       console.log('✅ Uniform sizing applied');
     } else if (sizeMode === 'degree') {
-      // Size by degree (number of connections)
+      // Size by degree (number of connections) - RECTANGLES
       cyInstance.nodes().forEach(n => {
         if (!n.data('isCluster')) {
           n.data('degree', n.degree());
@@ -265,15 +266,10 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         'width': node => {
           if (node.data('isCluster')) return 'label';
           const degree = node.data('degree') || 0;
-          const size = Math.max(30, Math.min(100, 30 + (degree * 3))) * exaggeration;
-          return size;
+          const width = Math.max(60, Math.min(200, 60 + (degree * 10))) * exaggeration;
+          return width;
         },
-        'height': node => {
-          if (node.data('isCluster')) return 'label';
-          const degree = node.data('degree') || 0;
-          const size = Math.max(30, Math.min(100, 30 + (degree * 3))) * exaggeration;
-          return size;
-        },
+        'height': 30, // Fixed height for rectangles
       }).update();
 
       // Force font size recalculation
@@ -317,29 +313,17 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         'width': node => {
           if (node.data('isCluster')) return 'label';
           const fileSize = node.data('fileSize') || 0;
-          if (fileSize === 0) return 25 * exaggeration;
+          if (fileSize === 0) return 60 * exaggeration;
 
           // Logarithmic normalization
           const logSize = Math.log10(fileSize + 1);
           const normalized = (logSize - minLog) / logRange;
 
-          // Wider size range: 25px to 200px
-          const size = Math.max(25, Math.min(200, 25 + (normalized * 175))) * exaggeration;
-          return size;
+          // Wider width range for rectangles: 60px to 200px
+          const width = Math.max(60, Math.min(200, 60 + (normalized * 140))) * exaggeration;
+          return width;
         },
-        'height': node => {
-          if (node.data('isCluster')) return 'label';
-          const fileSize = node.data('fileSize') || 0;
-          if (fileSize === 0) return 25 * exaggeration;
-
-          // Logarithmic normalization
-          const logSize = Math.log10(fileSize + 1);
-          const normalized = (logSize - minLog) / logRange;
-
-          // Wider size range: 25px to 200px
-          const size = Math.max(25, Math.min(200, 25 + (normalized * 175))) * exaggeration;
-          return size;
-        },
+        'height': 30, // Fixed height for rectangles
       }).update();
 
       // Force font size recalculation
@@ -416,22 +400,16 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
       console.log(`⭐ Centrality range: ${minCentrality} - ${maxCentrality}`);
 
-      // Apply sizing based on centrality
+      // Apply sizing based on centrality - RECTANGLES (width varies, height fixed)
       cyInstance.style().selector('node').style({
         'width': node => {
           if (node.data('isCluster')) return 'label';
           const centrality = node.data('centrality') || 0;
           const normalized = (centrality - minCentrality) / centralityRange;
-          const size = Math.max(30, Math.min(150, 30 + (normalized * 120))) * exaggeration;
-          return size;
+          const width = Math.max(60, Math.min(200, 60 + (normalized * 140))) * exaggeration;
+          return width;
         },
-        'height': node => {
-          if (node.data('isCluster')) return 'label';
-          const centrality = node.data('centrality') || 0;
-          const normalized = (centrality - minCentrality) / centralityRange;
-          const size = Math.max(30, Math.min(150, 30 + (normalized * 120))) * exaggeration;
-          return size;
-        },
+        'height': 30, // Fixed height for rectangles
       }).update();
 
       // Force font size recalculation
@@ -596,42 +574,42 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   };
 
   return (
-    <div className="h-10 bg-gray-900 border-b border-gray-800 flex items-center gap-2 px-4">
+    <div className="h-10 bg-[#000000] border-b border-[#1a1a1a] flex items-center gap-2 px-4">
       <button
         onClick={handleFit}
-        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
         title="Fit graph to view"
       >
         📐 Fit
       </button>
       <button
         onClick={handleCenter}
-        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
         title="Center view"
       >
         ⊙ Center
       </button>
       <button
         onClick={handleExportPNG}
-        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
         title="Export graph as PNG"
       >
         📸 PNG
       </button>
       <button
         onClick={handleExportJSON}
-        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
         title="Export graph as JSON"
       >
         💾 JSON
       </button>
 
       <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-gray-400 font-mono">Layout:</label>
+        <label className="text-xs text-[#6a6a6a] font-mono">Layout:</label>
         <select
           value={layout}
           onChange={e => handleLayoutChange(e.target.value)}
-          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition font-mono"
+          className="px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm hover:bg-[#1a1a1a] transition font-mono"
         >
           <optgroup label="ELK (Hierarchical)">
             <option value="elk">📊 ELK Right</option>
@@ -658,7 +636,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         className={`px-3 py-1 rounded text-sm transition ${
           clustering
             ? 'bg-blue-600 hover:bg-blue-700 text-white'
-            : 'bg-gray-800 hover:bg-gray-700 text-gray-300'
+            : 'bg-[#0a0a0a] hover:bg-[#1a1a1a] text-[#a0a0a0]'
         }`}
         title="Toggle folder clustering"
       >
@@ -666,11 +644,11 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
       </button>
 
       <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-gray-400 font-mono">Size:</label>
+        <label className="text-xs text-[#6a6a6a] font-mono">Size:</label>
         <select
           value={sizing}
           onChange={e => handleSizingChange(e.target.value)}
-          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition font-mono"
+          className="px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm hover:bg-[#1a1a1a] transition font-mono"
         >
           <option value="uniform">📏 Uniform</option>
           <option value="degree">🔗 By Degree</option>
@@ -685,14 +663,14 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           step="0.1"
           value={sizeExaggeration}
           onChange={e => handleSizeExaggeration(parseFloat(e.target.value))}
-          className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
           title={`Size exaggeration: ${sizeExaggeration.toFixed(1)}x`}
         />
-        <span className="text-xs text-gray-400 font-mono w-8">{sizeExaggeration.toFixed(1)}x</span>
+        <span className="text-xs text-[#6a6a6a] font-mono w-8">{sizeExaggeration.toFixed(1)}x</span>
       </div>
 
       <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-gray-400 font-mono">Spacing:</label>
+        <label className="text-xs text-[#6a6a6a] font-mono">Spacing:</label>
         <input
           type="range"
           min="20"
@@ -700,14 +678,14 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           step="10"
           value={nodeSpacing}
           onChange={e => handleNodeSpacing(parseInt(e.target.value))}
-          className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
           title={`Node spacing: ${nodeSpacing}px`}
         />
-        <span className="text-xs text-gray-400 font-mono w-10">{nodeSpacing}px</span>
+        <span className="text-xs text-[#6a6a6a] font-mono w-10">{nodeSpacing}px</span>
       </div>
 
       <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-gray-400 font-mono">Edges:</label>
+        <label className="text-xs text-[#6a6a6a] font-mono">Edges:</label>
         <input
           type="range"
           min="0.1"
@@ -715,18 +693,18 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           step="0.1"
           value={edgeOpacity}
           onChange={e => handleEdgeOpacity(parseFloat(e.target.value))}
-          className="w-24 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
           title={`Edge opacity: ${(edgeOpacity * 100).toFixed(0)}%`}
         />
-        <span className="text-xs text-gray-400 font-mono w-10">{(edgeOpacity * 100).toFixed(0)}%</span>
+        <span className="text-xs text-[#6a6a6a] font-mono w-10">{(edgeOpacity * 100).toFixed(0)}%</span>
       </div>
 
       <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-gray-400 font-mono">Curve:</label>
+        <label className="text-xs text-[#6a6a6a] font-mono">Curve:</label>
         <select
           value={curveStyle}
           onChange={e => handleCurveStyle(e.target.value)}
-          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm hover:bg-gray-700 transition font-mono"
+          className="px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm hover:bg-[#1a1a1a] transition font-mono"
         >
           <option value="straight">━ Straight</option>
           <option value="taxi">⌐ Right Angles (Auto)</option>
@@ -738,7 +716,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
       <button
         onClick={() => removeOverlaps(cy)}
-        className="px-3 py-1 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
         title="Remove overlaps by repacking nodes"
         disabled={!cy}
       >
@@ -750,7 +728,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         className={`px-3 py-1 rounded text-sm transition ${
           autoPack
             ? 'bg-blue-600 hover:bg-blue-700'
-            : 'bg-gray-800 hover:bg-gray-700'
+            : 'bg-[#0a0a0a] hover:bg-[#1a1a1a]'
         }`}
         title={`Auto-pack: ${autoPack ? 'ON' : 'OFF'} - Automatically remove overlaps when changing node sizes`}
       >

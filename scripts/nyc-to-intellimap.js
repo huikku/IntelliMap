@@ -140,13 +140,24 @@ async function convertNYCToIntelliMap() {
 
   console.log(`✅ Inferred ${edges.length} executed edges`);
 
-  // Get git metadata
+  // Get git metadata and repo name
   let branch = 'unknown';
   let commit = 'unknown';
-  
+  let repository = require('path').basename(cwd);
+
   try {
     branch = execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf8' }).trim();
     commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+    // Try to get repo name from git remote
+    try {
+      const remote = execSync('git config --get remote.origin.url', { encoding: 'utf8' }).trim();
+      const match = remote.match(/\/([^\/]+?)(\.git)?$/);
+      if (match) {
+        repository = match[1];
+      }
+    } catch (e) {
+      // No remote, use directory name
+    }
   } catch (err) {
     console.warn('⚠️  Could not get git metadata:', err.message);
   }
@@ -155,6 +166,7 @@ async function convertNYCToIntelliMap() {
   const trace = {
     metadata: {
       timestamp: Date.now(),
+      repository,
       branch,
       commit,
       runId: `nyc-${Date.now()}`,

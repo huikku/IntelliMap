@@ -262,6 +262,9 @@ function generateRuntimeReport(graph) {
   // Metadata
   if (graph.runtime.metadata) {
     report += `## Run Information\n`;
+    if (graph.runtime.metadata.repository) {
+      report += `- **Repository**: ${graph.runtime.metadata.repository}\n`;
+    }
     if (graph.runtime.metadata.timestamp) {
       report += `- **Timestamp**: ${new Date(graph.runtime.metadata.timestamp).toLocaleString()}\n`;
     }

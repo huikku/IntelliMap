@@ -36,7 +36,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
     return (
       <aside
         style={{ width: `${width}px` }}
-        className="h-full bg-gray-900 border-l border-gray-800 flex flex-col overflow-hidden relative"
+        className="h-full bg-[#000000] border-l border-[#1a1a1a] flex flex-col overflow-hidden relative"
       >
         {/* Resize handle */}
         <div
@@ -46,7 +46,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           title="Drag to resize"
         />
         <div className="flex-1 p-4 overflow-y-auto">
-          <h2 className="text-sm font-heading font-bold text-gray-300 mb-4">DETAILS</h2>
+          <h2 className="text-sm font-heading font-bold text-[#a0a0a0] mb-4">DETAILS</h2>
           <p className="text-xs text-gray-500">Select a node or edge to view details</p>
         </div>
       </aside>
@@ -114,7 +114,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
     return (
       <aside
         style={{ width: `${width}px` }}
-        className="h-full bg-gray-900 border-l border-gray-800 flex flex-col overflow-hidden relative"
+        className="h-full bg-[#000000] border-l border-[#1a1a1a] flex flex-col overflow-hidden relative"
       >
         {/* Resize handle */}
         <div
@@ -124,24 +124,24 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           title="Drag to resize"
         />
         <div className="flex-shrink-0 p-4 overflow-y-auto max-h-[50vh]">
-          <h2 className="text-sm font-heading font-bold text-gray-300 mb-4">CONNECTION</h2>
+          <h2 className="text-sm font-heading font-bold text-[#a0a0a0] mb-4">CONNECTION</h2>
 
           <div className="space-y-3 text-sm">
             {/* Edge Color Preview */}
             <div>
-              <label className="text-xs text-gray-400 font-condensed">Edge Color</label>
+              <label className="text-xs text-[#6a6a6a] font-condensed">Edge Color</label>
               <div className="flex items-center gap-2 mt-1">
                 <div
-                  className="w-16 h-6 rounded border border-gray-700"
+                  className="w-16 h-6 rounded border border-[#2a2a2a]"
                   style={{ backgroundColor: edgeColor }}
                 />
-                <code className="text-xs text-gray-400 font-mono">{edgeColor}</code>
+                <code className="text-xs text-[#6a6a6a] font-mono">{edgeColor}</code>
               </div>
             </div>
 
             {/* Connection Type */}
             <div>
-              <label className="text-xs text-gray-400 font-condensed">Connection Type</label>
+              <label className="text-xs text-[#6a6a6a] font-condensed">Connection Type</label>
               <span className="block mt-1">
                 <span className="px-2 py-1 bg-purple-900 text-purple-200 rounded text-xs font-mono">
                   {connectionType}
@@ -151,7 +151,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
             {/* Edge Type */}
             <div>
-              <label className="text-xs text-gray-400 font-condensed">Edge Type</label>
+              <label className="text-xs text-[#6a6a6a] font-condensed">Edge Type</label>
               <span className="block mt-1">
                 <span className="px-2 py-1 bg-indigo-900 text-indigo-200 rounded text-xs font-mono">
                   {edgeType}
@@ -159,9 +159,9 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
               </span>
             </div>
 
-            <div className="border-t border-gray-800 pt-3">
-              <label className="text-xs text-gray-400 font-condensed">From</label>
-              <code className="block bg-gray-800 p-2 rounded text-xs mt-1 break-all font-mono">
+            <div className="border-t border-[#1a1a1a] pt-3">
+              <label className="text-xs text-[#6a6a6a] font-condensed">From</label>
+              <code className="block bg-[#0a0a0a] p-2 rounded text-xs mt-1 break-all font-mono">
                 {selectedNode.from}
               </code>
             </div>
@@ -169,15 +169,15 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
             <div className="text-center text-gray-500 text-2xl">↓</div>
 
             <div>
-              <label className="text-xs text-gray-400 font-condensed">To</label>
-              <code className="block bg-gray-800 p-2 rounded text-xs mt-1 break-all font-mono">
+              <label className="text-xs text-[#6a6a6a] font-condensed">To</label>
+              <code className="block bg-[#0a0a0a] p-2 rounded text-xs mt-1 break-all font-mono">
                 {selectedNode.to}
               </code>
             </div>
 
             {selectedNode.type && (
               <div>
-                <label className="text-xs text-gray-400 font-condensed">Import Type</label>
+                <label className="text-xs text-[#6a6a6a] font-condensed">Import Type</label>
                 <span className="block mt-1">
                   <span className="px-2 py-1 bg-green-900 text-green-200 rounded text-xs font-mono">
                     {selectedNode.type}
@@ -188,7 +188,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
             {fromNode && (
               <div>
-                <label className="text-xs text-gray-400 font-condensed">Source Language</label>
+                <label className="text-xs text-[#6a6a6a] font-condensed">Source Language</label>
                 <span className="block mt-1">
                   <span className="px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs font-mono">
                     {fromNode.lang?.toUpperCase()}
@@ -199,7 +199,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
             {toNode && (
               <div>
-                <label className="text-xs text-gray-400 font-condensed">Target Language</label>
+                <label className="text-xs text-[#6a6a6a] font-condensed">Target Language</label>
                 <span className="block mt-1">
                   <span className="px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs font-mono">
                     {toNode.lang?.toUpperCase()}
@@ -221,7 +221,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
     <>
       <aside
         style={{ width: `${width}px` }}
-        className="h-full bg-gray-900 border-l border-gray-800 flex flex-col overflow-hidden relative"
+        className="h-full bg-[#000000] border-l border-[#1a1a1a] flex flex-col overflow-hidden relative"
       >
         {/* Resize handle */}
         <div
@@ -233,13 +233,13 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
         {/* Top section - Details (auto-sized) */}
         <div className="flex-shrink-0 p-4 overflow-y-auto max-h-[50vh]">
-          <h2 className="text-sm font-heading font-bold text-gray-300 mb-4">DETAILS</h2>
+          <h2 className="text-sm font-heading font-bold text-[#a0a0a0] mb-4">DETAILS</h2>
 
         <div className="space-y-3 text-sm">
           <div>
-            <label className="text-xs text-gray-400 font-condensed">Path</label>
+            <label className="text-xs text-[#6a6a6a] font-condensed">Path</label>
             <div className="flex items-center gap-2 mt-1">
-              <code className="flex-1 bg-gray-800 p-2 rounded text-xs break-all font-mono">
+              <code className="flex-1 bg-[#0a0a0a] p-2 rounded text-xs break-all font-mono">
                 {selectedNode.id}
               </code>
               <button
@@ -257,7 +257,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           </div>
 
           <div>
-            <label className="text-xs text-gray-400">Language</label>
+            <label className="text-xs text-[#6a6a6a]">Language</label>
             <span className="block mt-1">
               <span className="px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs">
                 {selectedNode.lang?.toUpperCase()}
@@ -266,7 +266,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           </div>
 
           <div>
-            <label className="text-xs text-gray-400">Environment</label>
+            <label className="text-xs text-[#6a6a6a]">Environment</label>
             <span className="block mt-1">
               <span className="px-2 py-1 bg-purple-900 text-purple-200 rounded text-xs">
                 {selectedNode.env}
@@ -276,11 +276,11 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
           <div className="flex gap-4">
             <div>
-              <label className="text-xs text-gray-400">Imports</label>
+              <label className="text-xs text-[#6a6a6a]">Imports</label>
               <span className="block mt-1 text-lg font-bold">{outgoing.length}</span>
             </div>
             <div>
-              <label className="text-xs text-gray-400">Imported by</label>
+              <label className="text-xs text-[#6a6a6a]">Imported by</label>
               <span className="block mt-1 text-lg font-bold">{incoming.length}</span>
             </div>
           </div>
@@ -292,8 +292,8 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           )}
 
           {/* Dependency Navigation Buttons */}
-          <div className="pt-3 border-t border-gray-800">
-            <label className="text-xs text-gray-400 font-condensed mb-2 block">NAVIGATE DEPENDENCIES</label>
+          <div className="pt-3 border-t border-[#1a1a1a]">
+            <label className="text-xs text-[#6a6a6a] font-condensed mb-2 block">NAVIGATE DEPENDENCIES</label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => onNavigate && onNavigate('upstream')}
@@ -333,7 +333,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
             </div>
             <button
               onClick={() => onNavigate && onNavigate('reset')}
-              className="w-full mt-2 px-2 py-1.5 bg-gray-800 hover:bg-gray-700 rounded text-xs transition"
+              className="w-full mt-2 px-2 py-1.5 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-xs transition"
               title="Reset to full graph view"
             >
               🔄 Reset View
@@ -343,10 +343,10 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
         {outgoing.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-xs font-heading font-bold text-gray-300 mb-2">OUTGOING ({outgoing.length})</h3>
+            <h3 className="text-xs font-heading font-bold text-[#a0a0a0] mb-2">OUTGOING ({outgoing.length})</h3>
             <ul className="space-y-1 text-xs font-mono">
               {outgoing.slice(0, 5).map(e => (
-                <li key={e.to} className="text-gray-400 truncate">
+                <li key={e.to} className="text-[#6a6a6a] truncate">
                   → {e.to.split('/').pop()}
                 </li>
               ))}
@@ -359,10 +359,10 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
         {incoming.length > 0 && (
           <div className="mt-4">
-            <h3 className="text-xs font-heading font-bold text-gray-300 mb-2">INCOMING ({incoming.length})</h3>
+            <h3 className="text-xs font-heading font-bold text-[#a0a0a0] mb-2">INCOMING ({incoming.length})</h3>
             <ul className="space-y-1 text-xs font-mono">
               {incoming.slice(0, 5).map(e => (
-                <li key={e.from} className="text-gray-400 truncate">
+                <li key={e.from} className="text-[#6a6a6a] truncate">
                   ← {e.from.split('/').pop()}
                 </li>
               ))}
@@ -375,12 +375,12 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
       </div>
 
       {/* Bottom section - File Preview (fills remaining space) */}
-      <div className="flex-1 border-t border-gray-800 flex flex-col overflow-hidden min-h-0">
-        <div className="flex items-center justify-between p-2 border-b border-gray-800">
-          <h3 className="text-xs font-heading font-bold text-gray-300">FILE PREVIEW</h3>
+      <div className="flex-1 border-t border-[#1a1a1a] flex flex-col overflow-hidden min-h-0">
+        <div className="flex items-center justify-between p-2 border-b border-[#1a1a1a]">
+          <h3 className="text-xs font-heading font-bold text-[#a0a0a0]">FILE PREVIEW</h3>
           <button
             onClick={() => setShowModal(true)}
-            className="px-2 py-1 bg-gray-800 hover:bg-gray-700 rounded text-xs transition flex items-center gap-1"
+            className="px-2 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-xs transition flex items-center gap-1"
             title="Expand preview"
           >
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -400,18 +400,18 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
         onClick={() => setShowModal(false)}
       >
         <div
-          className="bg-gray-900 rounded-lg shadow-2xl w-full max-w-6xl h-full max-h-[90vh] flex flex-col"
+          className="bg-[#000000] rounded-lg shadow-2xl w-full max-w-6xl h-full max-h-[90vh] flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Modal header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-800">
+          <div className="flex items-center justify-between p-4 border-b border-[#1a1a1a]">
             <div>
-              <h2 className="text-lg font-heading font-bold text-gray-300">File Preview</h2>
+              <h2 className="text-lg font-heading font-bold text-[#a0a0a0]">File Preview</h2>
               <p className="text-xs text-gray-500 font-mono mt-1">{selectedNode.id}</p>
             </div>
             <button
               onClick={() => setShowModal(false)}
-              className="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded text-sm transition"
+              className="px-3 py-2 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
               title="Close"
             >
               ✕ Close

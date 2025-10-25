@@ -46,14 +46,15 @@ function getNodeShape(nodeType) {
   return shapes[nodeType] || 'ellipse';
 }
 
-// Helper to get color based on language and type
+// Helper to get color based on language and type - Nostromo Monochrome Palette
 function getNodeColor(lang, nodeType, changed) {
-  if (changed) return '#dc2626'; // Red for changed
+  if (changed) return '#8b7355'; // Muted amber for changed
 
+  // Monochrome palette with subtle variations
   const colorMap = {
-    ts: { component: '#3b82f6', hook: '#06b6d4', util: '#0ea5e9', config: '#1e40af', service: '#1e3a8a', default: '#2563eb' },
-    js: { component: '#f59e0b', hook: '#fbbf24', util: '#fcd34d', config: '#d97706', service: '#b45309', default: '#f97316' },
-    py: { component: '#10b981', hook: '#14b8a6', util: '#06d6a0', config: '#059669', service: '#047857', default: '#34d399' },
+    ts: { component: '#5a5a5a', hook: '#6a6a6a', util: '#4a4a4a', config: '#3a3a3a', service: '#2a2a2a', default: '#5a5a5a' },
+    js: { component: '#6a6a6a', hook: '#7a7a7a', util: '#5a5a5a', config: '#4a4a4a', service: '#3a3a3a', default: '#6a6a6a' },
+    py: { component: '#4a5a4a', hook: '#5a6a5a', util: '#3a4a3a', config: '#2a3a2a', service: '#1a2a1a', default: '#4a5a4a' },
   };
 
   const langColors = colorMap[lang] || colorMap.ts;
@@ -152,6 +153,11 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             pkg: n.pkg,
             fileSize: n.size || 0,
             isUnconnected,
+            // Metrics for visual encoding
+            loc: n.loc || 50, // Lines of code
+            complexity: n.complexity || 1, // Cyclomatic complexity
+            loc_q: n.loc_q || 3, // LOC quantile (1-5)
+            cx_q: n.cx_q || 3, // Complexity quantile (1-5)
             // parent will be set later if clustering is enabled
           },
         };
@@ -374,58 +380,47 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             },
             'shape': node => {
               if (node.data('isCluster')) return 'rectangle';
-              return getNodeShape(node.data('nodeType'));
+              // Canonical shape: rectangle for all nodes
+              return 'rectangle';
             },
             'label': node => {
               if (node.data('isCluster')) return node.data('label');
-              const baseName = node.data('baseName') || '';
-              const ext = node.data('ext') || '';
-              // Multi-line label: basename on first line, extension on second
-              return ext ? `${baseName}\n${ext}` : baseName;
+              // Single-line label: just the filename
+              return node.data('label') || '';
             },
             'text-valign': 'center',
             'text-halign': 'center',
             'font-family': 'Barlow Condensed, sans-serif',
             'font-size': node => {
               if (node.data('isCluster')) return 12;
-              // Scale font size with node width to ensure text fits
-              const nodeWidth = node.width() || 45;
-              const baseName = node.data('baseName') || '';
-              const ext = node.data('ext') || '';
-
-              // Estimate characters (use longer of basename or ext)
-              const maxChars = Math.max(baseName.length, ext.length);
-
-              // Calculate font size to fit within node width (with padding)
-              // Barlow Condensed is ~0.5em wide per character
-              const availableWidth = nodeWidth * 0.85; // 85% of node width for text
-              const estimatedFontSize = availableWidth / (maxChars * 0.5);
-
-              // Clamp between 8px and 20px
-              return Math.max(8, Math.min(20, estimatedFontSize));
+              // Larger font to fill the box better
+              return 11;
             },
             'font-weight': node => (node.data('isCluster') ? 'bold' : 'normal'),
             'color': '#fff',
             'text-outline-color': '#000',
-            'text-outline-width': 2,
+            'text-outline-width': 1.5,
             'border-width': node => {
               if (node.data('isCluster')) return 2;
-              return node.data('changed') ? 3 : 1;
+              // Border thickness encodes complexity quantile (1-5 → 1-4px)
+              const cx_q = node.data('cx_q') || 3;
+              return Math.max(1, Math.min(4, cx_q));
             },
             'border-color': node => {
               if (node.data('isCluster')) return '#4b5563';
-              return node.data('changed') ? '#fca5a5' : '#333';
+              // Changed files get amber border
+              return node.data('changed') ? '#8b7355' : '#3a3a3a';
             },
             'border-style': node => (node.data('isCluster') ? 'dashed' : 'solid'),
-            'width': node => (node.data('isCluster') ? 'label' : 45),
-            'height': node => (node.data('isCluster') ? 'label' : 45),
-            'padding': node => (node.data('isCluster') ? 15 : 5),
-            'text-wrap': 'wrap',
+            'width': 150, // RECTANGLES: Fixed width
+            'height': 30, // RECTANGLES: Fixed height (5:1 ratio)
+            'padding': node => (node.data('isCluster') ? 15 : 4),
+            'text-wrap': 'ellipsis', // Truncate with ... if too long
             'text-max-width': node => {
               if (node.data('isCluster')) return 200;
-              // Scale text width with node size
-              const nodeSize = node.width() || 45;
-              return Math.max(40, nodeSize * 0.85);
+              // Text should fill almost the entire width (minus padding)
+              const width = node.width ? node.width() : 150;
+              return width - 8; // Leave 4px padding on each side
             },
             'compound-sizing-wrt-labels': 'include',
           },
@@ -466,17 +461,17 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             'font-size': 10,
             'font-family': 'Barlow Condensed, sans-serif',
             'text-background-color': '#000',
-            'text-background-opacity': 0.8,
+            'text-background-opacity': 0.9,
             'text-background-padding': 2,
-            'color': '#fff',
+            'color': '#b8b8b8',
             'text-outline-width': 0,
           },
         },
         {
           selector: 'edge:selected',
           style: {
-            'line-color': '#fbbf24',
-            'target-arrow-color': '#fbbf24',
+            'line-color': '#a0a0a0',
+            'target-arrow-color': '#a0a0a0',
             'width': 3,
             'opacity': 1,
           },
@@ -485,9 +480,9 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           selector: '.search-highlight',
           style: {
             'border-width': 4,
-            'border-color': '#fbbf24',
+            'border-color': '#a0a0a0',
             'border-opacity': 1,
-            'background-color': '#fbbf24',
+            'background-color': '#6a6a6a',
             'transition-property': 'border-width, border-color, background-color',
             'transition-duration': '0.3s',
           },
@@ -496,16 +491,16 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           selector: 'node.in-cycle',
           style: {
             'border-width': 3,
-            'border-color': '#ef4444',
+            'border-color': '#8b7355',
             'border-opacity': 1,
-            'background-color': '#7f1d1d',
+            'background-color': '#5a4a3a',
           },
         },
         {
           selector: 'edge.in-cycle',
           style: {
-            'line-color': '#ef4444',
-            'target-arrow-color': '#ef4444',
+            'line-color': '#8b7355',
+            'target-arrow-color': '#8b7355',
             'width': 3,
             'opacity': 1,
           },
@@ -514,17 +509,17 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
           selector: 'node.highlighted',
           style: {
             'border-width': 4,
-            'border-color': '#10b981',
+            'border-color': '#4a5a4a',
             'border-opacity': 1,
-            'background-color': '#065f46',
+            'background-color': '#2a3a2a',
             'z-index': 999,
           },
         },
         {
           selector: 'edge.highlighted',
           style: {
-            'line-color': '#10b981',
-            'target-arrow-color': '#10b981',
+            'line-color': '#4a5a4a',
+            'target-arrow-color': '#4a5a4a',
             'width': 3,
             'opacity': 1,
             'z-index': 999,
@@ -565,8 +560,8 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
       const edge = e.target;
       edge.data('originalWidth', edge.style('width'));
       edge.style({
-        'line-color': '#60a5fa',
-        'target-arrow-color': '#60a5fa',
+        'line-color': '#6a6a6a',
+        'target-arrow-color': '#6a6a6a',
         'width': 3,
         'opacity': 1,
       });

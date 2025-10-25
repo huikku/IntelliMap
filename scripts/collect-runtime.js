@@ -195,17 +195,17 @@ async function runPythonCoverage() {
 
 async function convertCoverage(jsType, pySuccess) {
   console.log('\n🔄 Converting coverage data to IntelliMap format...');
-  
+
   let converted = false;
-  
+
   // Convert JavaScript coverage
   if (jsType) {
-    console.log('  Converting JavaScript coverage...');
-    if (run('node scripts/nyc-to-intellimap.js')) {
-      converted = true;
-    }
+    console.log('  ⚠️  NYC/Istanbul coverage is deprecated');
+    console.log('  Please use: npm run run -- "npm test"');
+    console.log('  This will use enhanced V8 coverage with function-level tracking');
+    // Don't convert NYC data - it's deprecated
   }
-  
+
   // Convert Python coverage
   if (pySuccess) {
     console.log('  Converting Python coverage...');
@@ -213,12 +213,12 @@ async function convertCoverage(jsType, pySuccess) {
     const pythonCmd = process.platform === 'win32'
       ? `${venvPath}\\Scripts\\python.exe`
       : `${venvPath}/bin/python`;
-    
+
     if (run(`${pythonCmd} scripts/coverage-to-intellimap.py`)) {
       converted = true;
     }
   }
-  
+
   return converted;
 }
 

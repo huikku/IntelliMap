@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import ReportViewer from './ReportViewer';
+import MOTHPanel from './MOTHPanel.jsx';
 
 export default function Sidebar({ filters, setFilters, graph, cy }) {
   const [activeSection, setActiveSection] = useState('filters');
@@ -23,8 +24,17 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
     collectRunning: false,
     hasData: false,
     message: '',
-    error: false
+    error: false,
+    repoPath: '',
+    suggestedCommand: 'npm start',
   });
+
+  // Runtime capture state
+  const [captureCommand, setCaptureCommand] = useState('');
+  const [isCapturing, setIsCapturing] = useState(false);
+
+  // MOTH panel state
+  const [showMOTHPanel, setShowMOTHPanel] = useState(false);
 
   // Handle resizing
   useEffect(() => {
@@ -452,80 +462,62 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
       setRuntimeStatus(prev => ({
         ...prev,
         setupComplete: data.setupComplete,
-        hasData: data.hasData
+        hasData: data.hasData,
+        repoPath: data.repoPath,
+        suggestedCommand: data.suggestedCommand || 'npm start',
       }));
+      setCaptureCommand(data.suggestedCommand || 'npm start');
     } catch (error) {
       console.error('Error checking runtime status:', error);
     }
   };
 
-  const setupRuntime = async () => {
-    setRuntimeStatus(prev => ({ ...prev, setupRunning: true, message: '', error: false }));
-
-    try {
-      const response = await fetch('/api/runtime-setup', { method: 'POST' });
-      const data = await response.json();
-
-      if (data.success) {
-        setRuntimeStatus(prev => ({
-          ...prev,
-          setupRunning: false,
-          setupComplete: true,
-          message: '✅ Setup complete! Ready to collect coverage.',
-          error: false
-        }));
-      } else {
-        setRuntimeStatus(prev => ({
-          ...prev,
-          setupRunning: false,
-          message: `❌ Setup failed: ${data.error}`,
-          error: true
-        }));
-      }
-    } catch (error) {
+  const startRuntimeCapture = async () => {
+    if (!captureCommand.trim()) {
       setRuntimeStatus(prev => ({
         ...prev,
-        setupRunning: false,
-        message: `❌ Setup failed: ${error.message}`,
-        error: true
+        message: '❌ Please enter a command to run',
+        error: true,
       }));
+      return;
     }
-  };
 
-  const collectRuntime = async () => {
-    setRuntimeStatus(prev => ({ ...prev, collectRunning: true, message: '', error: false }));
+    setIsCapturing(true);
+    setRuntimeStatus(prev => ({
+      ...prev,
+      message: '🎬 Starting your app with runtime capture...',
+      error: false,
+    }));
 
     try {
-      const response = await fetch('/api/runtime-collect', { method: 'POST' });
+      const response = await fetch('/api/runtime-capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ command: captureCommand }),
+      });
+
       const data = await response.json();
 
       if (data.success) {
-        // Check if we actually got coverage data
-        const hasRealData = data.output && !data.output.includes('No coverage data');
-
         setRuntimeStatus(prev => ({
           ...prev,
-          collectRunning: false,
-          hasData: true,
-          message: hasRealData
-            ? '✅ Coverage collected! Click "View Analysis" to see results.'
-            : '⚠️ No tests found. Add tests to your project first.',
-          error: !hasRealData
+          message: '✅ App is running! Use it normally, then stop it (Ctrl+C in terminal) to capture data.',
+          error: false,
         }));
       } else {
+        setIsCapturing(false);
         setRuntimeStatus(prev => ({
           ...prev,
-          collectRunning: false,
-          message: `❌ Collection failed: ${data.error}`,
-          error: true
+          message: `❌ Failed to start: ${data.error}`,
+          error: true,
         }));
       }
     } catch (error) {
+      setIsCapturing(false);
       setRuntimeStatus(prev => ({
         ...prev,
-        collectRunning: false,
-        message: `❌ Collection failed: ${error.message}`,
-        error: true
+        message: `❌ Error: ${error.message}`,
+        error: true,
       }));
     }
   };
@@ -540,6 +532,12 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
         setRuntimeData(data.runtime);
         setReportType('runtime');
         setActiveSection('analysis');
+
+        // Update status to show we have data
+        setRuntimeStatus(prev => ({
+          ...prev,
+          hasData: true,
+        }));
       } else {
         setAnalysisReport(data.report);
         setRuntimeData(null);
@@ -614,37 +612,39 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
   return (
     <aside
       style={{ width: `${width}px` }}
-      className="h-full bg-gray-900 border-r border-gray-800 flex flex-col relative"
+      className="h-full bg-[#0a0a0a] border-r border-[#1a1a1a] flex flex-col relative"
     >
       {/* Resize handle */}
       <div
         ref={resizeRef}
         onMouseDown={() => setIsResizing(true)}
-        className="absolute right-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-blue-500 transition-colors z-10"
+        className="absolute right-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-[#5a5a5a] transition-colors z-10"
         title="Drag to resize"
       />
 
       {/* Section Tabs */}
-      <div className="flex border-b border-gray-800">
+      <div className="flex border-b border-[#1a1a1a]">
         <button
           onClick={() => setActiveSection('filters')}
-          className={`flex-1 px-4 py-2 text-sm font-semibold transition ${
+          className={`flex-1 px-4 py-2 text-xs font-semibold transition uppercase tracking-wider ${
             activeSection === 'filters'
-              ? 'bg-gray-800 text-white border-b-2 border-blue-500'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[#1a1a1a] text-[#d4d4d4] border-b-2 border-[#5a5a5a]'
+              : 'text-[#6a6a6a] hover:text-[#a0a0a0]'
           }`}
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
-          🔍 Filters
+          Filters
         </button>
         <button
           onClick={() => setActiveSection('analysis')}
-          className={`flex-1 px-4 py-2 text-sm font-semibold transition ${
+          className={`flex-1 px-4 py-2 text-xs font-semibold transition uppercase tracking-wider ${
             activeSection === 'analysis'
-              ? 'bg-gray-800 text-white border-b-2 border-blue-500'
-              : 'text-gray-400 hover:text-white'
+              ? 'bg-[#1a1a1a] text-[#d4d4d4] border-b-2 border-[#5a5a5a]'
+              : 'text-[#6a6a6a] hover:text-[#a0a0a0]'
           }`}
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
         >
-          📊 Analysis
+          Analysis
         </button>
       </div>
 
@@ -652,7 +652,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
       <div className="flex-1 overflow-y-auto p-4">
         {activeSection === 'filters' && (
           <>
-            <h2 className="text-sm font-bold text-gray-300 mb-4">FILTERS</h2>
+            <h2 className="text-sm font-bold text-[#a0a0a0] mb-4">FILTERS</h2>
 
             {/* Show Changed Only */}
             <label className="flex items-center gap-2 mb-3 cursor-pointer">
@@ -678,11 +678,11 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
 
             {/* Language Filter */}
             <div className="mb-4">
-              <label className="text-xs text-gray-400 block mb-2">Language</label>
+              <label className="text-xs text-[#6a6a6a] block mb-2">Language</label>
               <select
                 value={filters.language}
                 onChange={e => handleFilterChange('language', e.target.value)}
-                className="w-full px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm"
+                className="w-full px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm"
               >
                 <option value="all">All</option>
                 <option value="js">JavaScript</option>
@@ -693,11 +693,11 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
 
             {/* Environment Filter */}
             <div className="mb-4">
-              <label className="text-xs text-gray-400 block mb-2">Environment</label>
+              <label className="text-xs text-[#6a6a6a] block mb-2">Environment</label>
               <select
                 value={filters.env}
                 onChange={e => handleFilterChange('env', e.target.value)}
-                className="w-full px-2 py-1 bg-gray-800 border border-gray-700 rounded text-sm"
+                className="w-full px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm"
               >
                 <option value="all">All</option>
                 <option value="frontend">Frontend</option>
@@ -706,8 +706,8 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
             </div>
 
             {/* Stats */}
-            <div className="mt-6 pt-4 border-t border-gray-800">
-              <h3 className="text-xs text-gray-400 mb-2">STATS</h3>
+            <div className="mt-6 pt-4 border-t border-[#1a1a1a]">
+              <h3 className="text-xs text-[#6a6a6a] mb-2">STATS</h3>
               <div className="text-xs text-gray-500 space-y-1">
                 <p>Nodes: {graph?.nodes?.length || 0}</p>
                 <p>Edges: {graph?.edges?.length || 0}</p>
@@ -718,54 +718,71 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
 
         {activeSection === 'analysis' && (
           <>
-            <h2 className="text-sm font-bold text-gray-300 mb-4">CODE ANALYSIS</h2>
+            <h2 className="text-sm font-bold text-[#a0a0a0] mb-4">CODE ANALYSIS</h2>
 
             {/* Analysis Buttons */}
             <div className="space-y-2 mb-4">
               <button
                 onClick={runCycleDetection}
-                className="w-full px-3 py-2 bg-red-800 hover:bg-red-700 rounded text-sm font-semibold transition flex items-center justify-center gap-2"
+                className="w-full px-3 py-1.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#8b7355]/40 text-[#8b7355] rounded text-xs transition flex items-center justify-center gap-2"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 title="Detect circular dependencies"
               >
-                🔴 Detect Cycles
+                DETECT CYCLES
               </button>
               <button
                 onClick={runCodeAnalysis}
-                className="w-full px-3 py-2 bg-blue-800 hover:bg-blue-700 rounded text-sm font-semibold transition flex items-center justify-center gap-2"
+                className="w-full px-3 py-1.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#3a4a5a]/40 text-[#3a4a5a] rounded text-xs transition flex items-center justify-center gap-2"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 title="Analyze code architecture"
               >
-                📊 Architecture Analysis
+                ARCHITECTURE
+              </button>
+
+              <button
+                onClick={() => setShowMOTHPanel(true)}
+                className="w-full px-3 py-1.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#6a6a6a]/40 text-[#a0a0a0] rounded text-xs transition flex items-center justify-center gap-2"
+                style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                title="View MOTH manifest"
+              >
+                MOTH MANIFEST
               </button>
 
               {/* Runtime Analysis Section */}
-              <div className="border border-purple-700 rounded p-3 space-y-2 bg-purple-950/30">
-                <div className="text-xs font-bold text-purple-300 mb-2">RUNTIME ANALYSIS</div>
+              <div className="border border-[#3a3a3a] rounded p-3 space-y-2 bg-[#0a0a0a]/50">
+                <div className="text-[10px] font-bold text-[#6a6a6a] mb-2 tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>RUNTIME ANALYSIS</div>
 
-                <button
-                  onClick={setupRuntime}
-                  disabled={runtimeStatus.setupRunning}
-                  className="w-full px-3 py-2 bg-purple-900 hover:bg-purple-800 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-xs font-semibold transition flex items-center justify-center gap-2"
-                  title="Install coverage tools and create configs (one-time setup)"
-                >
-                  {runtimeStatus.setupRunning ? '⏳ Setting up...' : '🔧 Setup Runtime'}
-                </button>
+                {/* Capture Controls - Always visible */}
+                <div className="space-y-2">
+                  <div className="text-[10px] text-[#6a6a6a]">
+                    Run your app to capture runtime data:
+                  </div>
+                  <input
+                    type="text"
+                    value={captureCommand}
+                    onChange={(e) => setCaptureCommand(e.target.value)}
+                    placeholder="npm start"
+                    className="w-full px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-xs font-mono"
+                  />
+                  <button
+                    onClick={startRuntimeCapture}
+                    disabled={isCapturing}
+                    className="w-full px-3 py-1.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] disabled:bg-[#0a0a0a] disabled:cursor-not-allowed border border-[#4a5a4a]/40 text-[#4a5a4a] rounded text-xs transition flex items-center justify-center gap-2"
+                    style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    title="Run your app with runtime capture"
+                  >
+                    {isCapturing ? 'CAPTURING...' : 'RUN & CAPTURE'}
+                  </button>
+                </div>
 
-                <button
-                  onClick={collectRuntime}
-                  disabled={runtimeStatus.collectRunning || !runtimeStatus.setupComplete}
-                  className="w-full px-3 py-2 bg-purple-800 hover:bg-purple-700 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-xs font-semibold transition flex items-center justify-center gap-2"
-                  title="Run tests with coverage and collect data"
-                >
-                  {runtimeStatus.collectRunning ? '⏳ Collecting...' : '📊 Collect Coverage'}
-                </button>
-
+                {/* View Analysis Button */}
                 <button
                   onClick={runRuntimeAnalysis}
-                  disabled={!runtimeStatus.hasData}
-                  className="w-full px-3 py-2 bg-purple-700 hover:bg-purple-600 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-xs font-semibold transition flex items-center justify-center gap-2"
+                  className="w-full px-3 py-1.5 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#6a6a6a]/40 text-[#a0a0a0] rounded text-xs transition flex items-center justify-center gap-2"
+                  style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   title="View runtime analysis report"
                 >
-                  ⚡ View Analysis
+                  VIEW ANALYSIS
                 </button>
 
                 {runtimeStatus.message && (
@@ -782,7 +799,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
             {(analysisReport || cycleReport) && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs text-gray-400 font-semibold">
+                  <h3 className="text-xs text-[#6a6a6a] font-semibold">
                     {reportType === 'cycles' ? '🔴 Cycle Report' :
                      reportType === 'runtime' ? '⚡ Runtime Report' :
                      '📊 Analysis Report'}
@@ -790,14 +807,15 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                   <div className="flex gap-1">
                     <button
                       onClick={() => setShowReportModal(true)}
-                      className="px-2 py-1 bg-blue-700 hover:bg-blue-600 rounded text-xs transition"
+                      className="px-2 py-1 bg-[#1a1a1a] hover:bg-[#2a2a2a] border border-[#3a3a3a] text-[#a0a0a0] rounded text-xs transition"
+                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
                       title="Expand report in modal"
                     >
                       ⛶ Expand
                     </button>
                     <button
                       onClick={copyReport}
-                      className="px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded text-xs transition"
+                      className="px-2 py-1 bg-[#1a1a1a] hover:bg-[#2a2a2a] rounded text-xs transition"
                       title="Copy report to clipboard"
                     >
                       📋 Copy
@@ -807,17 +825,17 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                 <textarea
                   readOnly
                   value={reportType === 'cycles' ? cycleReport : analysisReport}
-                  className="w-full h-64 p-3 bg-gray-800 border border-gray-700 rounded text-xs font-mono text-gray-300 resize-none"
+                  className="w-full h-64 p-3 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-xs font-mono text-[#a0a0a0] resize-none"
                   style={{ fontFamily: 'monospace' }}
                 />
 
                 {/* Interactive File Lists */}
                 {reportType === 'analysis' && analysisData && (
                   <div className="space-y-3 mt-4">
-                    <h3 className="text-xs text-gray-400 font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
+                    <h3 className="text-xs text-[#6a6a6a] font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
 
                     {analysisData.monolithicFiles?.length > 0 && (
-                      <div className="bg-gray-800 border border-orange-900 rounded p-2">
+                      <div className="bg-[#0a0a0a] border border-orange-900 rounded p-2">
                         <button
                           onClick={() => highlightFiles(analysisData.monolithicFiles)}
                           className="w-full text-left text-xs font-semibold text-orange-400 mb-1 hover:text-orange-300 transition"
@@ -830,7 +848,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
-                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              className="w-full text-left px-2 py-1 text-xs text-[#a0a0a0] hover:bg-[#1a1a1a] hover:text-[#d4d4d4] rounded transition truncate"
                               title={`Click to view ${fileId} in graph`}
                             >
                               {fileId}
@@ -841,7 +859,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                     )}
 
                     {analysisData.godFiles?.length > 0 && (
-                      <div className="bg-gray-800 border border-red-900 rounded p-2">
+                      <div className="bg-[#0a0a0a] border border-red-900 rounded p-2">
                         <button
                           onClick={() => highlightFiles(analysisData.godFiles)}
                           className="w-full text-left text-xs font-semibold text-red-400 mb-1 hover:text-red-300 transition"
@@ -854,7 +872,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
-                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              className="w-full text-left px-2 py-1 text-xs text-[#a0a0a0] hover:bg-[#1a1a1a] hover:text-[#d4d4d4] rounded transition truncate"
                               title={`Click to view ${fileId} in graph`}
                             >
                               {fileId}
@@ -865,7 +883,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                     )}
 
                     {analysisData.unstableDeps?.length > 0 && (
-                      <div className="bg-gray-800 border border-yellow-900 rounded p-2">
+                      <div className="bg-[#0a0a0a] border border-yellow-900 rounded p-2">
                         <button
                           onClick={() => highlightFiles(analysisData.unstableDeps)}
                           className="w-full text-left text-xs font-semibold text-yellow-400 mb-1 hover:text-yellow-300 transition"
@@ -878,7 +896,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
-                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              className="w-full text-left px-2 py-1 text-xs text-[#a0a0a0] hover:bg-[#1a1a1a] hover:text-[#d4d4d4] rounded transition truncate"
                               title={`Click to view ${fileId} in graph`}
                             >
                               {fileId}
@@ -889,7 +907,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                     )}
 
                     {analysisData.deepChains?.length > 0 && (
-                      <div className="bg-gray-800 border border-purple-900 rounded p-2">
+                      <div className="bg-[#0a0a0a] border border-purple-900 rounded p-2">
                         <button
                           onClick={() => highlightFiles(analysisData.deepChains)}
                           className="w-full text-left text-xs font-semibold text-purple-400 mb-1 hover:text-purple-300 transition"
@@ -902,7 +920,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
-                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              className="w-full text-left px-2 py-1 text-xs text-[#a0a0a0] hover:bg-[#1a1a1a] hover:text-[#d4d4d4] rounded transition truncate"
                               title={`Click to view ${fileId} in graph`}
                             >
                               {fileId}
@@ -916,10 +934,10 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
 
                 {reportType === 'cycles' && cycleData && cycleData.cycles?.length > 0 && (
                   <div className="space-y-3 mt-4">
-                    <h3 className="text-xs text-gray-400 font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
+                    <h3 className="text-xs text-[#6a6a6a] font-semibold">📍 AFFECTED FILES (Click to view in graph)</h3>
 
                     {cycleData.cycles.map((cycle, idx) => (
-                      <div key={`cycle-${idx}-${cycle[0]}`} className="bg-gray-800 border border-red-900 rounded p-2">
+                      <div key={`cycle-${idx}-${cycle[0]}`} className="bg-[#0a0a0a] border border-red-900 rounded p-2">
                         <button
                           onClick={() => highlightFiles(cycle)}
                           className="w-full text-left text-xs font-semibold text-red-400 mb-1 hover:text-red-300 transition"
@@ -932,7 +950,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                             <button
                               key={fileId}
                               onClick={() => highlightFile(fileId)}
-                              className="w-full text-left px-2 py-1 text-xs text-gray-300 hover:bg-gray-700 hover:text-white rounded transition truncate"
+                              className="w-full text-left px-2 py-1 text-xs text-[#a0a0a0] hover:bg-[#1a1a1a] hover:text-[#d4d4d4] rounded transition truncate"
                               title={`Click to view ${fileId} in graph`}
                             >
                               {fileId}
@@ -963,6 +981,11 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
           reportType={reportType}
           onClose={() => setShowReportModal(false)}
         />
+      )}
+
+      {/* MOTH Panel Modal */}
+      {showMOTHPanel && (
+        <MOTHPanel onClose={() => setShowMOTHPanel(false)} />
       )}
     </aside>
   );

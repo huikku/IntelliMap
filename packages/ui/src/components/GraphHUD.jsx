@@ -42,7 +42,7 @@ export default function GraphHUD({ cyRef, graph }) {
   }, [graph]);
 
   return (
-    <div className="absolute top-4 left-4 bg-gray-900 bg-opacity-80 border border-gray-700 rounded px-3 py-2 text-xs text-gray-300 font-mono space-y-1 pointer-events-none">
+    <div className="absolute top-4 left-4 bg-[#000000] bg-opacity-80 border border-[#2a2a2a] rounded px-3 py-2 text-xs text-[#a0a0a0] font-mono space-y-1 pointer-events-none">
       <div className="flex items-center gap-2">
         <span className="text-gray-500">🔍</span>
         <span>Zoom: <span className="text-orange-400 font-bold">{zoom.toFixed(2)}x</span></span>
@@ -55,7 +55,7 @@ export default function GraphHUD({ cyRef, graph }) {
         <span className="text-gray-500">📊</span>
         <span>Nodes: <span className="text-green-400 font-bold">{nodeCount}</span></span>
       </div>
-      <div className="text-gray-500 text-xs mt-2 pt-1 border-t border-gray-700">
+      <div className="text-gray-500 text-xs mt-2 pt-1 border-t border-[#2a2a2a]">
         Press <span className="text-yellow-400">F</span> to focus
       </div>
     </div>

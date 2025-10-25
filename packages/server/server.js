@@ -16,16 +16,30 @@ const app = express();
 const port = process.env.PORT || 7676;
 const watch = process.env.WATCH === 'true';
 
+// Track current repository path (defaults to server's working directory)
+let currentRepoPath = process.cwd();
+
+// IntelliMap's installation directory (where scripts are located)
+const intellimapRoot = resolve(__dirname, '../..');
+
 // Setup SSE for live reload
 setupSSE(app);
 
 app.use(cors());
 app.use(express.json());
 
+// Debug endpoint to check current repo
+app.get('/api/debug-cwd', (req, res) => {
+  res.json({
+    currentRepoPath,
+    processCwd: process.cwd(),
+  });
+});
+
 // Serve graph.json
 app.get('/graph', (req, res) => {
   try {
-    const graphPath = resolve(process.cwd(), '.intellimap/graph.json');
+    const graphPath = resolve(currentRepoPath, '.intellimap/graph.json');
     const graph = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
     res.json(graph);
   } catch (error) {
@@ -274,8 +288,9 @@ app.post('/api/index', express.json(), async (req, res) => {
       fs.ensureDirSync(intellimapDir);
       fs.writeFileSync(join(intellimapDir, 'graph.json'), JSON.stringify(merged, null, 2));
 
-      // Update current working directory for graph serving
-      process.chdir(fullPath);
+      // Update current repo path (don't use process.chdir - it's global state!)
+      currentRepoPath = fullPath;
+      console.log(`📂 Current repo set to: ${currentRepoPath}`);
 
       res.json({
         success: true,
@@ -381,17 +396,45 @@ app.get('/api/file-content', (req, res) => {
 // Runtime status check
 app.get('/api/runtime-status', async (req, res) => {
   try {
-    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
-    const nycrcPath = resolve(process.cwd(), '.nycrc.json');
-    const venvPath = resolve(process.cwd(), '.venv-intellimap');
+    const runtimeDir = resolve(currentRepoPath, '.intellimap/runtime');
+    const nycrcPath = resolve(currentRepoPath, '.nycrc.json');
+    const venvPath = resolve(currentRepoPath, '.venv-intellimap');
 
     const setupComplete = fs.existsSync(nycrcPath) || fs.existsSync(venvPath);
     const hasData = fs.existsSync(runtimeDir) &&
                     (await fs.readdir(runtimeDir)).some(f => f.startsWith('trace-'));
 
-    res.json({ setupComplete, hasData });
+    // Detect suggested command to run
+    let suggestedCommand = 'npm start';
+    try {
+      const packageJsonPath = resolve(currentRepoPath, 'package.json');
+      if (fs.existsSync(packageJsonPath)) {
+        const packageJson = await fs.readJson(packageJsonPath);
+        const scripts = packageJson.scripts || {};
+
+        // Prefer these commands in order
+        if (scripts.dev) suggestedCommand = 'npm run dev';
+        else if (scripts.start) suggestedCommand = 'npm start';
+        else if (scripts.serve) suggestedCommand = 'npm run serve';
+        else if (scripts['start:dev']) suggestedCommand = 'npm run start:dev';
+      }
+    } catch (e) {
+      // Ignore errors, use default
+    }
+
+    res.json({
+      setupComplete,
+      hasData,
+      repoPath: currentRepoPath,
+      suggestedCommand,
+    });
   } catch (error) {
-    res.json({ setupComplete: false, hasData: false });
+    res.json({
+      setupComplete: false,
+      hasData: false,
+      repoPath: currentRepoPath,
+      suggestedCommand: 'npm start',
+    });
   }
 });
 
@@ -399,12 +442,14 @@ app.get('/api/runtime-status', async (req, res) => {
 app.post('/api/runtime-setup', async (req, res) => {
   try {
     const { spawn } = await import('node:child_process');
-    const setupScript = resolve(process.cwd(), 'scripts/setup-runtime.js');
+    // Use IntelliMap's setup script, but run it in the target repo
+    const setupScript = resolve(intellimapRoot, 'scripts/setup-runtime.js');
 
-    console.log('🚀 Running runtime setup...');
+    console.log(`🚀 Running runtime setup for ${currentRepoPath}...`);
+    console.log(`   Using script: ${setupScript}`);
 
     const child = spawn('node', [setupScript], {
-      cwd: process.cwd(),
+      cwd: currentRepoPath,
       stdio: 'pipe'
     });
 
@@ -441,16 +486,94 @@ app.post('/api/runtime-setup', async (req, res) => {
   }
 });
 
-// Runtime collection endpoint
+// Runtime capture endpoint - runs app with V8 coverage
+app.post('/api/runtime-capture', async (req, res) => {
+  try {
+    const { command } = req.body;
+
+    if (!command) {
+      return res.status(400).json({ success: false, error: 'No command provided' });
+    }
+
+    const { spawn } = await import('node:child_process');
+    const coverageDir = resolve(currentRepoPath, '.intellimap/v8-coverage');
+
+    // Ensure coverage directory exists
+    await fs.ensureDir(coverageDir);
+
+    console.log(`🎬 Starting runtime capture for ${currentRepoPath}...`);
+    console.log(`   Command: ${command}`);
+    console.log(`   Coverage dir: ${coverageDir}`);
+
+    // Parse command
+    const parts = command.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
+    const cmd = parts[0];
+    const args = parts.slice(1).map(arg => arg.replace(/^"|"$/g, ''));
+
+    // Start the process with V8 coverage
+    const child = spawn(cmd, args, {
+      cwd: currentRepoPath,
+      stdio: 'pipe',
+      env: {
+        ...process.env,
+        NODE_V8_COVERAGE: coverageDir,
+      },
+    });
+
+    let output = '';
+    let errorOutput = '';
+
+    child.stdout.on('data', (data) => {
+      output += data.toString();
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+      console.error(data.toString());
+    });
+
+    // Send back the process info immediately so UI can show it's running
+    res.json({
+      success: true,
+      message: 'Runtime capture started. The app is now running with V8 coverage enabled.',
+      command,
+      coverageDir,
+    });
+
+    // When process exits, convert the coverage
+    child.on('exit', async (code) => {
+      console.log(`\n⏹️  App stopped (exit code: ${code})`);
+      console.log('🔄 Converting V8 coverage to IntelliMap format...\n');
+
+      try {
+        const converterPath = resolve(intellimapRoot, 'packages/cli/runtime/enhanced-v8-converter.js');
+        const { default: convertV8Coverage } = await import(converterPath);
+        await convertV8Coverage(coverageDir, currentRepoPath);
+        console.log('✅ Runtime capture complete!\n');
+      } catch (error) {
+        console.error('❌ Error converting coverage:', error.message);
+      }
+    });
+
+  } catch (error) {
+    console.error('Error starting runtime capture:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Runtime collection endpoint (deprecated - use /api/runtime-capture instead)
 app.post('/api/runtime-collect', async (req, res) => {
   try {
     const { spawn } = await import('node:child_process');
-    const collectScript = resolve(process.cwd(), 'scripts/collect-runtime.js');
+    // Use IntelliMap's collection script, but run it in the target repo
+    const collectScript = resolve(intellimapRoot, 'scripts/collect-runtime.js');
 
-    console.log('📊 Running runtime collection...');
+    console.log(`📊 Running runtime collection for ${currentRepoPath}...`);
+    console.log(`   Using script: ${collectScript}`);
 
     const child = spawn('node', [collectScript], {
-      cwd: process.cwd(),
+      cwd: currentRepoPath,
       stdio: 'pipe'
     });
 
@@ -497,7 +620,7 @@ app.post('/api/runtime-trace', async (req, res) => {
     }
 
     // Save runtime trace
-    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    const runtimeDir = resolve(currentRepoPath, '.intellimap/runtime');
     await fs.ensureDir(runtimeDir);
 
     const timestamp = Date.now();
@@ -523,21 +646,25 @@ app.post('/api/runtime-trace', async (req, res) => {
 // Get runtime analysis
 app.get('/api/runtime-analysis', async (req, res) => {
   try {
-    // Load static graph
-    const graphPath = resolve(process.cwd(), '.intellimap/graph.json');
+    // Load static graph from current repo
+    const graphPath = resolve(currentRepoPath, '.intellimap/graph.json');
     if (!fs.existsSync(graphPath)) {
-      return res.status(404).json({ error: 'No static graph found. Run indexing first.' });
+      return res.status(404).json({
+        error: 'No static graph found. Run indexing first.',
+        repoPath: currentRepoPath,
+      });
     }
 
     const staticGraph = await fs.readJson(graphPath);
 
-    // Load latest runtime trace
-    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    // Load latest runtime trace from current repo
+    const runtimeDir = resolve(currentRepoPath, '.intellimap/runtime');
     if (!fs.existsSync(runtimeDir)) {
       return res.json({
         graph: staticGraph,
         runtime: null,
         report: generateRuntimeReport({ ...staticGraph, runtime: null }),
+        repoPath: currentRepoPath,
       });
     }
 
@@ -551,6 +678,7 @@ app.get('/api/runtime-analysis', async (req, res) => {
         graph: staticGraph,
         runtime: null,
         report: generateRuntimeReport({ ...staticGraph, runtime: null }),
+        repoPath: currentRepoPath,
       });
     }
 
@@ -568,19 +696,20 @@ app.get('/api/runtime-analysis', async (req, res) => {
       runtime: mergedGraph.runtime,
       report,
       traceFile: traceFiles[0],
+      repoPath: currentRepoPath,
     });
   } catch (error) {
     console.error('Error generating runtime analysis:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message, repoPath: currentRepoPath });
   }
 });
 
 // List available runtime traces
 app.get('/api/runtime-traces', async (req, res) => {
   try {
-    const runtimeDir = resolve(process.cwd(), '.intellimap/runtime');
+    const runtimeDir = resolve(currentRepoPath, '.intellimap/runtime');
     if (!fs.existsSync(runtimeDir)) {
-      return res.json({ traces: [] });
+      return res.json({ traces: [], repoPath: currentRepoPath });
     }
 
     const traceFiles = (await fs.readdir(runtimeDir))
@@ -608,6 +737,117 @@ app.get('/api/runtime-traces', async (req, res) => {
   }
 });
 
+// MOTH generation endpoint
+app.post('/api/moth-generate', async (req, res) => {
+  try {
+    const { spawn } = await import('node:child_process');
+    const mothScript = resolve(intellimapRoot, 'packages/cli/index.js');
+
+    console.log(`🦋 Generating MOTH manifest for ${currentRepoPath}...`);
+
+    const child = spawn('node', [mothScript, 'moth'], {
+      cwd: currentRepoPath,
+      stdio: 'pipe'
+    });
+
+    let output = '';
+    let errorOutput = '';
+
+    child.stdout.on('data', (data) => {
+      output += data.toString();
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      errorOutput += data.toString();
+      console.error(data.toString());
+    });
+
+    child.on('close', (code) => {
+      if (code === 0) {
+        res.json({
+          success: true,
+          message: 'MOTH manifest generated successfully',
+          output
+        });
+      } else {
+        res.status(500).json({
+          success: false,
+          error: `MOTH generation failed with code ${code}`,
+          output: errorOutput
+        });
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating MOTH manifest:', error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get MOTH manifest
+app.get('/api/moth-manifest', async (req, res) => {
+  try {
+    const mothPath = resolve(currentRepoPath, '.mothlab/moth/REPO.moth');
+
+    if (!fs.existsSync(mothPath)) {
+      return res.status(404).json({
+        error: 'No MOTH manifest found. Generate one first.',
+        repoPath: currentRepoPath,
+      });
+    }
+
+    const manifest = await fs.readFile(mothPath, 'utf8');
+    res.type('text/plain').send(manifest);
+
+  } catch (error) {
+    console.error('Error loading MOTH manifest:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get MOTH index
+app.get('/api/moth-index', async (req, res) => {
+  try {
+    const indexPath = resolve(currentRepoPath, '.mothlab/moth/moth.index.json');
+
+    if (!fs.existsSync(indexPath)) {
+      return res.status(404).json({
+        error: 'No MOTH index found. Generate one first.',
+        repoPath: currentRepoPath,
+      });
+    }
+
+    const index = await fs.readJson(indexPath);
+    res.json(index);
+
+  } catch (error) {
+    console.error('Error loading MOTH index:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get MOTH validation
+app.get('/api/moth-validation', async (req, res) => {
+  try {
+    const validationPath = resolve(currentRepoPath, '.mothlab/moth/validation.json');
+
+    if (!fs.existsSync(validationPath)) {
+      return res.status(404).json({
+        error: 'No MOTH validation found. Generate one first.',
+        repoPath: currentRepoPath,
+      });
+    }
+
+    const validation = await fs.readJson(validationPath);
+    res.json(validation);
+
+  } catch (error) {
+    console.error('Error loading MOTH validation:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', port });
@@ -616,7 +856,14 @@ app.get('/health', (req, res) => {
 // Serve static UI from dist
 const uiDistPath = join(__dirname, '../ui/dist');
 if (fs.existsSync(uiDistPath)) {
-  app.use(express.static(uiDistPath));
+  // Disable caching for development
+  app.use(express.static(uiDistPath, {
+    etag: false,
+    maxAge: 0,
+    setHeaders: (res) => {
+      res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    }
+  }));
 
   // SPA fallback - only for non-API routes
   app.get('*', (req, res, next) => {
@@ -624,6 +871,7 @@ if (fs.existsSync(uiDistPath)) {
     if (req.path.startsWith('/api/') || req.path.startsWith('/graph') || req.path.startsWith('/health')) {
       return next();
     }
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     res.sendFile(join(uiDistPath, 'index.html'));
   });
 } else {

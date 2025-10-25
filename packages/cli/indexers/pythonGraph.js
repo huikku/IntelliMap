@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { enrichNodesWithMetrics, computeFolderAggregates } from './metricsComputer.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,7 +38,18 @@ export async function buildPythonGraph(options) {
       } else {
         try {
           const result = JSON.parse(stdout);
-          resolve(result);
+
+          // Enrich nodes with LOC and complexity metrics
+          const enrichedNodes = enrichNodesWithMetrics(result.nodes || []);
+
+          // Compute folder aggregates
+          const folders = computeFolderAggregates(enrichedNodes);
+
+          resolve({
+            nodes: enrichedNodes,
+            edges: result.edges || [],
+            folders,
+          });
         } catch (error) {
           reject(new Error(`Failed to parse Python indexer output: ${error.message}`));
         }

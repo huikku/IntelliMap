@@ -52,7 +52,7 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
 
   if (loading) {
     return (
-      <div className="text-xs text-gray-400 p-2">
+      <div className="text-xs text-[#6a6a6a] p-2">
         Loading file...
       </div>
     );
@@ -60,11 +60,11 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
 
   if (error) {
     return (
-      <div className="p-3 bg-gray-900 border border-red-900">
+      <div className="p-3 bg-[#000000] border border-red-900">
         <div className="text-sm text-red-400 font-semibold mb-2">
           ⚠️ Cannot Preview File
         </div>
-        <div className="text-xs text-gray-300 leading-relaxed">
+        <div className="text-xs text-[#a0a0a0] leading-relaxed">
           {error}
         </div>
       </div>
@@ -87,7 +87,7 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* File info header */}
-      <div className="px-2 py-1 bg-gray-800 border-b border-gray-700 text-xs text-gray-400">
+      <div className="px-2 py-1 bg-[#0a0a0a] border-b border-[#2a2a2a] text-xs text-[#6a6a6a]">
         <div className="truncate font-mono text-xs">{filePath}</div>
         <div className="text-xs text-gray-500 font-condensed">{lineCount} lines</div>
       </div>
@@ -108,7 +108,7 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
               <span className="text-gray-600 w-8 text-right pr-2 select-none">
                 {idx + 1}
               </span>
-              <span className="text-gray-300 flex-1 whitespace-pre-wrap break-words">
+              <span className="text-[#a0a0a0] flex-1 whitespace-pre-wrap break-words">
                 {line || ' '}
               </span>
             </div>

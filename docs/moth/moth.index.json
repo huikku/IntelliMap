@@ -1,0 +1,6201 @@
+{
+  "version": "1.2",
+  "project": "spark-intellishot",
+  "generated": "2025-10-25T05:42:40.458Z",
+  "files": {
+    "./.c8rc.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 22,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "34c91030e564498600b04742221f3d97ed1e695b155dd028a341deb7872ee8b0",
+      "size": 325,
+      "lastModified": "2025-10-24T21:52:45.889Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./.claude/settings.local.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 34,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "b67c8c07e391ff4f55aa989f4c28c060d6a9badc9a8c9c09f7d039701983ad10",
+      "size": 796,
+      "lastModified": "2025-10-23T17:59:14.150Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./.intellimap/graph.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 4784,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "185b7413d34bda644498a83eb191d91dd209e6a074e8cfd46d464fc711a8616c",
+      "size": 114172,
+      "lastModified": "2025-10-24T22:54:03.852Z",
+      "dependencies": [
+        "@external:\n    },\n    {\n      "
+      ],
+      "symbols": []
+    },
+    "./.nycrc.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 31,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "f1c445fe25309ae382b69a818ba05739b794185b90991c8699c9a7fbaabcc0d3",
+      "size": 542,
+      "lastModified": "2025-10-24T21:52:45.889Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./Image generation with Gemini (aka Nano B.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 0,
+        "loc": 315,
+        "complexity": 34,
+        "coverage": 0
+      },
+      "hash": "3eb717428e97715c2fdbb9bb3480ee4c7d7a087cb9e46ea2dd1f5b287f9c2b5b",
+      "size": 15470,
+      "lastModified": "2025-10-22T02:33:40.161Z",
+      "dependencies": [
+        "@external:google",
+        "@external:google.genai",
+        "@external:PIL",
+        "@external:io",
+        "@external:genai",
+        "@external:types",
+        "@external:Image",
+        "@external:BytesIO"
+      ],
+      "symbols": []
+    },
+    "./appspec.yml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 25,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "f8ff19c27321d536a5db2547e7a1f35455e85f31890dad48a179236d33cb3182",
+      "size": 496,
+      "lastModified": "2025-10-22T02:33:40.161Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./config/helpers.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 41,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "88693a8a58fae5ee578dae0a4635aaffa2b0f7eaac9bf375e5d1698dfe91e3be",
+      "size": 1492,
+      "lastModified": "2025-10-22T02:33:40.173Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docker-compose.prod.yml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 72,
+        "loc": 132,
+        "complexity": 7,
+        "coverage": 0
+      },
+      "hash": "07547b7a74785432a49ce79cf69c34a523e157f9776afba02cb760795707e3aa",
+      "size": 3915,
+      "lastModified": "2025-10-22T02:33:40.177Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docker-compose.spark.yml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 132,
+        "loc": 121,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "10f425bf3d0d2e114d2a90b52ea0716e5b0081ec3dcb6fc2a33e2905c515afc8",
+      "size": 4092,
+      "lastModified": "2025-10-22T02:33:40.177Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docker-compose.yml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 2,
+        "loc": 35,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "01fc58b2b79afe731e2773e3ed4a4032f614d325302850a855ce647215de9cac",
+      "size": 939,
+      "lastModified": "2025-10-23T18:44:51.636Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/nano-banana-masking/Morpheus–NanoBanana-Mask-Light-Version1.01.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 706,
+        "complexity": 9,
+        "coverage": 0
+      },
+      "hash": "1cc1caabe3043fe5cdee03a4311259b7ab295f236bfb03324572073602dbe173",
+      "size": 12789,
+      "lastModified": "2025-10-23T17:03:48.245Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/topaz-labs-image-api.yaml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 2311,
+        "complexity": 194,
+        "coverage": 0
+      },
+      "hash": "1093d3e52bc557c7da8b0f7b6ef9675ec6166adc97c20135e76a09d8d192bec1",
+      "size": 90832,
+      "lastModified": "2025-10-22T02:33:40.189Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/examples/snapshots/project-index.snapshot.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 21,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "155df2cd9135c0e0fa0c391040b0c6dde8fd550cac451e904d2ae95de46495f2",
+      "size": 302,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/examples/snapshots/shot-index.snapshot.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 24,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "a7e01811974a80f18e06f24303a4ca5cb92acbd5f459a4042676abacdd397a57",
+      "size": 451,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/schemas/date-manifest.schema.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 15,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "98a8a2c43de3690d5fb618e61bc2b7ac87d894a2d741a405ef349b814bcdffc7",
+      "size": 384,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/schemas/generation-event.schema.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 86,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "97a6a26ec19c0c17c444238929930a38c6b03a2a64d62642efdde966798ce44e",
+      "size": 2479,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/schemas/index-journal-line.schema.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 20,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "33a8f7cc57cecd3c4963cc6cf1d00e73f611de5b28ef82dc181e6b0469f6f271",
+      "size": 787,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/schemas/project-index.schema.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 31,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "dfedd235f70711526c763a2f538af47fc1f135aaac82c9c266ed6f7b5cf07b5f",
+      "size": 856,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./docs/zero-knowledge-db/schemas/shot-index.schema.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 32,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "01b486a363470fdb98415a4f228ea71a9162e2c64191b331449c4f38263892fb",
+      "size": 851,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./eslint.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 27,
+        "loc": 59,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "bf70cef905f282f63acbadb72afb0ad68e6a46baaac323e58b925bea255dfd9f",
+      "size": 1851,
+      "lastModified": "2025-10-22T02:33:40.193Z",
+      "dependencies": [
+        "@external:@eslint/js",
+        "@external:typescript-eslint",
+        "@external:eslint-plugin-react-hooks",
+        "@external:eslint-plugin-react-refresh",
+        "@external:js",
+        "@external:tseslint",
+        "@external:reactHooks",
+        "@external:reactRefresh"
+      ],
+      "symbols": []
+    },
+    "./find-devtest-project.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 107,
+        "complexity": 25,
+        "coverage": 0
+      },
+      "hash": "f254a2273bcdab851bd90cc58db419ec446cfbcf45bee42dfd938accbf3288eb",
+      "size": 3702,
+      "lastModified": "2025-10-22T02:18:14.210Z",
+      "dependencies": [
+        "@external:node-fetch"
+      ],
+      "symbols": []
+    },
+    "./organisations_rows.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 1,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "4a43e8c9f3aa18ea77f048af61ccc14c240b8c33289147a825a43f45021679db",
+      "size": 529,
+      "lastModified": "2025-10-22T02:18:14.214Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./package-lock.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 2427,
+        "loc": 9621,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "2258f87993b1414e69bfc32260a3244f914d9c145ad090cfb12183cc962233e1",
+      "size": 352996,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./package.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 10,
+        "loc": 74,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "80476693f92346d064060a8eb4ac0935cc62ee91ae3285e17d83e2745ebf53f6",
+      "size": 2386,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./public/config/asset-style-presets.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 161,
+        "loc": 126,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "b2a4cf8fc6916303e19dafdfad3706898639743ee53a921ff8eeff1ec2e1b787",
+      "size": 26312,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./public/config/helpers.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 151,
+        "loc": 150,
+        "complexity": 40,
+        "coverage": 0
+      },
+      "hash": "8eb96e2ca71f9bf1fd1fdeeef4552fd2378ce961a9345df540a5fdbd0018c3f1",
+      "size": 28491,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./public/config/model-resolutions.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 23,
+        "loc": 14,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "7484c6d522c63a48f3c1905b080ebe3f399f4ec7b9b67687311ae8875651b9cb",
+      "size": 3047,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./public/config/shot-style-presets.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 88,
+        "loc": 73,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "46c61f3f43567bcfab2db0082f5856e1a17be6f61cb868ca600c13fda9bbeafe",
+      "size": 13455,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./public/config/style-presets.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 2,
+        "loc": 79,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "ffd276704444d4680846530bced5b435300f8f23927910033bf1c1bc4120238d",
+      "size": 14088,
+      "lastModified": "2025-10-22T02:33:40.197Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./scripts/add-border-to-blanks.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 76,
+        "complexity": 19,
+        "coverage": 0
+      },
+      "hash": "a8422e4d7493aecdd4098bfd92e1e0e6b27dc3b80dea8d5dd64f39fd09fe7746",
+      "size": 1964,
+      "lastModified": "2025-10-22T02:33:40.208Z",
+      "dependencies": [
+        "@external:fs",
+        "@external:path"
+      ],
+      "symbols": []
+    },
+    "./scripts/add-border-to-blanks.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 63,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "a409266ccb2a982dab672691ec2ee5a59d4dcff6ae4d862d6d696d80b4f9ce8f",
+      "size": 1725,
+      "lastModified": "2025-10-22T02:33:40.208Z",
+      "dependencies": [
+        "@external:PIL",
+        "@external:os",
+        "@external:Image"
+      ],
+      "symbols": []
+    },
+    "./scripts/coverage-to-intellimap.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 0,
+        "loc": 90,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "ff05407c5b7b9a22d8855753d98ea527a3e4971965bf70858ce13c077400072d",
+      "size": 2982,
+      "lastModified": "2025-10-24T21:52:50.178Z",
+      "dependencies": [
+        "@external:pathlib",
+        "@external:datetime",
+        "@external:json",
+        "@external:os",
+        "@external:subprocess",
+        "@external:Path"
+      ],
+      "symbols": []
+    },
+    "./spark-intellishot-dev_docker-compose.yml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 52,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "5a94318be455c8f40a0cad1e1657edf2a4e8ffbe694f5dc6212e4d0bd499c7da",
+      "size": 1565,
+      "lastModified": "2025-10-22T02:33:40.212Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./spark-intellishot_docker-compose.yml": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 2,
+        "loc": 52,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "14644f47ad4ad69a8fb4577934a1f7ea47cdd673d34ed7b625e5951e67f8c032",
+      "size": 1525,
+      "lastModified": "2025-10-22T02:33:40.212Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./spark_users_rows.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 1,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "ef012f8a12e3fa35378b228fe39e16a8fbea9e78971ed17a6ef46c96d4c55a43",
+      "size": 465,
+      "lastModified": "2025-10-22T02:18:14.214Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/App.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 14,
+        "depth": 1,
+        "churn": 2139,
+        "loc": 49,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "8af932897d2e9a4e76fc71b1ee21c58846c99a16900f077f0ffafac4ae839a55",
+      "size": 1845,
+      "lastModified": "2025-10-22T02:33:40.212Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "src/contexts/AppStateContext.tsx",
+        "src/components/Auth/LoadingScreen.tsx",
+        "src/components/Auth/LoginScreen.tsx",
+        "src/components/Header/Header.tsx",
+        "src/components/panels/LeftPanel.tsx",
+        "src/components/panels/CenterPanel.tsx",
+        "src/components/panels/RightPanel.tsx",
+        "src/components/viewer/ViewerModal.tsx",
+        "src/components/modals/GlobalModals.tsx",
+        "@external:React",
+        "@external:Header"
+      ],
+      "symbols": [
+        "App"
+      ]
+    },
+    "./src/api/fal.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 31,
+        "loc": 76,
+        "complexity": 28,
+        "coverage": 0
+      },
+      "hash": "8c77a169b95ccdf3c410b86efbe57974322edce5b91ad2d36cf20ac1090c93ec",
+      "size": 2771,
+      "lastModified": "2025-10-23T17:03:48.253Z",
+      "dependencies": [],
+      "symbols": [
+        "FluxKontextParams"
+      ]
+    },
+    "./src/api/openai.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 110,
+        "loc": 103,
+        "complexity": 30,
+        "coverage": 0
+      },
+      "hash": "dc55400f5c97be6fcc6994e05ac82f557d8d8b37a29898bc8ecb3a272bf5a01b",
+      "size": 4096,
+      "lastModified": "2025-10-22T02:33:40.212Z",
+      "dependencies": [],
+      "symbols": [
+        "GPTImageParams"
+      ]
+    },
+    "./src/api/openrouter.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 6,
+        "loc": 42,
+        "complexity": 7,
+        "coverage": 0
+      },
+      "hash": "62808baf935d05c9e4956ae08cbf42bc3ae3b745a16fd7233dddf9f69730380f",
+      "size": 1515,
+      "lastModified": "2025-10-22T02:33:40.212Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/api/useAuthorizedFetch.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 36,
+        "loc": 88,
+        "complexity": 18,
+        "coverage": 0
+      },
+      "hash": "aa07015a6dcf92e7b7483476832d304366528ac09063c8dfd0233f59bea459a1",
+      "size": 2704,
+      "lastModified": "2025-10-22T02:33:40.212Z",
+      "dependencies": [
+        "src/auth/SimpleKeycloakAuth.tsx"
+      ],
+      "symbols": [
+        "useAuthorizedFetch",
+        "useAuthorizedAPI"
+      ]
+    },
+    "./src/assets/pricing/fal.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 8,
+        "loc": 90,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "e4830d5c9fa4a6fe33a5d1dcf8b47c8e46bfa8e74e52b301d6d4639fd90c4d5f",
+      "size": 9023,
+      "lastModified": "2025-10-23T23:23:15.528Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/auth/CleanKeycloakAuth.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 250,
+        "loc": 563,
+        "complexity": 70,
+        "coverage": 0
+      },
+      "hash": "d277afb06dd9ba236845a946385c07f25a9105caa4a253db09c5f43e98814ae1",
+      "size": 16369,
+      "lastModified": "2025-10-22T02:33:40.228Z",
+      "dependencies": [
+        "@external:react",
+        "@external:keycloak-js",
+        "@external:@supabase/supabase-js",
+        "@external:React",
+        "@external:Keycloak"
+      ],
+      "symbols": [
+        "CleanKeycloakAuthProvider",
+        "useCleanAuth",
+        "useAuth",
+        "AuthContextType"
+      ]
+    },
+    "./src/auth/OLD_SimpleKeycloakAuth.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 796,
+        "complexity": 139,
+        "coverage": 0
+      },
+      "hash": "8b5f9f8f2def69042dc8a918fee7475a590246520a7f972aa836b4032824a97a",
+      "size": 26083,
+      "lastModified": "2025-10-22T02:33:40.228Z",
+      "dependencies": [
+        "@external:react",
+        "@external:keycloak-js",
+        "@external:@supabase/supabase-js",
+        "@external:React",
+        "@external:Keycloak"
+      ],
+      "symbols": [
+        "SimpleKeycloakAuthProvider",
+        "useSimpleAuth",
+        "useAuth",
+        "AuthContext"
+      ]
+    },
+    "./src/auth/SimpleKeycloakAuth.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 2381,
+        "loc": 953,
+        "complexity": 187,
+        "coverage": 0
+      },
+      "hash": "62c9fbdc5b7396b757e4ebd2a7f18eba680dfaf6621d35630cbf1ed381183498",
+      "size": 32767,
+      "lastModified": "2025-10-23T16:23:06.076Z",
+      "dependencies": [
+        "@external:react",
+        "@external:keycloak-js",
+        "@external:@supabase/supabase-js",
+        "src/keycloakService.ts",
+        "src/utils/sparkStorage.ts",
+        "@external:React",
+        "@external:Keycloak"
+      ],
+      "symbols": [
+        "SimpleKeycloakAuthProvider",
+        "useSimpleAuth",
+        "useAuth",
+        "AuthContext"
+      ]
+    },
+    "./src/auth/WorkingKeycloakAuth.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 37,
+        "loc": 496,
+        "complexity": 84,
+        "coverage": 0
+      },
+      "hash": "757780b6effe6d6e68b3dd8ad974bb4fe896067feda63478eb90cbf87badc803",
+      "size": 14883,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "@external:keycloak-js",
+        "@external:@supabase/supabase-js",
+        "@external:React",
+        "@external:Keycloak"
+      ],
+      "symbols": [
+        "WorkingKeycloakAuthProvider",
+        "useWorkingAuth",
+        "AuthContext"
+      ]
+    },
+    "./src/auth/authorizedFetch.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 45,
+        "complexity": 14,
+        "coverage": 0
+      },
+      "hash": "7a4f66aa970fbbd49ab52b6b9f5cc00abae27f66c71d0833bd1715e7d0b5b766",
+      "size": 1329,
+      "lastModified": "2025-10-24T15:20:04.242Z",
+      "dependencies": [],
+      "symbols": [
+        "authorizedFetch"
+      ]
+    },
+    "./src/auth/supabaseKeycloakClient.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 31,
+        "loc": 88,
+        "complexity": 26,
+        "coverage": 0
+      },
+      "hash": "89de4b1405a82ff237ed92a621319f247af26a2e0db025b321b3b3188ae56ccc",
+      "size": 3239,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@supabase/supabase-js"
+      ],
+      "symbols": [
+        "createAuthenticatedSupabaseClient",
+        "updateSupabaseClient",
+        "getSupabaseClient"
+      ]
+    },
+    "./src/auth/useAuthorizedFetch.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 33,
+        "loc": 90,
+        "complexity": 19,
+        "coverage": 0
+      },
+      "hash": "5081ed4ba9d03878215d9146f7b3a086f5b85643ace316df404fb54992112466",
+      "size": 2742,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "src/auth/SimpleKeycloakAuth.tsx"
+      ],
+      "symbols": [
+        "useAuthorizedFetch",
+        "authorizedFetch"
+      ]
+    },
+    "./src/components/Auth/LoadingScreen.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 11,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "ca407506083801f15cbfe178f1f4f82f7298ec81734d8b04b3aefa632099f7bb",
+      "size": 402,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "LoadingScreen"
+      ]
+    },
+    "./src/components/Auth/LoginScreen.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 22,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "d77bdbe14822606bae7fe949cf70baa743361fe60f073018d0789b81f4d666b6",
+      "size": 894,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/keycloakService.ts",
+        "@external:React"
+      ],
+      "symbols": [
+        "LoginScreen"
+      ]
+    },
+    "./src/components/ContentItemFileManager.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 2,
+        "loc": 384,
+        "complexity": 43,
+        "coverage": 0
+      },
+      "hash": "d0020f979454ebcf754cb50a1c99fc8c190dac16a0a56e30db417a5c5912b939",
+      "size": 14236,
+      "lastModified": "2025-10-10T17:04:01.013Z",
+      "dependencies": [
+        "@external:react",
+        "@external:react-dropzone",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "src/utils/sparkStorage.ts",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "ContentItemFileManager",
+        "ContentItemFileManagerProps",
+        "FileUploadProgress"
+      ]
+    },
+    "./src/components/DatabaseSetup.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 177,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "d25fff4839a6abd41d2264061db359eff2c6cbf2436bdc8fa6ef457fe11900db",
+      "size": 4817,
+      "lastModified": "2025-10-10T17:04:01.013Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/utils/setupDatabase.ts",
+        "@external:React"
+      ],
+      "symbols": [
+        "DatabaseSetup"
+      ]
+    },
+    "./src/components/Header/Header.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 393,
+        "loc": 181,
+        "complexity": 38,
+        "coverage": 0
+      },
+      "hash": "0014dc0dad711956ff00e5380c5b34d227a619f3f0f948d5463c5a26910496da",
+      "size": 6096,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "@external:react",
+        "intellistoryLogo.svg",
+        "src/utils/apiBase.ts",
+        "@external:React",
+        "@external:logo"
+      ],
+      "symbols": []
+    },
+    "./src/components/MainCanvas/MainCanvas.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 145,
+        "complexity": 7,
+        "coverage": 0
+      },
+      "hash": "ef5e071b82e730b47b5576449fc0ee51d0aa6c2c70137f7d026af0ce73057a03",
+      "size": 4586,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "@external:react-redux",
+        "src/store/store.ts",
+        "src/store/slices/generationSlice.ts"
+      ],
+      "symbols": []
+    },
+    "./src/components/ProjectNumberManager.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 110,
+        "loc": 249,
+        "complexity": 30,
+        "coverage": 0
+      },
+      "hash": "b06782a77d2c2e28f20c5ab268817740ebedb6bc5192f535b685e480ba5efd09",
+      "size": 7834,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "src/lib/supabase.ts",
+        "src/utils/projectNumberManager.js",
+        "@external:React"
+      ],
+      "symbols": []
+    },
+    "./src/components/ReferenceImages/ReferenceImageItem.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 0,
+        "loc": 269,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "a0607332131e949f536131ad1441638a21dc2920f29de7f0ce92e4f3df340466",
+      "size": 8429,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "@external:react",
+        "@external:react-dropzone",
+        "@external:react-redux",
+        "@external:react-icons/md",
+        "src/store/slices/referenceImagesSlice.ts",
+        "@external:@dnd-kit/sortable",
+        "@external:@dnd-kit/utilities"
+      ],
+      "symbols": [
+        "ReferenceImageItemProps"
+      ]
+    },
+    "./src/components/ReferenceImages/ReferenceImagesList.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 0,
+        "loc": 67,
+        "complexity": 7,
+        "coverage": 0
+      },
+      "hash": "ea3165a7befe131c1216f1aefa05c1be778cdbc104439c5253486ad8e52ef98b",
+      "size": 1756,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "@external:react-redux",
+        "src/store/store.ts",
+        "src/components/ReferenceImages/ReferenceImageItem.tsx",
+        "src/store/slices/referenceImagesSlice.ts",
+        "@external:@dnd-kit/core",
+        "@external:@dnd-kit/sortable",
+        "@external:ReferenceImageItem"
+      ],
+      "symbols": []
+    },
+    "./src/components/RightPanel/RightPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 183,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "8c028917891b3bc9785f498997d25617bb6dd601f5277b1fbecfe6073138b56f",
+      "size": 5910,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "@external:react-redux",
+        "src/store/store.ts"
+      ],
+      "symbols": []
+    },
+    "./src/components/Sidebar/Sidebar.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 4,
+        "loc": 173,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "22e3cafc478ba3310b08b2eae6b626716f6733e849028d0ba0363e699d4a2a63",
+      "size": 5624,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "@external:react-redux",
+        "src/store/store.ts",
+        "src/store/slices/generationSlice.ts",
+        "src/store/slices/referenceImagesSlice.ts",
+        "src/components/ReferenceImages/ReferenceImagesList.tsx",
+        "@external:ReferenceImagesList"
+      ],
+      "symbols": []
+    },
+    "./src/components/StateTest.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 9,
+        "loc": 298,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "a2bed231ab95c85ac458c44408650d4ae9379e3d84caa4c4b6803c578beadc0f",
+      "size": 11908,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "StateTest"
+      ]
+    },
+    "./src/components/UploadManager.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 9,
+        "depth": 1,
+        "churn": 0,
+        "loc": 326,
+        "complexity": 26,
+        "coverage": 0
+      },
+      "hash": "08b87cdc9724bbe4947dcf7edad492087bf4c8484cb2016eb5c04f3e2a19dbd4",
+      "size": 9818,
+      "lastModified": "2025-10-10T17:04:01.018Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-dropzone",
+        "@external:react-icons/md",
+        "src/hooks/useFileUpload.ts",
+        "src/hooks/useSupabaseData.ts",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "UploadManager",
+        "UploadManagerProps"
+      ]
+    },
+    "./src/components/assets/AssetsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 2,
+        "loc": 135,
+        "complexity": 8,
+        "coverage": 0
+      },
+      "hash": "13d601e7939605b79fb74cff4ade284094b47b3ca239d5d1291ce8bb79ed8e06",
+      "size": 4162,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "AssetsPanel",
+        "AssetImage",
+        "AssetsPanelProps"
+      ]
+    },
+    "./src/components/canvas/CanvasAdjustmentsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 128,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "8c593472b9f8e5a8456dea57dbf12bd258f0b91fd0488912b17db4feabeac401",
+      "size": 5743,
+      "lastModified": "2025-10-10T17:04:01.034Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "Levels",
+        "HSL",
+        "CanvasAdjustmentsPanelProps"
+      ]
+    },
+    "./src/components/canvas/CanvasPropertiesPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 6,
+        "loc": 141,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "7e12a0cab28b0a64db4a6dc3623d2251064e4863dd32cf92a3df4822b1615b1b",
+      "size": 5491,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "DrawingMode",
+        "CanvasPropertiesPanelProps"
+      ]
+    },
+    "./src/components/canvas/CanvasToolbox.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 61,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "98e6705c99e06f016a2f65e2d04dac624ac37b956428dc6c213098170a93dca1",
+      "size": 1810,
+      "lastModified": "2025-10-10T17:04:01.039Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CanvasToolboxProps"
+      ]
+    },
+    "./src/components/canvas/CanvasView.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 47,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "12530352743c10dffa283e4b15cfa1e9ad801a3a61cca5878ee3d5b6ac805b50",
+      "size": 1217,
+      "lastModified": "2025-10-10T17:04:01.043Z",
+      "dependencies": [
+        "@external:react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CanvasViewProps"
+      ]
+    },
+    "./src/components/canvas/DrawingCanvas.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 1968,
+        "loc": 933,
+        "complexity": 248,
+        "coverage": 0
+      },
+      "hash": "2f80507c79c2e98239210c4589b8841face4edf62b8d24ee68a44fe5db15462c",
+      "size": 33272,
+      "lastModified": "2025-10-22T02:33:40.232Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/lib/config.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "DrawingImage",
+        "DrawingBounds",
+        "Point",
+        "LevelsAdjustment",
+        "HSLAdjustment",
+        "DrawingCanvasProps",
+        "DrawingCanvas"
+      ]
+    },
+    "./src/components/common/ErrorBoundary.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 42,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "62a2823de53bdac2339e9dc15f71362153143e6c0a6832fe9cfebb20fc33390f",
+      "size": 1175,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:React"
+      ],
+      "symbols": [
+        "Props",
+        "State"
+      ]
+    },
+    "./src/components/helpers/HelperControls.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 11,
+        "depth": 1,
+        "churn": 126,
+        "loc": 122,
+        "complexity": 38,
+        "coverage": 0
+      },
+      "hash": "0f5019d049cd3a11631d48d4e7c7822c800b7282377db56157877fe3ad59722c",
+      "size": 4912,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/helpers/catalog.ts",
+        "src/helpers/types.ts",
+        "src/helpers/assemble.ts",
+        "src/components/helpers/InfoModal.tsx",
+        "src/helpers/telemetry.ts",
+        "@external:React",
+        "@external:type",
+        "@external:InfoModal"
+      ],
+      "symbols": [
+        "HelperControlsProps"
+      ]
+    },
+    "./src/components/helpers/InfoModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 220,
+        "loc": 120,
+        "complexity": 20,
+        "coverage": 0
+      },
+      "hash": "eb69688fefe2d8c615ee68f7a39a494a3987b5e54f9cbe364bb00aa5aee4cbba",
+      "size": 5415,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/helpers/types.ts",
+        "src/helpers/assemble.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "InfoModalProps"
+      ]
+    },
+    "./src/components/helpers/PreviewPane.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 22,
+        "loc": 46,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "bce0ff631212d217bcc84aa9d4bbcb263eae59d02619ba6ce773d49666ef44b4",
+      "size": 1624,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/helpers/types.ts",
+        "src/helpers/assemble.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "PreviewPaneProps"
+      ]
+    },
+    "./src/components/history/BatchGenerationExample.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 0,
+        "loc": 191,
+        "complexity": 16,
+        "coverage": 0
+      },
+      "hash": "0a5cee5e468026d1c8567cfab0b588cde680c8d77ba135ccfb67f67e0f024599",
+      "size": 7451,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/history/GenerationHistoryPanelV2.tsx",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:GenerationHistoryPanelV2",
+        "@external:type"
+      ],
+      "symbols": []
+    },
+    "./src/components/history/GenerationBatchHistoryList.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 0,
+        "loc": 152,
+        "complexity": 41,
+        "coverage": 0
+      },
+      "hash": "3bb6014c858fa4ed33957d52803f97b6d8e3d8710262c60e475ba9eef393313d",
+      "size": 6200,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/history/GenerationBatchTile.tsx",
+        "src/types/types.ts",
+        "src/config/pricing.ts",
+        "@external:React",
+        "@external:GenerationBatchTile",
+        "@external:type"
+      ],
+      "symbols": [
+        "GenerationBatchHistoryListProps"
+      ]
+    },
+    "./src/components/history/GenerationBatchTile.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 9,
+        "depth": 1,
+        "churn": 1964,
+        "loc": 1384,
+        "complexity": 384,
+        "coverage": 0
+      },
+      "hash": "870db3d5d6fa30f51b7c07cb1bf1c7225bd204385fbe967c47dfd5be2a31311e",
+      "size": 65250,
+      "lastModified": "2025-10-24T18:07:38.118Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/config/pricing.ts",
+        "@external:react-icons/md",
+        "src/types/types.ts",
+        "src/assets/progress-movie-128.mp4",
+        "@external:React",
+        "@external:type",
+        "@external:progressMovie128"
+      ],
+      "symbols": [
+        "GenerationBatchTileProps"
+      ]
+    },
+    "./src/components/history/GenerationHistoryFilters.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 236,
+        "complexity": 8,
+        "coverage": 0
+      },
+      "hash": "06be54a77cb377d3081eb23b00a4cf661f82d6012f809fc226311cbaf2743ced",
+      "size": 9125,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "GenerationHistoryFiltersProps"
+      ]
+    },
+    "./src/components/history/GenerationHistoryList.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 843,
+        "loc": 486,
+        "complexity": 148,
+        "coverage": 0
+      },
+      "hash": "bd2c0358dc3738a81b64bd2dfa4d3414f831a86a051d5c0a6fa974b54c12e41a",
+      "size": 28072,
+      "lastModified": "2025-10-24T18:24:11.694Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "@external:React"
+      ],
+      "symbols": [
+        "GenerationHistoryItem",
+        "GenerationHistoryListProps"
+      ]
+    },
+    "./src/components/history/GenerationHistoryPanelV2.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 12,
+        "depth": 1,
+        "churn": 0,
+        "loc": 341,
+        "complexity": 34,
+        "coverage": 0
+      },
+      "hash": "2bac6a7aa3bcabf587796a61b425a71e544f37021c106d80c2c681c855bcc760",
+      "size": 11592,
+      "lastModified": "2025-10-22T02:33:40.236Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/history/GenerationBatchHistoryList.tsx",
+        "src/components/history/GenerationHistoryList.tsx",
+        "src/components/history/GenerationHistoryFilters.tsx",
+        "src/hooks/useGenerationBatches.ts",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:GenerationBatchHistoryList",
+        "@external:GenerationHistoryList",
+        "@external:GenerationHistoryFilters",
+        "@external:type"
+      ],
+      "symbols": [
+        "GenerationHistoryPanelV2Props",
+        "GenerationHistoryPanelV2Ref"
+      ]
+    },
+    "./src/components/history/HistoryPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 12,
+        "depth": 1,
+        "churn": 1392,
+        "loc": 1016,
+        "complexity": 251,
+        "coverage": 0
+      },
+      "hash": "7975f444b6a5798af5bb9a154e5be716f094faef5710467791eb67ec658fb29d",
+      "size": 45237,
+      "lastModified": "2025-10-23T20:09:46.766Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/history/ImageFiltersPanel.tsx",
+        "src/components/history/GenerationBatchHistoryList.tsx",
+        "src/types/types.ts",
+        "src/components/common/ErrorBoundary.tsx",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React",
+        "@external:ImageFiltersPanel",
+        "@external:GenerationBatchHistoryList",
+        "@external:type",
+        "@external:ErrorBoundary"
+      ],
+      "symbols": [
+        "HistoryPanel",
+        "HistoryPanelProps"
+      ]
+    },
+    "./src/components/history/ImageFiltersPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 16,
+        "depth": 1,
+        "churn": 161,
+        "loc": 234,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "7aeb0115004f063e765eba4b33c4af337425e39ceb0a764891cd674e50f16196",
+      "size": 7988,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/modules/metadata-panel/selectors/TeamSelect.tsx",
+        "src/modules/metadata-panel/selectors/ProjectSelect.tsx",
+        "src/modules/metadata-panel/selectors/SequenceSelect.tsx",
+        "src/modules/metadata-panel/selectors/ShotSelect.tsx",
+        "src/modules/metadata-panel/selectors/CharacterSelect.tsx",
+        "src/modules/metadata-panel/selectors/VariantSelect.tsx",
+        "src/modules/metadata-panel/selectors/AssetTypeSelect.tsx",
+        "src/modules/metadata-panel/selectors/AssetSelect.tsx",
+        "src/modules/metadata-panel/selectors/DepartmentSelect.tsx",
+        "src/modules/metadata-panel/selectors/TaskSelect.tsx",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "ImageFiltersPanelProps",
+        "ImageFiltersPanel"
+      ]
+    },
+    "./src/components/layout/AnalysisControls.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 4,
+        "loc": 23,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "46b2af760d5cdef2197d24032768c42b1e18d38fcf239607bf2bb79ef3a817d4",
+      "size": 594,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "AnalysisControlsProps"
+      ]
+    },
+    "./src/components/layout/CenterPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 11,
+        "depth": 1,
+        "churn": 4,
+        "loc": 119,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "53c4915243e44d82418ca803e1185d80b34b7fa8964dab489adca53de50d6b6f",
+      "size": 3466,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/canvas/CanvasView.tsx",
+        "src/components/canvas/CanvasToolbox.tsx",
+        "src/components/canvas/CanvasPropertiesPanel.tsx",
+        "src/components/canvas/CanvasAdjustmentsPanel.tsx",
+        "@external:React",
+        "@external:CanvasView",
+        "@external:CanvasToolbox",
+        "@external:CanvasPropertiesPanel",
+        "@external:CanvasAdjustmentsPanel"
+      ],
+      "symbols": [
+        "CenterPanelProps"
+      ]
+    },
+    "./src/components/layout/GeneratedImagePanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 24,
+        "loc": 179,
+        "complexity": 19,
+        "coverage": 0
+      },
+      "hash": "0f3e8e1cdf142f652637899787b4f7881ba3e210cb27c1c3f7c6664f6b78bbcc",
+      "size": 6444,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "@external:React"
+      ],
+      "symbols": [
+        "GeneratedImagePanelProps"
+      ]
+    },
+    "./src/components/layout/ImageSettingsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 227,
+        "loc": 180,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "924d103ea2c11718ed9b4bc6b4b96de9aa520c08494faac87a87db5c36fa3887",
+      "size": 7015,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "ImageSettingsPanelProps"
+      ]
+    },
+    "./src/components/layout/Layout.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 9,
+        "depth": 1,
+        "churn": 0,
+        "loc": 23,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "0d0f801b07f278b413c669a40b7390aebc2d2adbfd4a8b329eef2c348603b08b",
+      "size": 687,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/Header/Header.tsx",
+        "src/components/panels/LeftPanel.tsx",
+        "src/components/panels/CenterPanel.tsx",
+        "src/components/panels/RightPanel.tsx",
+        "src/components/Modals/GlobalModals",
+        "@external:React",
+        "@external:Header"
+      ],
+      "symbols": [
+        "Layout"
+      ]
+    },
+    "./src/components/layout/LeftPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 89,
+        "loc": 166,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "72624f949fc11339b631adad642440780b6c4c35d9b5e891cfbaaec591f74f43",
+      "size": 5759,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/types/types.ts",
+        "src/components/reference/ReferenceImagesPanel.tsx",
+        "@external:React",
+        "@external:type",
+        "@external:ReferenceImagesPanel"
+      ],
+      "symbols": [
+        "LeftPanelProps"
+      ]
+    },
+    "./src/components/layout/MainLeftPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 4,
+        "loc": 414,
+        "complexity": 10,
+        "coverage": 0
+      },
+      "hash": "84e1cbeda43a367b9344567d95bb5108ef6480decec930c7f277490f56022ae8",
+      "size": 14650,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/types/types.ts",
+        "src/components/reference/ReferenceImagesPanel.tsx",
+        "@external:React",
+        "@external:type",
+        "@external:ReferenceImagesPanel"
+      ],
+      "symbols": [
+        "MainLeftPanel",
+        "MainLeftPanelProps"
+      ]
+    },
+    "./src/components/layout/RightPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 10,
+        "loc": 52,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "26642cf052689ddd3dbda777b1d9ce08713997241ab393ca8167ac6b426a4cbd",
+      "size": 1553,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "RightPanelProps"
+      ]
+    },
+    "./src/components/logs/LogsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 111,
+        "complexity": 10,
+        "coverage": 0
+      },
+      "hash": "ec3e151de8131546e961bae8bf89066900f421d8e7b7aa4d18301ea252756dca",
+      "size": 2803,
+      "lastModified": "2025-10-10T17:22:19.032Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "LogsPanel",
+        "LogEntry",
+        "LogsPanelProps"
+      ]
+    },
+    "./src/components/logs/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 2,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "238df0f25201ae053219acd3dc3557d5ee1550556740c6932f8829f08ba18603",
+      "size": 41,
+      "lastModified": "2025-10-10T17:22:19.032Z",
+      "dependencies": [],
+      "symbols": [
+        "LogsPanel"
+      ]
+    },
+    "./src/components/modals/CreateAssetModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 404,
+        "loc": 361,
+        "complexity": 30,
+        "coverage": 0
+      },
+      "hash": "a6fbef8df04631869859644c227b5f0bccbae8ddecb05c2d6fdaba4bf271a234",
+      "size": 12389,
+      "lastModified": "2025-10-23T17:03:48.253Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateAssetModal",
+        "CreateAssetModalProps"
+      ]
+    },
+    "./src/components/modals/CreateAssetTypeModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 115,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "c21dee15a0552cd9ba3bf7d4073b708a2d849fbc90de15e848ebaa662efe2445",
+      "size": 3612,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateAssetTypeModalProps",
+        "CreateAssetTypeModal"
+      ]
+    },
+    "./src/components/modals/CreateDepartmentModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 88,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "90ac1eae292e1348c59bb7825c6dc7f884bac35aabd87a574f78949f58e83da2",
+      "size": 3360,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateDepartmentModalProps",
+        "CreateDepartmentModal"
+      ]
+    },
+    "./src/components/modals/CreateProjectModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 223,
+        "complexity": 31,
+        "coverage": 0
+      },
+      "hash": "add0b6d5b92fced475682e887eb99773f624fcad8e9c9f529ffc2aef4b473991",
+      "size": 7296,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateProjectModal",
+        "CreateProjectModalProps"
+      ]
+    },
+    "./src/components/modals/CreateSequenceModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 20,
+        "loc": 237,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "1ed6d4eb3e13ac40280340deb76229e5e2c74216cde760b7a8de0af115d1071a",
+      "size": 7121,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateSequenceModal",
+        "CreateSequenceModalProps"
+      ]
+    },
+    "./src/components/modals/CreateShotModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 4,
+        "loc": 345,
+        "complexity": 48,
+        "coverage": 0
+      },
+      "hash": "e190e6909510b92b39af3f04d318d9eff8ce335b375cc9be777141002653e253",
+      "size": 10820,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateShotModal",
+        "CreateShotModalProps"
+      ]
+    },
+    "./src/components/modals/CreateTaskModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 89,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "6862e5a4d1db3594bc22c2100c092796e1d074493eb23f4d0160d9861885592f",
+      "size": 3366,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateTaskModalProps",
+        "CreateTaskModal"
+      ]
+    },
+    "./src/components/modals/CreateVariantModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 117,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "f8a8050315c403236befa1a22046bac2e00bb1be59dc712a8b5e687aab1bb81f",
+      "size": 3814,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "CreateVariantModal",
+        "CreateVariantModalProps"
+      ]
+    },
+    "./src/components/modals/DevLoginModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 214,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "11855b079a2b2e97dd2e871ef95883db714f46b29c5479410ab8739c675eab7a",
+      "size": 6108,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "@external:React"
+      ],
+      "symbols": [
+        "DevLoginModal",
+        "DevLoginModalProps"
+      ]
+    },
+    "./src/components/modals/DrawingAnnotationModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 13,
+        "loc": 102,
+        "complexity": 16,
+        "coverage": 0
+      },
+      "hash": "75708e0895caa4e7fe321acc5ccb7048b2860aa75e6e220861174dcbe1206936",
+      "size": 2828,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "src/components/canvas/DrawingCanvas.tsx",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "DrawingAnnotationModal",
+        "DrawingImage",
+        "AssetImage",
+        "DrawingAnnotationModalProps"
+      ]
+    },
+    "./src/components/modals/GlobalModals.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 43,
+        "loc": 55,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "89e0f2a49a035da7b0735154da67ed9e8daddfcc41de1df21d23662e4aeeddd3",
+      "size": 1924,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "src/components/modals/ImageEnlargementModal.tsx",
+        "src/components/modals/DrawingAnnotationModal.tsx",
+        "src/modules/model-docs/ModelDocsModal.tsx",
+        "src/modules/ingest/IngestManager.tsx",
+        "src/components/modals/GraphAPITestModal.tsx",
+        "src/components/modals/MetadataDebugModal.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "GlobalModals"
+      ]
+    },
+    "./src/components/modals/GraphAPITestModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 224,
+        "complexity": 29,
+        "coverage": 0
+      },
+      "hash": "57871115088ec9ca62545560ad922d21acff5c19fa6b14210ed4d7a8cecf37c8",
+      "size": 6929,
+      "lastModified": "2025-10-22T02:33:40.240Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "GraphAPITestModal",
+        "GraphAPITestModalProps",
+        "TestResult"
+      ]
+    },
+    "./src/components/modals/ImageEnlargementModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 64,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "cc2b24ba95bad5825cae5957248402426d5dd7c3cbe6e1b508fdb7cc9fd6933a",
+      "size": 1401,
+      "lastModified": "2025-10-10T17:04:01.144Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "ImageEnlargementModal",
+        "EnlargedImage",
+        "ImageEnlargementModalProps"
+      ]
+    },
+    "./src/components/modals/LoadingStatusModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 247,
+        "complexity": 26,
+        "coverage": 0
+      },
+      "hash": "2ee5bab95edcffd4b44ecfdee496985e3da4d43270b25a1365109ce7fd06d4eb",
+      "size": 7032,
+      "lastModified": "2025-10-22T02:18:14.226Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "LoadingStatusModal",
+        "useLoadingStatus",
+        "LoadingStep",
+        "LoadingStatusModalProps"
+      ]
+    },
+    "./src/components/modals/MetadataDebugModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 195,
+        "complexity": 16,
+        "coverage": 0
+      },
+      "hash": "610c627267d7194d6c642c82eada06fbe015ad3fa3cd85697dbe476a83fae3c6",
+      "size": 6248,
+      "lastModified": "2025-10-22T02:33:40.244Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "MetadataDebugModal",
+        "MetadataDebugModalProps"
+      ]
+    },
+    "./src/components/modals/ProjectRequiredModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 101,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "1894aee9f00f8c8ec548e782af926d1d17cbdeb4df6ae57ec476844c5e1abae6",
+      "size": 2861,
+      "lastModified": "2025-10-22T02:33:40.244Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "ProjectRequiredModal",
+        "ProjectRequiredModalProps"
+      ]
+    },
+    "./src/components/panels/AnalysisEnhancementPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 251,
+        "loc": 173,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "22f46cef15ef9cbb3966ce691ac1f6d82ccffc2e7d2df7758d7137579a3a334b",
+      "size": 5361,
+      "lastModified": "2025-10-22T02:33:40.244Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "AnalysisEnhancementPanel",
+        "ReferenceImage",
+        "AnalysisEnhancementPanelProps"
+      ]
+    },
+    "./src/components/panels/AssembledPromptPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 518,
+        "loc": 86,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "79d9a85d536052289cb3c453130da42820e845f39336f097d23817239f52e4bc",
+      "size": 2930,
+      "lastModified": "2025-10-22T02:33:40.244Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "AssembledPromptPanel",
+        "AssembledPromptPanelProps"
+      ]
+    },
+    "./src/components/panels/CanvasPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 967,
+        "loc": 698,
+        "complexity": 194,
+        "coverage": 0
+      },
+      "hash": "828a6a13de63b5c0812d92c8591a176a67898160491e185ff06d28cffb9791fc",
+      "size": 31091,
+      "lastModified": "2025-10-23T17:03:48.253Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/components/viewer/ViewerModal.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "CanvasPanel",
+        "ImageMetadata",
+        "UpscaleSettings",
+        "CanvasPanelProps"
+      ]
+    },
+    "./src/components/panels/CenterPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 18,
+        "depth": 1,
+        "churn": 2561,
+        "loc": 1561,
+        "complexity": 514,
+        "coverage": 0
+      },
+      "hash": "ee7ad16cdbfb91e230f017edb379b5d316734f9e8b4cd48eb1cc00dde34cfb60",
+      "size": 79326,
+      "lastModified": "2025-10-24T21:11:39.066Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/components/settings/ImageSettingsPanel.tsx",
+        "src/contexts/AppStateContext.tsx",
+        "src/components/panels/CanvasPanel.tsx",
+        "src/components/panels/StatusBarPanel.tsx",
+        "src/components/ui/HorizontalSplit.tsx",
+        "src/components/ui/VerticalSplit.tsx",
+        "src/components/canvas/DrawingCanvas.tsx",
+        "src/utils/vault/referenceVault.ts",
+        "src/types/types.ts",
+        "src/hooks/useGeneration.ts",
+        "src/hooks/useProjectMetadata.ts",
+        "src/hooks/useTopazUpscale.ts",
+        "src/components/modals/ProjectRequiredModal.tsx",
+        "src/utils/sparkStorage.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "CenterPanel",
+        "LocalReferenceImage",
+        "ImageMetadata",
+        "UpscaleSettings",
+        "CenterPanelProps"
+      ]
+    },
+    "./src/components/panels/LeftPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 29,
+        "depth": 1,
+        "churn": 2978,
+        "loc": 2243,
+        "complexity": 615,
+        "coverage": 0
+      },
+      "hash": "1d91dfee52c7509edde0768639b6cca7205359cfd97b3eac3f27583eb04abc2f",
+      "size": 122838,
+      "lastModified": "2025-10-23T17:03:48.253Z",
+      "dependencies": [
+        "@external:react",
+        "src/utils/apiBase.ts",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/services/sessionService.ts",
+        "src/contexts/AppStateContext.tsx",
+        "src/components/panels/ModelsPanel.tsx",
+        "src/components/panels/AnalysisEnhancementPanel.tsx",
+        "src/components/panels/PromptsPanel.tsx",
+        "src/components/settings/AdvancedSettingsPanel.tsx",
+        "src/components/prompt/SceneDescriptionInput.tsx",
+        "src/components/helpers/HelperControls.tsx",
+        "src/modules/metadata-panel/MetadataPanel.tsx",
+        "src/components/panels/ProjectMetadataPanel.tsx",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/helpers/types.ts",
+        "src/components/reference/ReferenceImagesPanel.tsx",
+        "src/components/reference/ReferenceGuidanceIndicator.tsx",
+        "src/helpers/catalog.ts",
+        "src/helpers/assemble.ts",
+        "src/utils/vault/index.ts",
+        "src/utils/sparkStorage.ts",
+        "src/utils/imageUtils.ts",
+        "src/services/openrouterService.ts",
+        "@external:React",
+        "@external:type",
+        "@external:HelperControls",
+        "@external:ReferenceImagesPanel",
+        "@external:ReferenceGuidanceIndicator"
+      ],
+      "symbols": [
+        "LeftPanel",
+        "labelFromKey",
+        "ReferenceImage",
+        "LoRAModel",
+        "LeftPanelProps",
+        "PromptSlot"
+      ]
+    },
+    "./src/components/panels/ModelsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 1019,
+        "loc": 451,
+        "complexity": 100,
+        "coverage": 0
+      },
+      "hash": "de2ce355a4b871ff882553171b08e7c1d613bce4ab2932457eaf1326edcfed38",
+      "size": 18052,
+      "lastModified": "2025-10-23T23:04:21.084Z",
+      "dependencies": [
+        "@external:react",
+        "src/promptEngine/capabilities.ts",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/fi",
+        "@external:react-icons/md",
+        "@external:React"
+      ],
+      "symbols": [
+        "ModelsPanel",
+        "ModelsPanelProps"
+      ]
+    },
+    "./src/components/panels/ProjectMetadataPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 18,
+        "depth": 1,
+        "churn": 3370,
+        "loc": 3197,
+        "complexity": 615,
+        "coverage": 0
+      },
+      "hash": "a7e10c5c8aa18fede87dfca401a0548f967695a0bdde92a99f14454294c259c0",
+      "size": 124663,
+      "lastModified": "2025-10-22T02:33:40.248Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "src/lib/supabase.ts",
+        "src/components/modals/LoadingStatusModal.tsx",
+        "src/components/modals/CreateSequenceModal.tsx",
+        "src/components/modals/CreateShotModal.tsx",
+        "src/components/modals/CreateProjectModal.tsx",
+        "src/components/modals/CreateAssetModal.tsx",
+        "@external:react-icons/io5",
+        "src/utils/projectMetadata.ts",
+        "src/utils/sparkStorage.ts",
+        "@external:react-markdown",
+        "src/components/modals/CreateVariantModal.tsx",
+        "src/utils/apiBase.ts",
+        "src/utils/fetchWithAuth.ts",
+        "@external:React",
+        "@external:ReactMarkdown"
+      ],
+      "symbols": [
+        "ProjectMetadataPanel",
+        "ProjectMetadataPanelProps"
+      ]
+    },
+    "./src/components/panels/PromptsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 406,
+        "loc": 320,
+        "complexity": 66,
+        "coverage": 0
+      },
+      "hash": "b8c5e19407938194a40186f944acd80e0a97ac5b807ecc73968742f33c4fe675",
+      "size": 11796,
+      "lastModified": "2025-10-22T02:33:40.248Z",
+      "dependencies": [
+        "@external:@chakra-ui/react",
+        "@external:react",
+        "src/helpers/catalog.ts",
+        "@external:React"
+      ],
+      "symbols": [
+        "PromptsPanel",
+        "PromptsPanelProps"
+      ]
+    },
+    "./src/components/panels/RightPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 21,
+        "depth": 1,
+        "churn": 2761,
+        "loc": 1924,
+        "complexity": 627,
+        "coverage": 0
+      },
+      "hash": "47568e9fe5738799ec288e4891e4a369a744d9134de10f52ef1bb507f0f0735d",
+      "size": 94039,
+      "lastModified": "2025-10-24T02:33:52.127Z",
+      "dependencies": [
+        "@external:react",
+        "@external:react-dom",
+        "@external:@chakra-ui/react",
+        "src/components/viewer/ViewerModal.tsx",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:react-icons/md",
+        "src/components/history/HistoryPanel.tsx",
+        "src/components/history/ImageFiltersPanel.tsx",
+        "src/components/assets/AssetsPanel.tsx",
+        "src/auth/useAuthorizedFetch.ts",
+        "src/modules/metadata-panel/services/projects.ts",
+        "src/modules/metadata-panel/services/shots.ts",
+        "src/modules/metadata-panel/services/characters.ts",
+        "src/modules/metadata-panel/services/assets.ts",
+        "src/modules/metadata-panel/services/departments.ts",
+        "src/components/logs/index.ts",
+        "src/hooks/useLog.ts",
+        "src/hooks/useGenerationHistory.ts",
+        "@external:React",
+        "@external:type",
+        "@external:ImageFiltersPanel"
+      ],
+      "symbols": [
+        "RightPanel",
+        "AssetImage",
+        "GenerationQueueItem",
+        "RightPanelProps"
+      ]
+    },
+    "./src/components/panels/SlidingPane.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 29,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "4fb13ff9c64ab75ea4afda91e7141e5f4908bb5c3ae7e4a919fd845141421998",
+      "size": 776,
+      "lastModified": "2025-10-22T02:33:40.248Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "SlidingPane",
+        "SlidingPaneProps"
+      ]
+    },
+    "./src/components/panels/StatusBarPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 4,
+        "loc": 35,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "0a407a019a6259e4f7888f0a34fad2bd5d42dd2f68afbc026e8a46cfeb5ab6d3",
+      "size": 729,
+      "lastModified": "2025-10-22T02:33:40.248Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "StatusBarPanel",
+        "StatusBarPanelProps"
+      ]
+    },
+    "./src/components/prompt/SceneDescriptionInput.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 39,
+        "loc": 44,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "0fef373597c56ccb7d55a802f86d17a207f060df10fb9d70f0a51d130e484da0",
+      "size": 1194,
+      "lastModified": "2025-10-22T02:33:40.248Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "SceneDescriptionInput",
+        "SceneDescriptionInputProps"
+      ]
+    },
+    "./src/components/queue/QueuePanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 123,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "b9657f7204f96c2bdfa4d902657768d90bd051e0c2d144d23c97f08df6d094da",
+      "size": 3277,
+      "lastModified": "2025-10-10T17:04:00.938Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "QueuePanel",
+        "QueueItem",
+        "QueuePanelProps"
+      ]
+    },
+    "./src/components/reference/AddReferenceButton.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 68,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "95060cb704075901dfb861aafae7818090e4f1f5026daedb4cca355c916d50f1",
+      "size": 1837,
+      "lastModified": "2025-10-10T17:04:00.950Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-dropzone",
+        "@external:react-icons/md",
+        "@external:React"
+      ],
+      "symbols": [
+        "AddReferenceButton",
+        "AddReferenceButtonProps"
+      ]
+    },
+    "./src/components/reference/ReferenceGuidanceIndicator.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 68,
+        "complexity": 18,
+        "coverage": 0
+      },
+      "hash": "075d8d89b4a6fd3796ff843a7cf45fe19b92e2b83ad1eb7de77d92351a5dd419",
+      "size": 2377,
+      "lastModified": "2025-10-22T02:33:40.248Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "RefWeight",
+        "ReferenceGuidanceIndicatorProps"
+      ]
+    },
+    "./src/components/reference/ReferenceImageTile.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 10,
+        "depth": 1,
+        "churn": 10,
+        "loc": 292,
+        "complexity": 21,
+        "coverage": 0
+      },
+      "hash": "f33733ec4d1c2a68703451e5e9e5824926edd8326dfe374d090010273d96e24b",
+      "size": 8681,
+      "lastModified": "2025-10-23T17:03:48.258Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-dropzone",
+        "@external:@dnd-kit/sortable",
+        "@external:@dnd-kit/utilities",
+        "@external:react-icons/md",
+        "src/lib/config.ts",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "ReferenceImageTile",
+        "ReferenceImageTileProps"
+      ]
+    },
+    "./src/components/reference/ReferenceImagesPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 11,
+        "depth": 1,
+        "churn": 646,
+        "loc": 553,
+        "complexity": 173,
+        "coverage": 0
+      },
+      "hash": "ac61315a9d67891385b608bfc6ffc8785c7056d16889c142f00c8e38cbc4b9e9",
+      "size": 27019,
+      "lastModified": "2025-10-23T17:03:48.258Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:@dnd-kit/core",
+        "@external:@dnd-kit/sortable",
+        "@external:react-dropzone",
+        "@external:@dnd-kit/utilities",
+        "@external:react-icons/md",
+        "src/components/viewer/ViewerModal.tsx",
+        "src/types/types.ts",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "RefWeight",
+        "ReferenceImagesPanelProps",
+        "SortableReferenceImageTile",
+        "ReferenceImageTile"
+      ]
+    },
+    "./src/components/references/handlers/externalFileDrop.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 210,
+        "complexity": 35,
+        "coverage": 0
+      },
+      "hash": "37cc4a1b88a7286ac619e4b2397a707b90f292a07cfd15fc3d91a030b8ba1d18",
+      "size": 6602,
+      "lastModified": "2025-10-23T17:03:48.258Z",
+      "dependencies": [
+        "src/utils/vault/referenceVault.ts",
+        "src/utils/metadata/imageMetadataExtract.ts",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "ExternalFileDropParams",
+        "ExternalFileDropResult",
+        "isSupportedImageFile",
+        "isValidFileSize"
+      ]
+    },
+    "./src/components/references/handlers/generationDrop.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 181,
+        "complexity": 18,
+        "coverage": 0
+      },
+      "hash": "891056c24b9671b9472a42b0700f29ee3d4dcecd33ae82ba55890dbc1e68aea3",
+      "size": 5395,
+      "lastModified": "2025-10-23T17:03:48.258Z",
+      "dependencies": [
+        "src/utils/vault/referenceVault.ts",
+        "src/utils/vault/vaultTypes.ts",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "GenerationDropParams",
+        "GenerationDropResult"
+      ]
+    },
+    "./src/components/references/handlers/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 25,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "bb027655dbf3971ccb93596cc5528955dd9554e58c5784199115f670c8cd2aec",
+      "size": 547,
+      "lastModified": "2025-10-23T17:03:48.258Z",
+      "dependencies": [],
+      "symbols": [
+        "handleGenerationDrop",
+        "extractGenerationMetadata",
+        "type GenerationDropParams",
+        "type GenerationDropResult",
+        "handleExternalFileDrop",
+        "isSupportedImageFile",
+        "isValidFileSize",
+        "type ExternalFileDropParams",
+        "type ExternalFileDropResult"
+      ]
+    },
+    "./src/components/settings/AdvancedSettingsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 119,
+        "loc": 336,
+        "complexity": 15,
+        "coverage": 0
+      },
+      "hash": "e59515677ec0dc2f0e5e9c19a2257116f1f50d4d8c99c9ce8c76e46b187c7b7c",
+      "size": 10720,
+      "lastModified": "2025-10-22T02:33:40.252Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "@external:React"
+      ],
+      "symbols": [
+        "AdvancedSettingsPanel",
+        "LoRAModel",
+        "AdvancedSettingsPanelProps"
+      ]
+    },
+    "./src/components/settings/FalSettingsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 58,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "6005731f2b8b406cb47e208e6dccf005b0f1bfe2b15d45a8213f5f7c3decf06d",
+      "size": 1481,
+      "lastModified": "2025-10-10T17:04:00.988Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "FalSettingsPanel",
+        "FalSettingsPanelProps"
+      ]
+    },
+    "./src/components/settings/ImageSettingsPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 8,
+        "depth": 1,
+        "churn": 2702,
+        "loc": 1405,
+        "complexity": 349,
+        "coverage": 0
+      },
+      "hash": "813f807fb22320d9461f4649a9cc2a8eb1649ef71e2e5f0ad96cdf9bf17e8a8e",
+      "size": 59128,
+      "lastModified": "2025-10-25T05:29:47.392Z",
+      "dependencies": [
+        "@external:react",
+        "src/promptEngine/sizeResolver.ts",
+        "src/promptEngine/adapter.ts",
+        "src/promptEngine/validator.ts",
+        "src/promptEngine/renderers/router.ts",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/fi",
+        "@external:React"
+      ],
+      "symbols": [
+        "ImageSettingsPanel",
+        "ReferenceImage",
+        "ImageSettingsPanelProps"
+      ]
+    },
+    "./src/components/ui/HorizontalSplit.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 74,
+        "complexity": 10,
+        "coverage": 0
+      },
+      "hash": "ed897894eea2aaf59c66cadeb7d47b8fb929b358a1fcf9fcf8701f1b84b02848",
+      "size": 2399,
+      "lastModified": "2025-10-22T02:33:40.252Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "HorizontalSplit",
+        "HorizontalSplitProps"
+      ]
+    },
+    "./src/components/ui/VerticalSplit.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 2,
+        "loc": 67,
+        "complexity": 8,
+        "coverage": 0
+      },
+      "hash": "32ed2ddb9c8a995e82bd43c3c341e109fa8da5ab13e6b438d84213611ff3f284",
+      "size": 2096,
+      "lastModified": "2025-10-22T02:33:40.252Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:React"
+      ],
+      "symbols": [
+        "VerticalSplit",
+        "VerticalSplitProps"
+      ]
+    },
+    "./src/components/viewer/ViewerModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 40,
+        "loc": 250,
+        "complexity": 86,
+        "coverage": 0
+      },
+      "hash": "614e1d72ac89378537885ace76fe4ef46806bec92a19ae5c490e38c91f6ff14f",
+      "size": 12771,
+      "lastModified": "2025-10-22T02:33:40.252Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "@external:React"
+      ],
+      "symbols": [
+        "ViewerItem",
+        "ViewerModalContext",
+        "useViewerModal",
+        "ViewerProvider",
+        "ViewerProviderProps"
+      ]
+    },
+    "./src/config/falPricingClient.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 71,
+        "loc": 77,
+        "complexity": 33,
+        "coverage": 0
+      },
+      "hash": "dc865d17df99d49ad1cac401d0c7cbe9469e42e14641ad8d0b642429bbd18ae6",
+      "size": 2733,
+      "lastModified": "2025-10-23T17:03:48.258Z",
+      "dependencies": [
+        "src/assets/pricing/fal.json",
+        "@external:pricingJson"
+      ],
+      "symbols": [
+        "getFalPricingForModel",
+        "estimateFalCostCents",
+        "PricingRow",
+        "normalizeModelKey",
+        "ensureLoadedFromJson"
+      ]
+    },
+    "./src/config/features.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 49,
+        "loc": 68,
+        "complexity": 21,
+        "coverage": 0
+      },
+      "hash": "2ecb6f3c611b7be523a43ee7830be4a189f00cd0b870d0a1ef51f4e85e7a49ce",
+      "size": 1752,
+      "lastModified": "2025-10-23T20:23:36.107Z",
+      "dependencies": [],
+      "symbols": [
+        "isEnabled",
+        "getAllFeatures",
+        "featureFlags"
+      ]
+    },
+    "./src/config/pricing.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 77,
+        "loc": 104,
+        "complexity": 21,
+        "coverage": 0
+      },
+      "hash": "c9b93605e6490b04866b93bb934f8d67ae9c09c8d1fd0c5a4604d5e7f3ed6055",
+      "size": 4475,
+      "lastModified": "2025-10-23T23:22:42.857Z",
+      "dependencies": [
+        "src/config/falPricingClient.ts"
+      ],
+      "symbols": [
+        "PRICING",
+        "ProviderKey",
+        "ModelPricing",
+        "ProviderPricing",
+        "PricingConfig",
+        "estimateOutputCostCents"
+      ]
+    },
+    "./src/contexts/AppStateContext.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 106,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "5665e083fd6b06afe8eef3dc97b64734c6ce6b7247fa7a899ceb7dc215d4762a",
+      "size": 3160,
+      "lastModified": "2025-10-22T02:33:40.252Z",
+      "dependencies": [
+        "@external:react",
+        "@external:React"
+      ],
+      "symbols": [
+        "AppState",
+        "AppStateProvider",
+        "useAppState",
+        "AppAction",
+        "appStateReducer",
+        "AppStateContextValue"
+      ]
+    },
+    "./src/contexts/AuthContext.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 9,
+        "depth": 1,
+        "churn": 0,
+        "loc": 349,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "43cfa5719664e8dd37d1dd19bf775f1d8a1870d20ceaaf6ae352cd655bda256d",
+      "size": 12854,
+      "lastModified": "2025-10-22T02:33:40.252Z",
+      "dependencies": [
+        "@external:react",
+        "src/hooks/useSparkAuth.ts",
+        "src/hooks/useSupabaseData.ts",
+        "src/utils/sparkStorage.ts",
+        "src/hooks/useAppState.ts",
+        "src/types/types.ts",
+        "@external:@supabase/supabase-js",
+        "@external:React",
+        "@external:type"
+      ],
+      "symbols": [
+        "AuthProvider",
+        "useAuth",
+        "AuthContextType",
+        "AuthProviderProps",
+        "AuthContext"
+      ]
+    },
+    "./src/examples/MetadataPanelIntegration.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 162,
+        "complexity": 21,
+        "coverage": 0
+      },
+      "hash": "bf5b9445f948dcb28d8efddd818f2a42544502b3838952c1b4476474155ac0b3",
+      "size": 5104,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "@external:react",
+        "src/utils/projectNumberManager.js",
+        "@external:React"
+      ],
+      "symbols": [
+        "useProjectNumber",
+        "createGenerationMetadata"
+      ]
+    },
+    "./src/helpers/assemble.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 41,
+        "loc": 64,
+        "complexity": 24,
+        "coverage": 0
+      },
+      "hash": "76330bd984ced1aa2fdb8f73ee71df43d01f5da575cbc44653fe8bf53ee8f705",
+      "size": 2610,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "src/helpers/types.ts",
+        "src/helpers/strength.ts",
+        "src/helpers/labels.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "RefBind",
+        "RefsMap",
+        "buildNumberedPreamble",
+        "assemblePrompt",
+        "indexOfRef",
+        "ordinal",
+        "capitalize"
+      ]
+    },
+    "./src/helpers/catalog.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 6,
+        "loc": 22,
+        "complexity": 8,
+        "coverage": 0
+      },
+      "hash": "9654b253fce56e45f69d079770f4426d4b343edd9de6ce7179be82bb65cc8e4f",
+      "size": 642,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "src/helpers/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "clearCatalogCache"
+      ]
+    },
+    "./src/helpers/labels.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 24,
+        "complexity": 10,
+        "coverage": 0
+      },
+      "hash": "050d9c4e34b643b2bdede7b73f4b4e7052f4dd6befc2f2b8c721abc723d835fc",
+      "size": 821,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "src/helpers/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "normalizeLabel",
+        "orderRefKeys"
+      ]
+    },
+    "./src/helpers/strength.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 7,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "f4af6e941a38298451226f781be23c7015fd3d712defb4b5b704865b1b4a543b",
+      "size": 183,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "src/helpers/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "strengthPhrase"
+      ]
+    },
+    "./src/helpers/telemetry.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 17,
+        "loc": 43,
+        "complexity": 8,
+        "coverage": 0
+      },
+      "hash": "188048b8633624a1fd966c63860fa06c6ad94f7f88fa0c196050141be002b91e",
+      "size": 1804,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [],
+      "symbols": [
+        "telemetry",
+        "HelperEventType",
+        "HelperEvent",
+        "push"
+      ]
+    },
+    "./src/helpers/types.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 24,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "53aa1d2e4b4d20c1f66206a9aacdfed53df0be06c2d649ea6bcb66c158e4723b",
+      "size": 643,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [],
+      "symbols": [
+        "Strength",
+        "RefKey",
+        "Helper",
+        "Catalog"
+      ]
+    },
+    "./src/hooks/useAppState.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 338,
+        "complexity": 38,
+        "coverage": 0
+      },
+      "hash": "a6e20fde00b652158426ac7e9b7aa334736b1dbcd11203460af7578ef79870bc",
+      "size": 8775,
+      "lastModified": "2025-10-10T17:04:00.509Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@supabase/supabase-js",
+        "@external:issues"
+      ],
+      "symbols": [
+        "AppState",
+        "useAppState",
+        "GenerationModel",
+        "ReferenceWeight",
+        "UseAppStateReturn"
+      ]
+    },
+    "./src/hooks/useCanvasController.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 221,
+        "complexity": 74,
+        "coverage": 0
+      },
+      "hash": "c11d5130a725328dd3c26ec98850670cbe73d6fbcbed9381f1df8b2ee4c33cd9",
+      "size": 7423,
+      "lastModified": "2025-10-10T17:04:00.513Z",
+      "dependencies": [
+        "@external:react",
+        "src/utils/canvasRenderer.ts",
+        "src/utils/canvasShapes.ts"
+      ],
+      "symbols": [
+        "DrawingMode",
+        "UseCanvasControllerArgs",
+        "useCanvasController"
+      ]
+    },
+    "./src/hooks/useFileUpload.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 128,
+        "complexity": 28,
+        "coverage": 0
+      },
+      "hash": "954bcb3718d117e509a78cb23f15b73f32f8311dac653b099ddba861bae92d34",
+      "size": 4160,
+      "lastModified": "2025-10-10T17:04:00.517Z",
+      "dependencies": [
+        "@external:react",
+        "src/lib/webdavClient.ts",
+        "src/types/types.ts",
+        "src/hooks/useSupabaseData.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "UploadProgressEntry",
+        "useFileUpload",
+        "UploadOptions"
+      ]
+    },
+    "./src/hooks/useGeneration.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 15,
+        "depth": 1,
+        "churn": 1996,
+        "loc": 1672,
+        "complexity": 622,
+        "coverage": 0
+      },
+      "hash": "1177c70d28f5f96211761c4afa5e4b04f446b89625de7f5a3967f5776be86000",
+      "size": 85789,
+      "lastModified": "2025-10-24T20:29:23.601Z",
+      "dependencies": [
+        "@external:react",
+        "src/contexts/AppStateContext.tsx",
+        "src/services/falService.ts",
+        "src/services/openaiService.ts",
+        "src/utils/imageUtils.ts",
+        "src/types/types.ts",
+        "src/promptEngine/adapter.ts",
+        "src/promptEngine/validator.ts",
+        "src/promptEngine/sizeResolver.ts",
+        "src/promptEngine/renderers/router.ts",
+        "src/promptEngine/compliance.ts",
+        "src/promptEngine/audit.ts",
+        "src/promptEngine/capabilities.ts",
+        "src/helpers/telemetry.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "useGeneration",
+        "GenerationSettings",
+        "UseGenerationProps",
+        "UseGenerationReturn"
+      ]
+    },
+    "./src/hooks/useGenerationBatches.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 11,
+        "loc": 444,
+        "complexity": 87,
+        "coverage": 0
+      },
+      "hash": "e2b5a924ff64be40999e3985fb8baebe7ab9ea470300cc6d1393da6e5890cbc3",
+      "size": 15876,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "@external:react",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "useGenerationBatches",
+        "UseGenerationBatchesProps",
+        "UseGenerationBatchesReturn"
+      ]
+    },
+    "./src/hooks/useGenerationHistory.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 2914,
+        "loc": 1589,
+        "complexity": 501,
+        "coverage": 0
+      },
+      "hash": "e6178865ac4ed782a79792bd3e6ab4a70d23f76776ceae1a2ce16bda09c0a734",
+      "size": 71218,
+      "lastModified": "2025-10-23T20:10:01.972Z",
+      "dependencies": [
+        "@external:react",
+        "src/types/types.ts",
+        "src/lib/supabase.ts",
+        "src/config/pricing.ts",
+        "src/config/features.js",
+        "@external:type",
+        "@external:features"
+      ],
+      "symbols": [
+        "useGenerationHistory",
+        "GenerationHistoryItem",
+        "GenerationQueueItem",
+        "UseGenerationHistoryProps",
+        "UseGenerationHistoryReturn"
+      ]
+    },
+    "./src/hooks/useGenerationLogic.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 16,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "c3b8e87dfe7dd3b7c022024710cbef9ed07d2b243465561221e10af27e20e73c",
+      "size": 432,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "useGenerationLogic"
+      ]
+    },
+    "./src/hooks/useImageAnalysis.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 10,
+        "loc": 140,
+        "complexity": 43,
+        "coverage": 0
+      },
+      "hash": "3a95a5488fa0a8c65877243717dbbcc47fe10fcd0a3bcfb9dbe1eb9040cafd23",
+      "size": 9291,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "@external:react",
+        "src/hooks/useReferenceImages.ts",
+        "src/utils/imageUtils.ts",
+        "src/services/openrouterService.ts",
+        "src/api/openai.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "UseImageAnalysisArgs",
+        "useImageAnalysis"
+      ]
+    },
+    "./src/hooks/useImageProcessing.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 7,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "782eba747ca0feb635f28a6ae780c20d32668a5b25a22a78c62b3a835f6d7a14",
+      "size": 173,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [],
+      "symbols": [
+        "useImageProcessing"
+      ]
+    },
+    "./src/hooks/useLog.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 26,
+        "loc": 89,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "ca2141bb2d4f5355c4108ada472f35bc19a251560ef3ddfafb5da53d9c38fd0b",
+      "size": 2393,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "@external:react",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "LogEntry",
+        "UseLogReturn",
+        "useLog"
+      ]
+    },
+    "./src/hooks/useProjectMetadata.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 149,
+        "loc": 356,
+        "complexity": 65,
+        "coverage": 0
+      },
+      "hash": "9c4e125504fc89b34ab8ba3629e0ab9ec486e95000be92da8c285408d5b8662d",
+      "size": 11214,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [
+        "@external:react",
+        "src/types/types.ts",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "@external:type"
+      ],
+      "symbols": [
+        "ProjectMetadata",
+        "UseProjectMetadataReturn",
+        "useProjectMetadata",
+        "UseProjectMetadataProps"
+      ]
+    },
+    "./src/hooks/useReferenceImages.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 28,
+        "loc": 118,
+        "complexity": 33,
+        "coverage": 0
+      },
+      "hash": "a941a31b3528a3524cbfc7c87482db3de34d7355f4385c7f3b71788dd0bfef14",
+      "size": 4136,
+      "lastModified": "2025-10-23T16:23:04.862Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@dnd-kit/sortable",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "UseReferenceImagesArgs",
+        "useReferenceImages"
+      ]
+    },
+    "./src/hooks/useSettingsPersistence.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 7,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "63a512f6f7eff86ac6a7c35ea26de558a2b6a41370aac8e68b7d858386dfbe86",
+      "size": 181,
+      "lastModified": "2025-10-22T02:33:40.256Z",
+      "dependencies": [],
+      "symbols": [
+        "useSettingsPersistence"
+      ]
+    },
+    "./src/hooks/useSparkAuth.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 251,
+        "loc": 680,
+        "complexity": 184,
+        "coverage": 0
+      },
+      "hash": "e8fa6d6214ede523f8894ac9544ea0f10f8ea6dcdd8c13b436220a12c265592d",
+      "size": 25126,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@supabase/supabase-js",
+        "src/types/types.ts",
+        "src/utils/dynamicSparkConfig.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "useSparkAuth",
+        "UseSparkAuthReturn"
+      ]
+    },
+    "./src/hooks/useSupabaseData.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 15,
+        "loc": 1030,
+        "complexity": 209,
+        "coverage": 0
+      },
+      "hash": "a2ed743b97856199eb6090a588985a18fd0636044edfc27c304349de0c107b7d",
+      "size": 31171,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@supabase/supabase-js",
+        "src/types/types.ts",
+        "src/lib/supabase.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "useSupabaseData",
+        "UseSupabaseDataReturn"
+      ]
+    },
+    "./src/hooks/useTopazUpscale.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 73,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "8b896031739e3d8c36ba993b6b7082077ab93cb1e152515b2a66c61be803cf85",
+      "size": 2161,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:react",
+        "src/services/topazService.ts"
+      ],
+      "symbols": [
+        "UpscaleProgress",
+        "useTopazUpscale"
+      ]
+    },
+    "./src/hooks/useUndoRedo.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 88,
+        "complexity": 30,
+        "coverage": 0
+      },
+      "hash": "b9911d82a29553b188927bf408c95ce3a034c4ab343f62da70016293071e96c6",
+      "size": 2511,
+      "lastModified": "2025-10-10T17:04:00.522Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "UseUndoRedoOptions",
+        "UseUndoRedoResult",
+        "useUndoRedo"
+      ]
+    },
+    "./src/hooks/useVaultReferenceImages.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 97,
+        "loc": 233,
+        "complexity": 32,
+        "coverage": 0
+      },
+      "hash": "3fdc79c94aad374ba4881be90ba06f940e1f36362f8d898f85c3cf8bd4cc3b51",
+      "size": 6936,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "@external:react",
+        "src/hooks/useReferenceImages.ts",
+        "src/components/references/handlers/index.ts",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "UseVaultReferenceImagesArgs",
+        "useVaultReferenceImages"
+      ]
+    },
+    "./src/keycloakService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 180,
+        "loc": 61,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "c6b11e6ccf588114c68bab923d2772d3dc82e13b2d46452058c0e4de5cc9e069",
+      "size": 1572,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:keycloak-js",
+        "@external:Keycloak"
+      ],
+      "symbols": [
+        "keycloak",
+        "initKeycloak"
+      ]
+    },
+    "./src/lib/analysisUtils.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 207,
+        "complexity": 54,
+        "coverage": 0
+      },
+      "hash": "c06847799a42f6f6a132040738f007d3fb0a040b250bfe812476fd75fbffcfcd",
+      "size": 10749,
+      "lastModified": "2025-10-10T17:04:00.580Z",
+      "dependencies": [
+        "src/lib/config.ts"
+      ],
+      "symbols": [
+        "generateDetailedAnalysis",
+        "generateBasicAnalysis",
+        "generateMinimalAnalysis",
+        "enhancePromptWithAI",
+        "createAnalysisPrompt",
+        "extractKeywords",
+        "calculateOptimalGuidanceScale",
+        "generateFilename",
+        "getOrdinalSuffix"
+      ]
+    },
+    "./src/lib/config.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 17,
+        "loc": 198,
+        "complexity": 28,
+        "coverage": 0
+      },
+      "hash": "e11a2e6fa5690f9892b5e6b6105865e5b1653e931e8fae5799eebff1c846b434",
+      "size": 6539,
+      "lastModified": "2025-10-23T21:33:09.596Z",
+      "dependencies": [],
+      "symbols": [
+        "REFERENCE_TYPES",
+        "WEIGHT_OPTIONS",
+        "STYLE_DEFINITIONS",
+        "GENERATION_MODELS",
+        "ANALYSIS_MODELS",
+        "ENHANCEMENT_LEVELS",
+        "IMAGE_QUALITY_OPTIONS",
+        "IMAGE_SIZE_OPTIONS",
+        "DEFAULTS",
+        "FAL_DEFAULTS",
+        "MODEL_CONSTRAINTS",
+        "WEIGHT_TO_GUIDANCE_SCALE",
+        "DRAWING_MODES",
+        "METADATA_TABS",
+        "PROJECT_IDS",
+        "DEPARTMENTS",
+        "TASKS",
+        "LOG_TYPES",
+        "GENERATION_STATUS",
+        "TASK_STATUS",
+        "FILE_TYPES",
+        "UPLOAD_MODES",
+        "ReferenceType",
+        "WeightOption",
+        "StyleDefinitionKey",
+        "GenerationModel",
+        "AnalysisModel",
+        "EnhancementLevel",
+        "ImageQuality",
+        "DrawingMode",
+        "MetadataTab",
+        "ProjectId",
+        "Department",
+        "Task",
+        "LogType",
+        "GenerationStatus",
+        "TaskStatus",
+        "FileType",
+        "UploadMode"
+      ]
+    },
+    "./src/lib/supabase.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 128,
+        "loc": 883,
+        "complexity": 100,
+        "coverage": 0
+      },
+      "hash": "e39d64f76031ad74126c062aef982b2e7f62b7958b90eb7613f4acf63e85e0fc",
+      "size": 24828,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:@supabase/supabase-js",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "Database",
+        "handleSupabaseError",
+        "validateRequired",
+        "projectOperations",
+        "sequenceOperations",
+        "shotOperations",
+        "generationOperations",
+        "fileOperations",
+        "productionDomainOperations",
+        "episodeOperations",
+        "contentTypeOperations",
+        "contentItemOperations",
+        "assetOperations",
+        "assetVersionOperations",
+        "taskOperations",
+        "supabase"
+      ]
+    },
+    "./src/lib/webdavClient.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 85,
+        "loc": 455,
+        "complexity": 106,
+        "coverage": 0
+      },
+      "hash": "be264d3b5984669134a30181fd990210b6aacf5ac1a19021d1e95a079f650fa9",
+      "size": 13084,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:webdav",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "getWebDAVConfig",
+        "createWebDAVClient",
+        "OCISWebDAVClient",
+        "SparkWebDAVClient",
+        "SignedURLClient",
+        "buildFilePath",
+        "buildThumbnailPath",
+        "sparkWebDAV",
+        "legacySparkWebDAV",
+        "signedURLClient"
+      ]
+    },
+    "./src/main.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 9,
+        "depth": 1,
+        "churn": 266,
+        "loc": 116,
+        "complexity": 39,
+        "coverage": 0
+      },
+      "hash": "29a5a3ba61f68e314c52cbde13f64c03d9b1da914fd88ce64f8636fa9570b9f0",
+      "size": 4249,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:react",
+        "@external:react-dom/client",
+        "@external:@chakra-ui/react",
+        "src/App.tsx",
+        "src/theme/invokeAITheme.ts",
+        "src/auth/SimpleKeycloakAuth.tsx",
+        "@external:React",
+        "@external:App",
+        "@external:theme"
+      ],
+      "symbols": []
+    },
+    "./src/modules/ingest/IngestManager.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 249,
+        "complexity": 110,
+        "coverage": 0
+      },
+      "hash": "3f6a243de40bfcfb994ad80234ee7fea965cb4ea3a449c82c4101796f1b6e29a",
+      "size": 11610,
+      "lastModified": "2025-10-22T02:33:40.260Z",
+      "dependencies": [
+        "@external:react",
+        "@external:React",
+        "@external:versions",
+        "@external:into"
+      ],
+      "symbols": [
+        "IngestManager",
+        "parsePngText",
+        "readV2State",
+        "readActiveTab",
+        "decideContext"
+      ]
+    },
+    "./src/modules/metadata-panel/MetadataPanel.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 25,
+        "depth": 1,
+        "churn": 784,
+        "loc": 640,
+        "complexity": 168,
+        "coverage": 0
+      },
+      "hash": "22c6323302d5f5f56920c4abc16b53f87c96839e007259773ffddefeed926e16",
+      "size": 31075,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/md",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/modules/metadata-panel/selectors/TeamSelect.tsx",
+        "src/modules/metadata-panel/selectors/ProjectSelect.tsx",
+        "src/modules/metadata-panel/selectors/DepartmentSelect.tsx",
+        "src/hooks/useSparkAuth.ts",
+        "src/modules/metadata-panel/selectors/TaskSelect.tsx",
+        "src/modules/metadata-panel/selectors/AssetTypeSelect.tsx",
+        "src/modules/metadata-panel/selectors/AssetSelect.tsx",
+        "src/modules/metadata-panel/selectors/VariantSelect.tsx",
+        "src/modules/metadata-panel/selectors/SequenceSelect.tsx",
+        "src/modules/metadata-panel/selectors/ShotSelect.tsx",
+        "src/modules/metadata-panel/selectors/CharacterSelect.tsx",
+        "src/components/modals/CreateSequenceModal.tsx",
+        "src/components/modals/CreateShotModal.tsx",
+        "src/components/modals/CreateAssetModal.tsx",
+        "src/components/modals/CreateVariantModal.tsx",
+        "src/components/modals/CreateAssetTypeModal.tsx",
+        "src/components/modals/CreateDepartmentModal.tsx",
+        "src/components/modals/CreateTaskModal.tsx",
+        "src/components/modals/CreateProjectModal.tsx",
+        "src/utils/sparkStorage.ts",
+        "@external:React"
+      ],
+      "symbols": [
+        "MetadataPanelV2"
+      ]
+    },
+    "./src/modules/metadata-panel/contexts/MetadataContext.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 11,
+        "loc": 587,
+        "complexity": 275,
+        "coverage": 0
+      },
+      "hash": "ea1da6000456561476369791bc7a97b134b3f4492652bc6f2d1dbb4d1d096813",
+      "size": 27782,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "@external:react",
+        "src/modules/metadata-panel/services/projects.ts",
+        "src/modules/metadata-panel/services/departments.ts",
+        "src/modules/metadata-panel/services/assets.ts",
+        "src/modules/metadata-panel/services/shots.ts",
+        "src/modules/metadata-panel/services/characters.ts",
+        "@external:React"
+      ],
+      "symbols": [
+        "Id",
+        "Option",
+        "SelectorState",
+        "MetadataState",
+        "MetadataActions",
+        "useMetadata",
+        "MetadataProvider",
+        "useAbortController"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/AssetSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 39,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "00a020294d8e83872b5eccd267d4a142f39fe4f52b2a949612189cc3a9ad7d96",
+      "size": 1661,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "AssetSelectProps",
+        "AssetSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/AssetTypeSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 39,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "3b0199627733a06dc12e6fbb747c43f8b2f111f34f23f4ffa273ea3c4f03d1a6",
+      "size": 1668,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "AssetTypeSelectProps",
+        "AssetTypeSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/CharacterSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 39,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "e72659bfbd1ca6e8cfad233d230b4e6c862506632cb2fe49a2f3bf33ce898676",
+      "size": 1693,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "CharacterSelectProps",
+        "CharacterSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/DepartmentSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 8,
+        "loc": 43,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "174463c55266db6aa806822aa245b52eb5692d4c04b2acf4ca5404680a667898",
+      "size": 1722,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "DepartmentSelectProps",
+        "DepartmentSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/ProjectSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 0,
+        "loc": 119,
+        "complexity": 19,
+        "coverage": 0
+      },
+      "hash": "cc912e0d54f8df3fba3dfa55b9f36f7bfa9b25e7eea844389b03be5150f73fca",
+      "size": 4111,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "@external:react-icons/md",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "ProjectSelectProps",
+        "ProjectSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/SequenceSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 40,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "56a93058e0bb1fd11ad3a8bb832b27925021e2ce9829cf713faf61c78c77db57",
+      "size": 1693,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "SequenceSelectProps",
+        "SequenceSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/ShotSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 40,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "a0e608121e8aee85243eea98077bc01827e5eaec03445dc587009bd61fa1635f",
+      "size": 1661,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "ShotSelectProps",
+        "ShotSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/TaskSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 8,
+        "loc": 43,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "5dc183d6873204f571eada25f8b1a3872ac3a1160511cee21f5ce302b99bee62",
+      "size": 1680,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "TaskSelectProps",
+        "TaskSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/TeamSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 28,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "e7daada5da16927eb1bbdd444f74210ac5e7f764ec04e15c001e1f85a5750570",
+      "size": 1024,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "TeamSelectProps",
+        "TeamSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/selectors/VariantSelect.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 39,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "61958d85e2dd1be99cb6b5ace4d566effda5de574b6ecbac3762525cbe431817",
+      "size": 1677,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "@external:react-icons/io5",
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "@external:React"
+      ],
+      "symbols": [
+        "VariantSelectProps",
+        "VariantSelect"
+      ]
+    },
+    "./src/modules/metadata-panel/services/assets.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 38,
+        "loc": 76,
+        "complexity": 32,
+        "coverage": 0
+      },
+      "hash": "1fa41bb51accbad4d0b4d852f8d66f6e2b591f736b486c3dcb6586ad7bb018c2",
+      "size": 3650,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/auth/useAuthorizedFetch.ts"
+      ],
+      "symbols": [
+        "Result"
+      ]
+    },
+    "./src/modules/metadata-panel/services/characters.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 43,
+        "complexity": 17,
+        "coverage": 0
+      },
+      "hash": "44d93a03a0b6517159a7134f048bfd9ee95d4f45b36360b3c592c2732ab054be",
+      "size": 1983,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/auth/useAuthorizedFetch.ts"
+      ],
+      "symbols": [
+        "Result"
+      ]
+    },
+    "./src/modules/metadata-panel/services/departments.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 31,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "bc32d5d04f77882ea6f7f0e2aa60a8e3020217453c3bd213aa587ffb1fcd1090",
+      "size": 1371,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/utils/projectMetadata.ts"
+      ],
+      "symbols": [
+        "Result"
+      ]
+    },
+    "./src/modules/metadata-panel/services/projects.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 50,
+        "loc": 80,
+        "complexity": 30,
+        "coverage": 0
+      },
+      "hash": "424e893a917943b4484006f38dacc1c01f5e8b92bb2cab82ea2581244e672521",
+      "size": 3767,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/auth/useAuthorizedFetch.ts"
+      ],
+      "symbols": [
+        "Result",
+        "getTeams"
+      ]
+    },
+    "./src/modules/metadata-panel/services/shots.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 26,
+        "loc": 57,
+        "complexity": 23,
+        "coverage": 0
+      },
+      "hash": "6f93bbea4ecc4c29308bbd44ffaee75f730134b76b9fbd21c26254ad7c156e4d",
+      "size": 2692,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "src/modules/metadata-panel/contexts/MetadataContext.tsx",
+        "src/auth/useAuthorizedFetch.ts"
+      ],
+      "symbols": [
+        "Result"
+      ]
+    },
+    "./src/modules/model-docs/ModelDocsModal.tsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 109,
+        "loc": 86,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "129afacac6091ee63b4e8e962ada258ac0d14e666740e75e5a141dab80945868",
+      "size": 3799,
+      "lastModified": "2025-10-22T02:33:40.264Z",
+      "dependencies": [
+        "@external:react",
+        "@external:@chakra-ui/react",
+        "src/modules/model-docs/modelRegistry.ts",
+        "@external:React"
+      ],
+      "symbols": [
+        "ModelDocsModal"
+      ]
+    },
+    "./src/modules/model-docs/modelRegistry.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 34,
+        "loc": 145,
+        "complexity": 34,
+        "coverage": 0
+      },
+      "hash": "aa657b42d1694269cedbbda5c4c521cff5abd97b5efcb85362cc37fb429413c1",
+      "size": 5953,
+      "lastModified": "2025-10-23T23:23:00.236Z",
+      "dependencies": [
+        "src/promptEngine/capabilities.ts",
+        "src/config/pricing.ts"
+      ],
+      "symbols": [
+        "MODEL_KEY_BY_LABEL",
+        "ProviderKey",
+        "ModelDocMeta",
+        "MODEL_DOCS",
+        "listModelLabelsAlphabetical",
+        "listModelLabelsUiOrder",
+        "getCapabilitiesForLabel",
+        "formatUsdWithMarkup",
+        "estimateCostDisplay",
+        "providerForModelKey"
+      ]
+    },
+    "./src/promptEngine/adapter.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 6,
+        "loc": 99,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "730a10a6f15ece2f0d9a5b9b134a5adaafaf5f01e555011d882d785b3b9aa006",
+      "size": 2802,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "UIStateForAdapter",
+        "toCanonicalSchema"
+      ]
+    },
+    "./src/promptEngine/allowlist.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 11,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "ff4eddd144e3c69c64525b5e5a90ff4cbd7fdb13a71586e5eb43235b2fdd61f6",
+      "size": 118,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/promptEngine/audit.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 37,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "3f1bb65d0e9e964012e146df5653d045b7274f6f0aca423cbe9ce6fe63caf627",
+      "size": 1302,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "AuditSnapshot"
+      ]
+    },
+    "./src/promptEngine/banlist.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 39,
+        "loc": 37,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "c019281872496f39e9136bb6f73b12733f259958ee5ebb48857fbb7c279f5f08",
+      "size": 2323,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/promptEngine/capabilities.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 9,
+        "loc": 21,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "7d3db0e2f2517c763e5f020064e2a23fc6ecbae3623d75ccdf4eed0692633e35",
+      "size": 1702,
+      "lastModified": "2025-10-23T23:04:47.771Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/promptEngine/capabilities.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 113,
+        "loc": 27,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "6bafbfcf7236928e33d166ba701fd5141aaa6a39334f5f93ac64d4d0e017495c",
+      "size": 783,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "src/promptEngine/capabilities.json",
+        "@external:type",
+        "@external:CAPABILITIES_JSON"
+      ],
+      "symbols": [
+        "getCapability",
+        "setCapabilities",
+        "getCapabilities"
+      ]
+    },
+    "./src/promptEngine/compliance.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 20,
+        "loc": 96,
+        "complexity": 23,
+        "coverage": 0
+      },
+      "hash": "041b4a7e7664db10823b962622998a80cabd0c349c0f76f59852eeb769b630ec",
+      "size": 2835,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/banlist.json",
+        "src/promptEngine/allowlist.json",
+        "@external:BANLIST",
+        "@external:ALLOW"
+      ],
+      "symbols": [
+        "ComplianceDecision",
+        "AdjudicatorOutput",
+        "PreflightInput",
+        "stage1Banlist"
+      ]
+    },
+    "./src/promptEngine/renderers/fluxKontext.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 63,
+        "loc": 79,
+        "complexity": 35,
+        "coverage": 0
+      },
+      "hash": "9b52365aef12e752cbb689bc92b5c9a740a1be45dd5aaf5e6164ff0867deee69",
+      "size": 3170,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "renderFluxKontext"
+      ]
+    },
+    "./src/promptEngine/renderers/gptImage1.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 17,
+        "loc": 70,
+        "complexity": 27,
+        "coverage": 0
+      },
+      "hash": "1e935706e2979da5f6c5f779f62eeeed194f1e0686e57ad52400a6106eb688b3",
+      "size": 2245,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "renderGptImage1"
+      ]
+    },
+    "./src/promptEngine/renderers/hunyuan.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 19,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "ead0f34f9f519375da8cc4c5179ab3f472778aef6cfff13c1509796431ba49b5",
+      "size": 737,
+      "lastModified": "2025-10-24T01:25:34.009Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "renderHunyuan"
+      ]
+    },
+    "./src/promptEngine/renderers/nanoBanana.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 72,
+        "loc": 158,
+        "complexity": 65,
+        "coverage": 0
+      },
+      "hash": "b2e8d9a8548be648cb0bf3911673ac44b0d7502edc661794e2ff65915f543281",
+      "size": 6378,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "renderNanoBanana",
+        "adherenceRank"
+      ]
+    },
+    "./src/promptEngine/renderers/qwenImage.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 54,
+        "loc": 122,
+        "complexity": 42,
+        "coverage": 0
+      },
+      "hash": "67d11ace262b3ba34f810dccbae19606dcc94381d03ca52d92fed1ce21351e9d",
+      "size": 4052,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "renderQwenImage",
+        "renderQwenImageEdit",
+        "renderQwenImageEditPlus",
+        "renderQwenImageI2I",
+        "commonHeader"
+      ]
+    },
+    "./src/promptEngine/renderers/router.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 5,
+        "loc": 45,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "764a9a4c30a8bc8044f3e5392b65a7a6efa46ab5c220e01c432ec41f0d65c88f",
+      "size": 1363,
+      "lastModified": "2025-10-24T01:25:37.837Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "src/promptEngine/renderers/nanoBanana.ts",
+        "src/promptEngine/renderers/gptImage1.ts",
+        "src/promptEngine/renderers/fluxKontext.ts",
+        "src/promptEngine/renderers/qwenImage.ts",
+        "src/promptEngine/renderers/hunyuan.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "renderAllPrompts"
+      ]
+    },
+    "./src/promptEngine/sizeResolver.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 468,
+        "loc": 547,
+        "complexity": 218,
+        "coverage": 0
+      },
+      "hash": "c5308052564532375c533d399e5d2cd0ba4ea8131a2914a580498da029f52189",
+      "size": 21631,
+      "lastModified": "2025-10-24T17:41:38.318Z",
+      "dependencies": [
+        "src/lib/config.ts"
+      ],
+      "symbols": [
+        "Orientation",
+        "Aspect",
+        "QualityTier",
+        "TargetTier",
+        "SizeIntent",
+        "aspectToRatio",
+        "calculateDimensions",
+        "deriveIntentFromSelection",
+        "sizeForTier",
+        "resolveForModel",
+        "tokenToAspect",
+        "describeResolution",
+        "initializeModelResolutions",
+        "ModelResolutionConfig",
+        "getModelConfig",
+        "applyModelConstraints",
+        "closestAspectWithinOrientation"
+      ]
+    },
+    "./src/promptEngine/types.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 4,
+        "loc": 80,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "08f3a2991e0b779b5bce36c167dc6875d5cae6558f318ff92cc6534e300e4897",
+      "size": 2393,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [],
+      "symbols": [
+        "AdherenceLevel",
+        "CanonicalReference",
+        "CanonicalAnnotationRef",
+        "CanonicalStyleContext",
+        "ModelSpecificOptions",
+        "CanonicalSchema",
+        "ModelCapability",
+        "CapabilitiesMap",
+        "ValidationResult",
+        "RenderedPrompts"
+      ]
+    },
+    "./src/promptEngine/validator.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 16,
+        "loc": 89,
+        "complexity": 36,
+        "coverage": 0
+      },
+      "hash": "5c4b074da7090632b9b234fdc65ecb64f52bb6c7c4533d9fad74b95f97e94a47",
+      "size": 3521,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [
+        "src/promptEngine/types.ts",
+        "src/promptEngine/capabilities.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "validateSchema"
+      ]
+    },
+    "./src/services/ImageService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 11,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "6bb8c41a4beda603aee8d796e0dda3d49b742945951a9946e64a924dcda161fa",
+      "size": 253,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [],
+      "symbols": [
+        "ImageService"
+      ]
+    },
+    "./src/services/SettingsService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 14,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "b98b37565b058881d6949a7c9ea3760dcccba4ff11b2d41b1d2e8413f769be4f",
+      "size": 333,
+      "lastModified": "2025-10-22T02:33:40.268Z",
+      "dependencies": [],
+      "symbols": [
+        "AppSettings",
+        "SettingsService"
+      ]
+    },
+    "./src/services/falService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 9,
+        "depth": 1,
+        "churn": 2420,
+        "loc": 1543,
+        "complexity": 647,
+        "coverage": 0
+      },
+      "hash": "c9ea4c0de44650b83073d6b82818a38d5d289333236841b9cf789735c8270b76",
+      "size": 65594,
+      "lastModified": "2025-10-24T18:23:13.792Z",
+      "dependencies": [
+        "@external:@fal-ai/client",
+        "src/utils/apiBase.ts",
+        "src/utils/sparkStorage.ts",
+        "src/utils/sparkStorageUtils.ts",
+        "src/lib/config.ts",
+        "src/promptEngine/sizeResolver.ts",
+        "src/types/types.ts",
+        "src/services/publicUrl.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "getLastSparkRefUrls",
+        "getLastFalRefMirrors",
+        "FalGenerationRequest",
+        "FalGenerationResponse"
+      ]
+    },
+    "./src/services/fundingStatusService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 260,
+        "complexity": 38,
+        "coverage": 0
+      },
+      "hash": "49e0d9e0f684c98873f25b0d10d1ce7f3f77894d46bf7dfe9b90261e5948f353",
+      "size": 6757,
+      "lastModified": "2025-10-10T17:22:19.036Z",
+      "dependencies": [],
+      "symbols": [
+        "fundingStatusService",
+        "OpenAIUsage",
+        "OpenRouterCredits",
+        "FALUsage",
+        "FundingStatusResponse",
+        "FundingStatusService"
+      ]
+    },
+    "./src/services/openaiService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 299,
+        "loc": 411,
+        "complexity": 121,
+        "coverage": 0
+      },
+      "hash": "386457e7eec824d1a291490ee16bcec2b35da8d82f11968e7a56b68870758dce",
+      "size": 16029,
+      "lastModified": "2025-10-24T03:20:26.594Z",
+      "dependencies": [
+        "src/types/types.ts",
+        "src/promptEngine/sizeResolver.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "OpenAIImageRequest",
+        "OpenAIImageResponse",
+        "normalizeOpenAISize"
+      ]
+    },
+    "./src/services/openrouterService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 69,
+        "loc": 150,
+        "complexity": 26,
+        "coverage": 0
+      },
+      "hash": "89f121ced3c43dcfeac683e6179c1dbb5ee995939281696f34259aefa646e28d",
+      "size": 3658,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "QwenAnalysisRequest",
+        "QwenAnalysisResponse"
+      ]
+    },
+    "./src/services/publicUrl.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 50,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "a5024e097c7c2139b6361c437de7a895d27b9327f10cdb8b9d9753955ea12e23",
+      "size": 1772,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [
+        "src/utils/apiBase.ts"
+      ],
+      "symbols": [
+        "getAuthHeader"
+      ]
+    },
+    "./src/services/sessionService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 110,
+        "complexity": 44,
+        "coverage": 0
+      },
+      "hash": "1cae37715d1ca4e4a5dc144adf066cef7ca127289549123c509122f947445039",
+      "size": 4027,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "src/utils/apiBase.ts"
+      ],
+      "symbols": [
+        "SessionListItem",
+        "SessionListResponse",
+        "defaultSessionFilename"
+      ]
+    },
+    "./src/services/topazService.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 44,
+        "loc": 535,
+        "complexity": 125,
+        "coverage": 0
+      },
+      "hash": "0bf208558823c45c7fa75207b98c7ac2d1d6de0de0802d40f00f2a6d4d4e9204",
+      "size": 18102,
+      "lastModified": "2025-10-23T17:03:48.262Z",
+      "dependencies": [
+        "src/utils/apiBase.ts"
+      ],
+      "symbols": [
+        "TopazUpscaleOptions",
+        "TopazJobResponse",
+        "TopazStatusResponse",
+        "TopazDownloadResponse",
+        "topazService",
+        "TopazService"
+      ]
+    },
+    "./src/store/slices/generationSlice.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 81,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "2c3b895710007ddf370290e285379570c388937554876710c72ad8304e17eade",
+      "size": 2039,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [
+        "@external:@reduxjs/toolkit"
+      ],
+      "symbols": [
+        "GenerationSettings",
+        "GenerationState",
+        "generationSlice"
+      ]
+    },
+    "./src/store/slices/referenceImagesSlice.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 73,
+        "complexity": 10,
+        "coverage": 0
+      },
+      "hash": "6dd011c83f00d9edddd4e30982961cfbaeb0e43fda9010d1ad4df6a318909ae0",
+      "size": 2197,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [
+        "@external:@reduxjs/toolkit",
+        "@external:uuid"
+      ],
+      "symbols": [
+        "ReferenceImage",
+        "ReferenceImagesState",
+        "referenceImagesSlice"
+      ]
+    },
+    "./src/store/store.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 17,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "97c355ab18d6dbc446c4aa4518e1addc2d8b190822cd039ebb1905240bbe6a9d",
+      "size": 530,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [
+        "@external:@reduxjs/toolkit",
+        "src/store/slices/referenceImagesSlice.ts",
+        "src/store/slices/generationSlice.ts",
+        "@external:referenceImagesReducer",
+        "@external:generationReducer"
+      ],
+      "symbols": [
+        "store",
+        "RootState",
+        "AppDispatch"
+      ]
+    },
+    "./src/theme/invokeAITheme.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 46,
+        "loc": 213,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "8681e9d7d155d5ba75b98c8161ccd6dca391b2032cf243ab3fbb4d250c8d7b8a",
+      "size": 4986,
+      "lastModified": "2025-10-23T16:23:04.783Z",
+      "dependencies": [
+        "@external:@chakra-ui/react"
+      ],
+      "symbols": []
+    },
+    "./src/types/types.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 112,
+        "loc": 915,
+        "complexity": 33,
+        "coverage": 0
+      },
+      "hash": "ac95d9f128a18f3f0dac1af64dfb16d9da27a6cc71f5d85e71377f169736918e",
+      "size": 23150,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [],
+      "symbols": [
+        "InputFormat",
+        "Tool",
+        "FileType",
+        "UploadMode",
+        "LogType",
+        "ReferenceImage",
+        "FalLoRA",
+        "GenerationModel",
+        "ReferenceWeight",
+        "GenerationBatchStatus",
+        "GenerationBatchImage",
+        "GenerationBatch",
+        "GenerationBatchHistoryItem",
+        "ProductionDomainType",
+        "ProjectType",
+        "ContentCategory",
+        "TaskStatus",
+        "ApprovalStatus",
+        "ReviewDecision",
+        "User",
+        "Organization",
+        "OrganizationMember",
+        "OrganizationContext",
+        "SparkJWTPayload",
+        "Project",
+        "Sequence",
+        "Shot",
+        "Generation",
+        "Character",
+        "CharacterVariant",
+        "Prop",
+        "PropVariant",
+        "Environment",
+        "EnvironmentVariant",
+        "FileRecord",
+        "GenerationSettings",
+        "ReferenceImageSettings",
+        "AppState",
+        "ApiResponse",
+        "GenerationResponse",
+        "GeneratedImage",
+        "UploadOptions",
+        "UploadResult",
+        "WebDAVConfig",
+        "TABLES",
+        "DEFAULT_VALUES",
+        "SupabaseError",
+        "UploadError",
+        "GenerationError",
+        "ProductionDomain",
+        "Episode",
+        "ContentType",
+        "ContentItem",
+        "Task",
+        "Department",
+        "Review",
+        "ContentRelationship",
+        "DomainTransition"
+      ]
+    },
+    "./src/utils/analytics.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 241,
+        "complexity": 19,
+        "coverage": 0
+      },
+      "hash": "dd5389b9517db4fc75abfa9de7299858db346dc121a09b5762d5ad36ba98d7fa",
+      "size": 5816,
+      "lastModified": "2025-10-23T15:35:48.291Z",
+      "dependencies": [],
+      "symbols": [
+        "trackEvent",
+        "trackImageGeneration",
+        "trackModelSelection",
+        "trackReferenceUpload",
+        "trackNavigation",
+        "trackAuth",
+        "trackStorageOperation",
+        "trackPromptAction",
+        "trackError",
+        "trackPageView",
+        "trackFeatureUsage",
+        "ensureDataLayer"
+      ]
+    },
+    "./src/utils/apiBase.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 24,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "2c113f33e5a913d12f860f5c9a5727d3212594cf7de49b9c40d3a690c77f2964",
+      "size": 821,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [],
+      "symbols": [
+        "apiBase"
+      ]
+    },
+    "./src/utils/canvasInit.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 62,
+        "complexity": 14,
+        "coverage": 0
+      },
+      "hash": "a8d9842b74fc35167c26827aefa06d5c3f5868cd7b311c9af1af7c61bf2a2ece",
+      "size": 1925,
+      "lastModified": "2025-10-10T17:04:00.665Z",
+      "dependencies": [],
+      "symbols": [
+        "initializeCanvas"
+      ]
+    },
+    "./src/utils/canvasRenderer.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 104,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "1c9f7f583d64f5496f2ac67d592d002094e37b39602e95cf40fda96d00e11f45",
+      "size": 3175,
+      "lastModified": "2025-10-10T17:04:00.669Z",
+      "dependencies": [],
+      "symbols": [
+        "BrushMode",
+        "applyDodgeBurn",
+        "updateBrushPreview"
+      ]
+    },
+    "./src/utils/canvasShapes.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 53,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "3724a6f7e6e4d9e459e06d92ded4180eb7591300a6070a0269815468c23fff0d",
+      "size": 1414,
+      "lastModified": "2025-10-10T17:04:00.673Z",
+      "dependencies": [],
+      "symbols": [
+        "ShapeMode",
+        "drawShape"
+      ]
+    },
+    "./src/utils/deploymentCheck.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 30,
+        "loc": 263,
+        "complexity": 56,
+        "coverage": 0
+      },
+      "hash": "8fcdc8c8cf6d87605c710967d2517c9c615dcfe32540500b980bf17b4fa76011",
+      "size": 7518,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [
+        "src/utils/sparkStorage.ts"
+      ],
+      "symbols": [
+        "DeploymentIssue",
+        "DeploymentStatus",
+        "checkDeploymentReadiness",
+        "generateDeploymentReport"
+      ]
+    },
+    "./src/utils/dynamicSparkConfig.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 49,
+        "loc": 185,
+        "complexity": 31,
+        "coverage": 0
+      },
+      "hash": "73fe5e18c668f8f03f4456b6ae457000698b5eaab42aa9221d90837c20de8061",
+      "size": 5649,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "DynamicSparkConfig",
+        "generateSparkConfig",
+        "getCurrentSparkConfig",
+        "DYNAMIC_ENV_KEYS",
+        "STATIC_ENV_KEYS",
+        "extractSparkDomain",
+        "generatePublicUrl",
+        "generatePrivateUrl",
+        "extractProjectSpaceId",
+        "extractFindMeProjectId"
+      ]
+    },
+    "./src/utils/fetchWithAuth.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 6,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "0431a96220088752af23a2c858cd31e321c54da35fdb943f2dd2642abe556f95",
+      "size": 232,
+      "lastModified": "2025-10-22T02:33:40.272Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./src/utils/fingerprint/contentHash.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 125,
+        "complexity": 30,
+        "coverage": 0
+      },
+      "hash": "7b8e6d5f4030a0f3ec29a40785d09060e5f562675584d7d25498555235fcca3d",
+      "size": 3334,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [
+        "src/utils/fingerprint/fingerprintTypes.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "cleanHashString",
+        "formatHashString",
+        "getShortHash",
+        "compareHashes"
+      ]
+    },
+    "./src/utils/fingerprint/fingerprintTypes.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 140,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "a26378412f3354133fd0152452bef0ee3ed78077f255c926c231dbceb989bc3c",
+      "size": 3340,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [],
+      "symbols": [
+        "OriginFingerprint",
+        "ContentHash",
+        "FingerprintEmbedPolicy",
+        "DEFAULT_EMBED_POLICY",
+        "ExtractedFingerprint",
+        "FingerprintReconciliation"
+      ]
+    },
+    "./src/utils/fingerprint/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 42,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "57f62c3b04349a149ec9016624892b5b5d48a61f96a62641e5b46b975f01320c",
+      "size": 890,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [],
+      "symbols": [
+        "DEFAULT_EMBED_POLICY",
+        "computeSHA256",
+        "computeContentHash",
+        "verifyContentHash",
+        "cleanHashString",
+        "formatHashString",
+        "getShortHash",
+        "compareHashes",
+        "generateOriginFingerprint",
+        "verifyOriginFingerprint",
+        "parseOriginFingerprint",
+        "formatOriginFingerprint",
+        "compareOriginFingerprints",
+        "getShortFingerprint"
+      ]
+    },
+    "./src/utils/fingerprint/originFingerprint.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 7,
+        "loc": 151,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "f06f61f888b56e4e03428b0d7991b77a6c863fb15b3c2d615abfd9244cf5de3f",
+      "size": 4097,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [
+        "src/utils/fingerprint/fingerprintTypes.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "OriginFingerprintParams",
+        "parseOriginFingerprint",
+        "formatOriginFingerprint",
+        "compareOriginFingerprints",
+        "getShortFingerprint"
+      ]
+    },
+    "./src/utils/imageAdjustments.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 6,
+        "loc": 103,
+        "complexity": 29,
+        "coverage": 0
+      },
+      "hash": "8731729e3dae8502973a9a709a6c85e1b0c5bc977da47649e27a73e9b6e8d819",
+      "size": 2739,
+      "lastModified": "2025-10-22T02:33:40.276Z",
+      "dependencies": [],
+      "symbols": [
+        "Levels",
+        "HSL",
+        "applyRealtimeAdjustments"
+      ]
+    },
+    "./src/utils/imageUtils.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 380,
+        "complexity": 77,
+        "coverage": 0
+      },
+      "hash": "da7581c03d017ca7b9d010f652b6386b7f7efb28066bdd9e1b5e99b53449eea2",
+      "size": 10492,
+      "lastModified": "2025-10-10T17:22:19.036Z",
+      "dependencies": [],
+      "symbols": [
+        "makeDivisibleBy64",
+        "imageToBase64",
+        "createTiledImage",
+        "loadImageFromFile",
+        "downloadDataUrl",
+        "ImageMetadata",
+        "generateImageMetadata",
+        "saveMetadataAsJson",
+        "autoSaveImage",
+        "downloadFile"
+      ]
+    },
+    "./src/utils/metadata/imageMetadataEmbed.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 2,
+        "loc": 112,
+        "complexity": 17,
+        "coverage": 0
+      },
+      "hash": "c86c6cad76d3fcd043a5bc62f7ff462ee71f61c718b34ccd8bdbc030f413ae69",
+      "size": 3039,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [
+        "src/utils/metadata/pngMetadata.ts",
+        "src/utils/fingerprint/fingerprintTypes.ts",
+        "src/utils/metadata/imageMetadataExtract.ts",
+        "@external:type"
+      ],
+      "symbols": []
+    },
+    "./src/utils/metadata/imageMetadataExtract.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 139,
+        "complexity": 15,
+        "coverage": 0
+      },
+      "hash": "85e6dc97422fe6fd2515dccb58d4012fe687aa200ebe662ff0dea70ba9287c0a",
+      "size": 3212,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [
+        "src/utils/metadata/pngMetadata.ts",
+        "src/utils/fingerprint/fingerprintTypes.ts",
+        "@external:type"
+      ],
+      "symbols": []
+    },
+    "./src/utils/metadata/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 37,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "995beea23d4946e9111eb5d293eb14a3082c485e073b367aefce1d7d637e28a3",
+      "size": 761,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [],
+      "symbols": [
+        "isPng",
+        "parsePngChunks",
+        "extractPngTextChunks",
+        "extractIntelliShotFingerprint",
+        "calculateCRC32",
+        "createPngTextChunk",
+        "stripPngTextChunks",
+        "insertPngTextChunk",
+        "extractFingerprint",
+        "extractImageDimensions",
+        "extractFileMetadata",
+        "extractAllMetadata",
+        "embedPngFingerprint",
+        "embedFingerprint",
+        "hasEmbeddedFingerprint"
+      ]
+    },
+    "./src/utils/metadata/pngMetadata.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 282,
+        "complexity": 62,
+        "coverage": 0
+      },
+      "hash": "35cfa5e94a1bb806f316ccbf25ab504d6bee00a55fdfb2bab29955a194905add",
+      "size": 7075,
+      "lastModified": "2025-10-23T17:03:48.266Z",
+      "dependencies": [],
+      "symbols": [
+        "PngChunk",
+        "PngTextChunks",
+        "isPng",
+        "parsePngChunks",
+        "extractPngTextChunks",
+        "extractIntelliShotFingerprint",
+        "calculateCRC32",
+        "createPngTextChunk",
+        "stripPngTextChunks",
+        "insertPngTextChunk"
+      ]
+    },
+    "./src/utils/projectMetadata.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 697,
+        "loc": 558,
+        "complexity": 134,
+        "coverage": 0
+      },
+      "hash": "3994577381cb26de206d9259c3c1d763f6fbd6cf27a5a5446b28b23db37cc4d6",
+      "size": 19738,
+      "lastModified": "2025-10-22T02:33:40.276Z",
+      "dependencies": [
+        "src/lib/supabase.ts",
+        "src/utils/apiBase.ts"
+      ],
+      "symbols": [
+        "ProjectDepartment",
+        "ProjectDepartments",
+        "ProjectPipeline",
+        "ProjectPipelines",
+        "ProjectManifest",
+        "ProjectInfo",
+        "DEFAULT_DEPARTMENTS",
+        "getOrgFilesBaseUrl",
+        "getProjectDepartments",
+        "getTasksForDepartment",
+        "getAuthToken"
+      ]
+    },
+    "./src/utils/projectNumberManager.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 172,
+        "loc": 234,
+        "complexity": 64,
+        "coverage": 0
+      },
+      "hash": "93062e6288f0d34b6bbf4ecedab849266be859830653834e4fcf0317817f5421",
+      "size": 7516,
+      "lastModified": "2025-10-22T02:33:40.276Z",
+      "dependencies": [],
+      "symbols": [
+        "clearProjectCache"
+      ]
+    },
+    "./src/utils/promptUtils.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 65,
+        "complexity": 22,
+        "coverage": 0
+      },
+      "hash": "4f8455f1b413efec9eedac886d10b982a67386b6df0e94815222232c9dd542f4",
+      "size": 3391,
+      "lastModified": "2025-10-10T17:04:00.677Z",
+      "dependencies": [],
+      "symbols": [
+        "getOrdinalSuffix",
+        "getWeightPrefix",
+        "enhancePromptWithAI",
+        "LogFunction",
+        "createAnalysisPrompt"
+      ]
+    },
+    "./src/utils/session/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 18,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "121f7e3693ff9eaee698d6745b12589c013dcc46fe6d41500098ca7aaab22bd0",
+      "size": 379,
+      "lastModified": "2025-10-23T17:03:48.271Z",
+      "dependencies": [],
+      "symbols": [
+        "toSessionReference",
+        "fromSessionReference",
+        "hydrateSessionReferences",
+        "migrateLegacyReferences",
+        "validateSessionReferences",
+        "type SessionReference"
+      ]
+    },
+    "./src/utils/session/sessionVault.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 229,
+        "complexity": 38,
+        "coverage": 0
+      },
+      "hash": "1847df2dd7b4d75b23fef7e7c0ff68df03e3f2bcde83d138fc94d3adf71b1fa2",
+      "size": 5881,
+      "lastModified": "2025-10-23T17:03:48.271Z",
+      "dependencies": [
+        "src/types/types.ts",
+        "src/utils/vault/referenceVault.ts",
+        "src/utils/vault/vaultStorage.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "SessionReference",
+        "toSessionReference"
+      ]
+    },
+    "./src/utils/setupDatabase.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 124,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "b44acd1039c228b51073c04483c2c841a43a6c49aba81304f593888d434caaaa",
+      "size": 3403,
+      "lastModified": "2025-10-10T17:04:00.681Z",
+      "dependencies": [
+        "src/lib/supabase.ts"
+      ],
+      "symbols": [
+        "getDatabaseSetupSQL"
+      ]
+    },
+    "./src/utils/sparkStorage.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 893,
+        "loc": 858,
+        "complexity": 258,
+        "coverage": 0
+      },
+      "hash": "29531fe2e20013e879fb4461374c5080af6d0b1ef7456625f4a990aafcdb55b5",
+      "size": 34395,
+      "lastModified": "2025-10-24T15:20:12.178Z",
+      "dependencies": [
+        "src/utils/dynamicSparkConfig.ts",
+        "src/auth/authorizedFetch.ts",
+        "src/utils/apiBase.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "setCurrentSparkConfig",
+        "getWebDAVClient",
+        "legacySparkWebDAV",
+        "generateStoragePath",
+        "generateFileName",
+        "createSparkStorageFolders",
+        "uploadToSparkStorage",
+        "getSparkStorageUrl",
+        "deleteFromSparkStorage",
+        "uploadGeneratedImage",
+        "uploadReferenceImage",
+        "isSparkStorageConfigured",
+        "getSparkStorageInfo",
+        "getSparkConfig",
+        "SparkWebDAVClient"
+      ]
+    },
+    "./src/utils/sparkStorageSync.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 290,
+        "complexity": 34,
+        "coverage": 0
+      },
+      "hash": "a17a1c49feee1dc4c2d5d15895c6e363153e75edbd62417b011904c2efe85ca7",
+      "size": 9903,
+      "lastModified": "2025-10-10T17:04:00.686Z",
+      "dependencies": [
+        "src/lib/supabase.ts"
+      ],
+      "symbols": [
+        "SparkStorageStructure"
+      ]
+    },
+    "./src/utils/sparkStorageUtils.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 93,
+        "loc": 257,
+        "complexity": 74,
+        "coverage": 0
+      },
+      "hash": "2fca18acec853aca7f5c39f1f215faad27099ad076cc8abad3e49f8a38440dc5",
+      "size": 9800,
+      "lastModified": "2025-10-22T02:33:40.280Z",
+      "dependencies": [
+        "src/utils/sparkStorage.ts",
+        "src/utils/apiBase.ts"
+      ],
+      "symbols": [
+        "Organization",
+        "LogFunction",
+        "uploadReferenceImageToSpark",
+        "uploadToSparkStorage",
+        "fetchOriginalImage"
+      ]
+    },
+    "./src/utils/vault/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 74,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "680a88c4ea295f3101718b33a042482f94a976085c17b88d436e5bd95f35a001",
+      "size": 1469,
+      "lastModified": "2025-10-23T17:03:48.271Z",
+      "dependencies": [],
+      "symbols": [
+        "ReferenceVault",
+        "getVaultRoot",
+        "getDailyPartition",
+        "getVaultFilePath",
+        "getVaultSidecarPath",
+        "getVaultIndexPath",
+        "writeVaultSidecar",
+        "readVaultSidecar",
+        "writeVaultImage",
+        "readVaultImage",
+        "vaultFileExists",
+        "parseVaultPath",
+        "loadIndex",
+        "saveIndex",
+        "addToHashIndex",
+        "findByHash",
+        "addToGenerationIndex",
+        "findByGeneration",
+        "addToFingerprintIndex",
+        "findByFingerprint",
+        "updateVaultMetadata",
+        "getVaultMetadata",
+        "incrementReferenceCount",
+        "testVaultPromotion",
+        "logVaultTestInstructions",
+        "enhanceFileDropWithVault",
+        "getProjectContextFromMetadata",
+        "getUserEmail",
+        "createVaultAwareDropHandler",
+        "isVaultAvailable",
+        "getVaultStatus"
+      ]
+    },
+    "./src/utils/vault/referenceVault.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 219,
+        "loc": 366,
+        "complexity": 42,
+        "coverage": 0
+      },
+      "hash": "d9d4f3b61d0a5a3a116c1d7aa91885d9bb3a659f5f135306ed9c76d5425657b3",
+      "size": 12336,
+      "lastModified": "2025-10-23T17:03:48.271Z",
+      "dependencies": [
+        "src/utils/fingerprint/contentHash.ts",
+        "src/utils/fingerprint/originFingerprint.ts",
+        "src/utils/vault/vaultTypes.ts",
+        "src/utils/vault/vaultStorage.ts",
+        "src/utils/vault/vaultIndexes.ts",
+        "src/utils/metadata/imageMetadataExtract.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "ReferenceVault"
+      ]
+    },
+    "./src/utils/vault/testVault.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 12,
+        "loc": 112,
+        "complexity": 14,
+        "coverage": 0
+      },
+      "hash": "3aa220f02ed2cfbbbd7860f2cfb2269aaa2f5f89e2c39118c6bed0a276761f85",
+      "size": 3579,
+      "lastModified": "2025-10-23T17:03:48.275Z",
+      "dependencies": [
+        "src/utils/vault/referenceVault.ts",
+        "src/utils/vault/vaultTypes.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "logVaultTestInstructions",
+        "createTestImage"
+      ]
+    },
+    "./src/utils/vault/vaultIndexes.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 191,
+        "loc": 350,
+        "complexity": 58,
+        "coverage": 0
+      },
+      "hash": "9e2bc73ba3b75eda0040dac81c2f95334a32b4c4babd960ce9828c777286ef79",
+      "size": 10320,
+      "lastModified": "2025-10-23T17:03:48.275Z",
+      "dependencies": [
+        "src/utils/vault/vaultTypes.ts",
+        "src/utils/vault/vaultStorage.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "IndexType",
+        "getDefaultMetadata",
+        "getAuthToken"
+      ]
+    },
+    "./src/utils/vault/vaultIntegration.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 19,
+        "loc": 238,
+        "complexity": 38,
+        "coverage": 0
+      },
+      "hash": "86712ded2a0beccad616bdb7478e32a13a5987ac7696747871bf82f03322aa53",
+      "size": 6380,
+      "lastModified": "2025-10-23T17:03:48.275Z",
+      "dependencies": [
+        "src/components/references/handlers/index.ts",
+        "src/types/types.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "getProjectContextFromMetadata",
+        "getUserEmail",
+        "createVaultAwareDropHandler",
+        "isVaultAvailable",
+        "getVaultStatus"
+      ]
+    },
+    "./src/utils/vault/vaultStorage.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 252,
+        "loc": 389,
+        "complexity": 79,
+        "coverage": 0
+      },
+      "hash": "923d8077297501a527df1ebffa2e460e320846288fa08ba247c397eb98c7d3c9",
+      "size": 11548,
+      "lastModified": "2025-10-23T17:03:48.275Z",
+      "dependencies": [
+        "src/utils/vault/vaultTypes.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "getVaultRoot",
+        "getDailyPartition",
+        "getVaultFilePath",
+        "getCanonicalVaultFilePath",
+        "getVaultSidecarPath",
+        "getVaultIndexPath",
+        "parseVaultPath",
+        "getAuthToken"
+      ]
+    },
+    "./src/utils/vault/vaultTypes.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 46,
+        "loc": 323,
+        "complexity": 14,
+        "coverage": 0
+      },
+      "hash": "b1a4613c16fab492f65e09f72091bd28c8503863d857f34eb22d0dd74eae3ed7",
+      "size": 6353,
+      "lastModified": "2025-10-23T17:03:48.275Z",
+      "dependencies": [
+        "src/utils/fingerprint/fingerprintTypes.ts",
+        "@external:type"
+      ],
+      "symbols": [
+        "ReferenceSourceKind",
+        "ReferenceSource",
+        "PromptSnapshot",
+        "SettingsSnapshot",
+        "AnalysisMetadata",
+        "UsageTracking",
+        "DerivationMetadata",
+        "FileMetadata",
+        "ReferenceMetadata",
+        "VaultRefEntry",
+        "VaultHashIndex",
+        "VaultGenerationIndex",
+        "VaultFingerprintIndex",
+        "VaultMetadata",
+        "VaultOperationResult"
+      ]
+    },
+    "./src/vite-env.d.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 22,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "1ecb81dae62fb708b0f3b81b06b42da670acc92ae83af30cadb7c1830308ec13",
+      "size": 619,
+      "lastModified": "2025-10-10T17:22:19.036Z",
+      "dependencies": [],
+      "symbols": [
+        "ImportMetaEnv",
+        "ImportMeta"
+      ]
+    },
+    "./test-graph-api.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 39,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "b31d30ef59d253561cd71a158230e655de764a1b9a6048d78176434454d2e0b7",
+      "size": 1275,
+      "lastModified": "2025-10-22T02:33:40.280Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./tsconfig.app.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 25,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "c4099902ce8a575a739a6eea09ddbe9683064425ad437fcac74b0441de9a2ca3",
+      "size": 528,
+      "lastModified": "2025-10-10T17:04:01.808Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./tsconfig.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 8,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808",
+      "size": 119,
+      "lastModified": "2025-10-10T17:04:01.812Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./tsconfig.node.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 16,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "4d6af6c72eae8671e093bd9cd38444aaffc54f02cdeb6f1ca95cc42f89e98386",
+      "size": 276,
+      "lastModified": "2025-10-10T17:04:01.816Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "./vite.config.d.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 3,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "4b96dd19fd2949d28ce80e913412b0026dc421e5bf6c31d87c7b5eb11b5753b4",
+      "size": 76,
+      "lastModified": "2025-10-22T02:18:14.258Z",
+      "dependencies": [
+        "@external:vite"
+      ],
+      "symbols": []
+    },
+    "./vite.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 39,
+        "loc": 60,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "4ac7f30dcaf641697f5b85a45a0b81eaa304bbbf6d53632c674ef66615a83fce",
+      "size": 2130,
+      "lastModified": "2025-10-22T02:33:40.284Z",
+      "dependencies": [
+        "@external:vite",
+        "@external:@vitejs/plugin-react",
+        "@external:node:child_process",
+        "@external:react"
+      ],
+      "symbols": []
+    },
+    "./vite.config.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 41,
+        "loc": 61,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "3ac29b85de8594734e5f9eb6271093dca968193273d12db135c9bb7ac25acfc2",
+      "size": 1752,
+      "lastModified": "2025-10-22T02:33:40.284Z",
+      "dependencies": [
+        "@external:vite",
+        "@external:@vitejs/plugin-react",
+        "@external:node:child_process",
+        "@external:react"
+      ],
+      "symbols": []
+    }
+  }
+}

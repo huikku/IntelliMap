@@ -1,0 +1,500 @@
+{
+  "timestamp": "2025-10-25T18:19:36.186Z",
+  "version": "1.2",
+  "project": "IntelliMap",
+  "summary": {
+    "totalFiles": 96,
+    "totalLines": 28013,
+    "totalComplexity": 2060,
+    "averageDepth": 1.2291666666666667
+  },
+  "validation": {
+    "manifestHash": "8aff239de1dc1cd8b07e80a547162caabf522c6fde04168d6d9ce7febc8ce6dd",
+    "schemaValid": true,
+    "checksumsValid": true,
+    "pathsResolved": true,
+    "metricsValid": true
+  },
+  "files": {
+    ".augment/rules/coding-standards.moth": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    ".augment/rules/prd.moth": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    ".c8rc.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    ".coveragerc": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    ".gitignore": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    ".nycrc.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "IMPLEMENTATION_SUMMARY.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "README.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/AUTOMATED-RUNTIME-ANALYSIS.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/IN-APP-RUNTIME-GUIDE.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/REAL-RUNTIME-DATA-GUIDE.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/RUNTIME-ANALYSIS-GUIDE.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/RUNTIME-QUICK-START.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/Run-Based-Derived-Reports-Plan.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/intellimap_llm_integration_plan.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/intellimap_llm_integration_plan.md:Zone.Identifier": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/intellimap_runtime_plan.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/intellimap_runtime_plan.md:Zone.Identifier": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/layout.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/newFeatures.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/novelFeatures.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/prd-expanded.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/runtime-analysis-guide.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/sizing.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "docs/testing-suite-plan.md": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "jest.config.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "package-lock.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "package.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/commands/diff.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/commands/index.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/commands/run.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/commands/serve.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/generate-sample-trace.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/index.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/indexers/esbuildGraph.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/indexers/mergeGraphs.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/indexers/mergeGraphs.test.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/indexers/pythonGraph.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/indexers/python_indexer.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/package.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/runtime-instrument.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/runtime/collector.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/runtime/enhanced-v8-converter.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/runtime/loader.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/cli/watcher.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/server/package.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/server/reload.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/server/runtime-analyzer.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/server/runtime-analyzer.test.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/server/server.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/eslint.config.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/index.html": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/package.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/postcss.config.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/App.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/CodeAnalysisModal.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/CycleModal.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/FilePreview.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/GraphHUD.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/GraphView.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/Inspector.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/LayoutProgressModal.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/LayoutSpinner.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/LoadingSpinner.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/PlaneSwitcher.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/RepoLoader.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/ReportViewer.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/SearchBox.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/Sidebar.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/components/Toolbar.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/index.css": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/src/main.jsx": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/tailwind.config.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "packages/ui/vite.config.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "scripts/collect-runtime.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "scripts/coverage-to-intellimap.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "scripts/nyc-to-intellimap.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "scripts/setup-runtime.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "scripts/v8-to-intellimap.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/demo.sh": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/lib/email.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/lib/logger.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/lib/orders.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/lib/products.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/lib/users.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/package-lock.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/package.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-app/server.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/backend/__init__.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/backend/api/__init__.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/backend/api/routes.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/backend/api/server.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/backend/core/__init__.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/backend/core/db.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/src/helper.ts": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "test-project/src/index.ts": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    }
+  }
+}

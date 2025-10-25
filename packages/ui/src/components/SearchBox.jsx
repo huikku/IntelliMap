@@ -101,7 +101,7 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+          className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
         />
         {searchTerm && (
           <button
@@ -109,7 +109,7 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
               setSearchTerm('');
               setResults([]);
             }}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[#6a6a6a] hover:text-gray-200"
           >
             ✕
           </button>
@@ -117,7 +117,7 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
       </div>
 
       {results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded shadow-lg z-50 max-h-64 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded shadow-lg z-50 max-h-64 overflow-y-auto">
           {results.map((node, index) => (
             <button
               key={node.id}
@@ -125,11 +125,11 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
               className={`w-full text-left px-3 py-2 text-sm transition ${
                 index === selectedIndex
                   ? 'bg-blue-600 text-white'
-                  : 'text-gray-300 hover:bg-gray-700'
+                  : 'text-[#a0a0a0] hover:bg-[#1a1a1a]'
               }`}
             >
               <div className="truncate font-mono text-xs">{node.id}</div>
-              <div className="text-xs text-gray-400">
+              <div className="text-xs text-[#6a6a6a]">
                 {node.lang} • {node.env}
               </div>
             </button>
@@ -138,7 +138,7 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
       )}
 
       {searchTerm && results.length === 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded px-3 py-2 text-sm text-gray-400">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded px-3 py-2 text-sm text-[#6a6a6a]">
           No results found
         </div>
       )}

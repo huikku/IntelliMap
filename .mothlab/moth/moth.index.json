@@ -1,0 +1,2317 @@
+{
+  "version": "1.2",
+  "project": "IntelliMap",
+  "generated": "2025-10-25T18:19:36.185Z",
+  "files": {
+    ".augment/rules/coding-standards.moth": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 166,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "1e97bdd0ab5eafc8d111b278fd33294c0e32ec4decac068d5c28e7abe909e021",
+      "size": 4748,
+      "lastModified": "2025-10-23T04:31:08.960Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    ".augment/rules/prd.moth": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 175,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "6dda77da3db84c2bbe4daacc369893e9c8d5d092aa6fbcb005f6ed44f53aa618",
+      "size": 5771,
+      "lastModified": "2025-10-23T04:39:45.909Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    ".c8rc.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 22,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "34c91030e564498600b04742221f3d97ed1e695b155dd028a341deb7872ee8b0",
+      "size": 325,
+      "lastModified": "2025-10-24T16:26:22.423Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    ".coveragerc": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 16,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "64f35ba9b45fd5416ce8c098edb5e7568d2b4ebceb217fc42d8a8f0209e53d11",
+      "size": 170,
+      "lastModified": "2025-10-24T16:26:26.331Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    ".gitignore": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 53,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "66b60d15e131ff7bbea7aafd1d814e68b395463886a26facadfc5b069182af2a",
+      "size": 443,
+      "lastModified": "2025-10-24T16:26:26.335Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    ".nycrc.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 31,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "f1c445fe25309ae382b69a818ba05739b794185b90991c8699c9a7fbaabcc0d3",
+      "size": 542,
+      "lastModified": "2025-10-24T16:26:22.419Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "IMPLEMENTATION_SUMMARY.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 158,
+        "complexity": 16,
+        "coverage": 0
+      },
+      "hash": "c9c2b88d5a4e3e85eda34ffbe9c4c082f096719d3d732c85ee77f8ae5320a4b5",
+      "size": 5622,
+      "lastModified": "2025-10-23T05:13:32.733Z",
+      "dependencies": [
+        "@external:extraction"
+      ],
+      "symbols": []
+    },
+    "README.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 134,
+        "loc": 185,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "4df8271f642c8b8041b98a6fb4f985023aba6905c8f5d4679d639ea8497c409f",
+      "size": 4320,
+      "lastModified": "2025-10-24T16:38:43.007Z",
+      "dependencies": [
+        "@external:\n    }\n  ],\n  "
+      ],
+      "symbols": []
+    },
+    "docs/AUTOMATED-RUNTIME-ANALYSIS.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 354,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "457de01ef2171e4b80ee04a17f377b01f19b38a0c1d93ba4b755682dfae76b2c",
+      "size": 6878,
+      "lastModified": "2025-10-24T16:27:08.643Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/IN-APP-RUNTIME-GUIDE.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 395,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "f29e77541a37ff2bb9ba2b859ecc31cbd4605cdf960899a0c30d7fdac667afc0",
+      "size": 8250,
+      "lastModified": "2025-10-24T16:38:23.417Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/REAL-RUNTIME-DATA-GUIDE.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 1,
+        "churn": 0,
+        "loc": 346,
+        "complexity": 48,
+        "coverage": 0
+      },
+      "hash": "9e7d276f0d504e9212dbbf5cf9d17c53b4e6a820363cfd82af8f5a6168fee387",
+      "size": 8496,
+      "lastModified": "2025-10-24T16:19:09.986Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:node:path",
+        "docs/runtime-tracer.js",
+        "docs/utils.js",
+        "@external:fs",
+        "@external:avgTime"
+      ],
+      "symbols": [
+        "tracer",
+        "RuntimeTracer"
+      ]
+    },
+    "docs/RUNTIME-ANALYSIS-GUIDE.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 349,
+        "complexity": 7,
+        "coverage": 0
+      },
+      "hash": "1e36ef221366f97957a6038442575a38c4a2c43fff77245a4b637e5560509077",
+      "size": 7567,
+      "lastModified": "2025-10-24T18:34:48.910Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/RUNTIME-QUICK-START.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 312,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "68e0c87de520efc13d429a6085d6ba6f9365057389ccb8f11ffd8d4ab1923141",
+      "size": 5354,
+      "lastModified": "2025-10-24T16:28:31.016Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/Run-Based-Derived-Reports-Plan.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 204,
+        "complexity": 3,
+        "coverage": 0
+      },
+      "hash": "2972a6744543ab06fe81befcb4379a06e49d3ccfd60585c8d1628df716d46e61",
+      "size": 7395,
+      "lastModified": "2025-10-24T15:49:42.555Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/intellimap_llm_integration_plan.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 356,
+        "complexity": 32,
+        "coverage": 0
+      },
+      "hash": "89ef25d4845e4baf4610acf1193df7abcbb9a92893fae0222de78dd8b3986e66",
+      "size": 16445,
+      "lastModified": "2025-10-24T16:11:40.933Z",
+      "dependencies": [],
+      "symbols": [
+        "LLMProvider"
+      ]
+    },
+    "docs/intellimap_llm_integration_plan.md:Zone.Identifier": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 3,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "38cd3449f918acd5ef23d60ab74134aa6a1b4a0c794073ff2903b09086224cb7",
+      "size": 55,
+      "lastModified": "2025-10-24T16:11:53.450Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/intellimap_runtime_plan.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 10,
+        "depth": 1,
+        "churn": 146,
+        "loc": 256,
+        "complexity": 18,
+        "coverage": 0
+      },
+      "hash": "3f20f73e9aeffe78cd572d5776ed1f888448d1ab0d350491715a3eac76120bc7",
+      "size": 10478,
+      "lastModified": "2025-10-24T18:45:03.985Z",
+      "dependencies": [
+        "@external:node:fs",
+        "@external:node:inspector",
+        "docs/cpu-profiler.js",
+        "@external:node:v8",
+        "@external:tracing",
+        "@external:edges.",
+        "@external:hook",
+        "@external:fs",
+        "@external:inspector",
+        "@external:v8"
+      ],
+      "symbols": []
+    },
+    "docs/intellimap_runtime_plan.md:Zone.Identifier": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 3,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "38cd3449f918acd5ef23d60ab74134aa6a1b4a0c794073ff2903b09086224cb7",
+      "size": 55,
+      "lastModified": "2025-10-24T18:45:12.833Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/layout.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 164,
+        "complexity": 18,
+        "coverage": 0
+      },
+      "hash": "d22315526bb176cb03924a8c785d985ebea3c9af60bec3b45ab46e82dedfb123",
+      "size": 3727,
+      "lastModified": "2025-10-23T18:41:07.664Z",
+      "dependencies": [
+        "@external:hierarchies."
+      ],
+      "symbols": []
+    },
+    "docs/newFeatures.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 96,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "77f7625f7e9a4b4c0b2804397e4bdf8b318d3041250dc3ed01eb0840d0d0e98e",
+      "size": 5840,
+      "lastModified": "2025-10-23T19:27:00.207Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/novelFeatures.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 216,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "40265ef2e6bd0f5257f691cff49430b2233bf44f5736fd8d64157f382fa04891",
+      "size": 6633,
+      "lastModified": "2025-10-23T20:00:48.331Z",
+      "dependencies": [
+        "@external:edges",
+        "@external:depth"
+      ],
+      "symbols": []
+    },
+    "docs/prd-expanded.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 280,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "7341b6aee943cb75b870cd9535e97acacfd4cfa1ba8a8083de3de0b289d7b20f",
+      "size": 9235,
+      "lastModified": "2025-10-23T04:38:53.075Z",
+      "dependencies": [
+        "@external:},\n    {",
+        "@external:}\n  ]\n}\n```\n\n### 6.2 Express Server\n\nServes both `graph.json` and static UI. Supports auto-refresh via SSE when graph updates.\n\n### 6.3 React UI (Vite + Cytoscape.js + Tailwind + shadcn/ui)\n\nUses React + Vite for dev speed, Tailwind for styling, and shadcn/ui for polished components.\n\n**Libraries:** `react`, `vite`, `cytoscape`, `cytoscape-elk`, `framer-motion`, `lucide-react`\n\n**Filters:** `Language` (JS/TS, Python), `Environment` (frontend, backend)\n\n**Main Components:**\n\n| Component           | Description                          |\n| ------------------- | ------------------------------------ |\n| `<GraphView />`     | Cytoscape visualization layer        |\n| `<Sidebar />`       | Search, filter, layout toggles       |\n| `<Toolbar />`       | Graph control buttons                |\n| `<Inspector />`     | Node detail + dependency info        |\n| `<PlaneSwitcher />` | Plane selector (static/backend/diff) |\n\n---\n\n## 7. File Hierarchy\n\n```\nintellimap/\n├── package.json\n├── README.md\n├── packages/\n│   ├── cli/\n│   │   ├── index.js\n│   │   ├── esbuildGraph.js\n│   │   ├── mergeGraphs.js\n│   │   └── watcher.js\n│   ├── py/\n│   │   ├── indexer.py\n│   │   ├── resolver.py\n│   │   └── requirements.txt\n│   ├── server/\n│   │   ├── server.js\n│   │   └── reload.js\n│   └── ui/\n│       ├── src/\n│       │   ├── App.jsx\n│       │   ├── components/\n│       │   │   ├── GraphView.jsx\n│       │   │   ├── Sidebar.jsx\n│       │   │   ├── Toolbar.jsx\n│       │   │   ├── Inspector.jsx\n│       │   │   └── PlaneSwitcher.jsx\n│       │   └── styles/theme.css\n│       └── vite.config.js\n└── .intellimap/\n    ├── graph.json\n    ├── js-graph.json\n    ├── py-graph.json\n    └── config.json\n```\n\n---\n\n## 8. UI Overview (KablUI Summary)\n\n```\n@APP[theme:dark id:intellimap]\n  @HEADER[h:48 bg:#1e1e1e]\n    ",
+        "docs/...",
+        "@external:graph",
+        "@external:and"
+      ],
+      "symbols": []
+    },
+    "docs/runtime-analysis-guide.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 331,
+        "complexity": 17,
+        "coverage": 0
+      },
+      "hash": "f94f14cc35f51cdb753e5b9e717457713b4989dbc1023488284ca4cbcb6e94a9",
+      "size": 6866,
+      "lastModified": "2025-10-24T16:06:10.647Z",
+      "dependencies": [
+        "@external:v8",
+        "@external:sys",
+        "@external:json",
+        "@external:time",
+        "@external:my_app"
+      ],
+      "symbols": [
+        "recordEdge"
+      ]
+    },
+    "docs/sizing.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 136,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "92b4d4ef664b87689d3885d7cf86b687b91a13ab29c7f446a3d965c5b6a71e13",
+      "size": 3145,
+      "lastModified": "2025-10-23T19:09:40.253Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "docs/testing-suite-plan.md": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 455,
+        "complexity": 17,
+        "coverage": 0
+      },
+      "hash": "a7a391fd9bf58777f1c54886abb39d565e79446fc877ba1b365dc86bf63cb79d",
+      "size": 16206,
+      "lastModified": "2025-10-24T15:28:26.774Z",
+      "dependencies": [
+        "@external:edges",
+        "@external:depth"
+      ],
+      "symbols": []
+    },
+    "jest.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 20,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "b94924ff1ad5b3b3f4b4c5506a0dd64116623bfa2a757127a378e93fe7fff3d6",
+      "size": 436,
+      "lastModified": "2025-10-24T17:49:08.316Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "package-lock.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 8235,
+        "loc": 11356,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "ba7c5357d0766765cd00a5e2650e4a09c23a495ec239b0d5d82a7a312ed9647a",
+      "size": 398796,
+      "lastModified": "2025-10-25T07:00:40.269Z",
+      "dependencies": [
+        "@external:: {\n      ",
+        "@external:: "
+      ],
+      "symbols": []
+    },
+    "package.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 20,
+        "loc": 52,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "1dc399b6b9bdbc43f075af402e6a29f12256401cee46748282c6274123739218",
+      "size": 1716,
+      "lastModified": "2025-10-25T07:00:40.093Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/cli/commands/diff.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 8,
+        "loc": 41,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "bca122cc05c95eb5921afd64b1d96690fe703bcdc4cd407f4aa45c92ca1eff2f",
+      "size": 1190,
+      "lastModified": "2025-10-23T04:49:39.167Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:simple-git"
+      ],
+      "symbols": [
+        "diffCommand",
+        "git",
+        "diff",
+        "changedFiles",
+        "graphPath",
+        "graph",
+        "markedCount",
+        "node"
+      ]
+    },
+    "packages/cli/commands/index.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 5,
+        "depth": 2,
+        "churn": 8,
+        "loc": 49,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "076a8a93c5126ea1b125168f7cf6cd84b7c335378e2098f20c84cace9db0c8fc",
+      "size": 1518,
+      "lastModified": "2025-10-23T04:49:25.158Z",
+      "dependencies": [
+        "packages/cli/indexers/esbuildGraph.js",
+        "packages/cli/indexers/pythonGraph.js",
+        "packages/cli/indexers/mergeGraphs.js",
+        "@external:fs-extra",
+        "@external:node:path"
+      ],
+      "symbols": [
+        "indexCommand",
+        "graphs",
+        "merged"
+      ]
+    },
+    "packages/cli/commands/run.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 5,
+        "depth": 2,
+        "churn": 37,
+        "loc": 277,
+        "complexity": 55,
+        "coverage": 0
+      },
+      "hash": "7578d6650babc9e2f012b81896ea8889d02bc7b28038c5bd5a17da76c4016694",
+      "size": 8110,
+      "lastModified": "2025-10-24T19:06:08.227Z",
+      "dependencies": [
+        "@external:child_process",
+        "@external:fs-extra",
+        "@external:path",
+        "@external:url",
+        "packages/cli/runtime/enhanced-v8-converter.js"
+      ],
+      "symbols": [
+        "__filename",
+        "__dirname",
+        "runWithCoverage",
+        "cwd",
+        "coverageDir",
+        "runtimeDir",
+        "isQuoted",
+        "cmd",
+        "args",
+        "parts",
+        "cleaned",
+        "env",
+        "child",
+        "exitCode",
+        "cleanup",
+        "staticGraphPath",
+        "convertV8Coverage",
+        "files",
+        "coverageFiles",
+        "allCoverage"
+      ]
+    },
+    "packages/cli/commands/serve.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 4,
+        "depth": 3,
+        "churn": 31,
+        "loc": 56,
+        "complexity": 10,
+        "coverage": 0
+      },
+      "hash": "3d01c6bc87f645e889f224ccc8dc3cbeb5785d9171c6b05b2b4e88873f319dbc",
+      "size": 1440,
+      "lastModified": "2025-10-23T05:10:40.843Z",
+      "dependencies": [
+        "@external:node:child_process",
+        "@external:node:url",
+        "@external:node:path",
+        "packages/cli/watcher.js"
+      ],
+      "symbols": [
+        "__filename",
+        "__dirname",
+        "serveCommand",
+        "serverPath",
+        "serverProcess"
+      ]
+    },
+    "packages/cli/generate-sample-trace.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 123,
+        "complexity": 28,
+        "coverage": 0
+      },
+      "hash": "5f0ab4b3939fb243e9c23f5264417c101cee679e57ee9b782d82a8bcf09d8dcf",
+      "size": 3805,
+      "lastModified": "2025-10-24T16:03:43.728Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:node:path"
+      ],
+      "symbols": [
+        "generateSampleTrace",
+        "graphPath",
+        "staticGraph",
+        "executedEdges",
+        "executedNodes",
+        "count",
+        "avgTime",
+        "node",
+        "nodes",
+        "dynamicEdges",
+        "from",
+        "to",
+        "i",
+        "trace",
+        "runtimeDir",
+        "traceFile"
+      ]
+    },
+    "packages/cli/index.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 4,
+        "churn": 0,
+        "loc": 61,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "839423f2fa56f9583578f753eff783cdb75478bf95b5fdbecf674bc72421f290",
+      "size": 2151,
+      "lastModified": "2025-10-25T06:35:50.827Z",
+      "dependencies": [
+        "@external:commander",
+        "packages/cli/commands/index.js",
+        "packages/cli/commands/diff.js",
+        "packages/cli/commands/serve.js",
+        "packages/cli/commands/run.js",
+        "packages/cli/commands/capture.js",
+        "packages/cli/commands/moth.js"
+      ],
+      "symbols": [
+        "program"
+      ]
+    },
+    "packages/cli/indexers/esbuildGraph.js": {
+      "metrics": {
+        "fanin": 3,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 776,
+        "loc": 352,
+        "complexity": 79,
+        "coverage": 0
+      },
+      "hash": "5b809d45df6fa59840fff3959e571496baed6a5d4c56880a04a5f1e4f9fbbe68",
+      "size": 12062,
+      "lastModified": "2025-10-25T15:42:57.564Z",
+      "dependencies": [
+        "@external:esbuild",
+        "@external:fs-extra",
+        "@external:glob",
+        "packages/cli/indexers/metricsComputer.js"
+      ],
+      "symbols": [
+        "scanBackendFiles",
+        "nodes",
+        "nodeMap",
+        "patterns",
+        "files",
+        "isTS",
+        "size",
+        "stats",
+        "file",
+        "pattern",
+        "buildJSGraph",
+        "edges",
+        "edgeSet",
+        "entryPoints",
+        "normalizedEntry",
+        "normalizedNodeEntry",
+        "isBackendFile",
+        "backendEntries",
+        "frontendEntries",
+        "metafile"
+      ]
+    },
+    "packages/cli/indexers/mergeGraphs.js": {
+      "metrics": {
+        "fanin": 4,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 69,
+        "complexity": 24,
+        "coverage": 0
+      },
+      "hash": "19939479d2c3f678e8e234ab1bd1d1b31fd09c5d6d3ff5b842ba5250aa78945b",
+      "size": 1433,
+      "lastModified": "2025-10-25T15:44:14.468Z",
+      "dependencies": [],
+      "symbols": [
+        "mergeGraphs",
+        "nodes",
+        "edges",
+        "folders",
+        "nodeMap",
+        "folderMap",
+        "key",
+        "node",
+        "edge",
+        "folder",
+        "edgeSet",
+        "uniqueEdges"
+      ]
+    },
+    "packages/cli/indexers/mergeGraphs.test.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 2,
+        "churn": 0,
+        "loc": 141,
+        "complexity": 18,
+        "coverage": 0
+      },
+      "hash": "28073c54e87eae6158c87e4c336d328bfba0a51112539cceb4b0d284b6a85029",
+      "size": 3418,
+      "lastModified": "2025-10-24T17:35:57.946Z",
+      "dependencies": [
+        "@external:@jest/globals",
+        "packages/cli/indexers/mergeGraphs.js"
+      ],
+      "symbols": [
+        "graphs",
+        "result",
+        "graphs1",
+        "result1",
+        "graphs2",
+        "result2"
+      ]
+    },
+    "packages/cli/indexers/pythonGraph.js": {
+      "metrics": {
+        "fanin": 3,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 8,
+        "loc": 60,
+        "complexity": 13,
+        "coverage": 0
+      },
+      "hash": "d09c80a8903b246c3917a5d0e66f77ce6c1ad51627d43fc725af8564e19cc781",
+      "size": 1688,
+      "lastModified": "2025-10-25T15:43:33.491Z",
+      "dependencies": [
+        "@external:node:child_process",
+        "@external:node:path",
+        "@external:node:url",
+        "packages/cli/indexers/metricsComputer.js"
+      ],
+      "symbols": [
+        "__filename",
+        "__dirname",
+        "buildPythonGraph",
+        "pythonScript",
+        "args",
+        "python",
+        "stdout",
+        "stderr",
+        "result",
+        "enrichedNodes",
+        "folders"
+      ]
+    },
+    "packages/cli/indexers/python_indexer.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 70,
+        "loc": 119,
+        "complexity": 21,
+        "coverage": 0
+      },
+      "hash": "8d7fe17a3da733193667557459a53907596d513920916716e0a4a9ff10b3e532",
+      "size": 3524,
+      "lastModified": "2025-10-23T19:10:16.697Z",
+      "dependencies": [
+        "@external:argparse",
+        "@external:ast",
+        "@external:json",
+        "@external:pathlib",
+        "@external:sys"
+      ],
+      "symbols": [
+        "build_python_graph",
+        "extract_imports",
+        "main",
+        "resolve_import_path"
+      ]
+    },
+    "packages/cli/package.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 3,
+        "loc": 24,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "3d651a97ca4f81daa99988c2af1ab6837f00fc183967471df5bc8d40aaea1cd5",
+      "size": 469,
+      "lastModified": "2025-10-24T17:32:35.349Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/cli/runtime-instrument.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 7,
+        "depth": 1,
+        "churn": 0,
+        "loc": 226,
+        "complexity": 26,
+        "coverage": 0
+      },
+      "hash": "c69df2f841838454920c3fd824461aeade5b19dd3cb3f44adcab6b8adaeec0dd",
+      "size": 6158,
+      "lastModified": "2025-10-24T18:49:09.617Z",
+      "dependencies": [
+        "@external:module",
+        "@external:fs-extra",
+        "@external:path",
+        "@external:perf_hooks",
+        "@external:Module",
+        "@external:fs",
+        "@external:relationship"
+      ],
+      "symbols": []
+    },
+    "packages/cli/runtime/collector.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 213,
+        "complexity": 23,
+        "coverage": 0
+      },
+      "hash": "bd2e2b8232eaef299b58234e4023b081a871c9b31114e97e3ab6beed9307fa92",
+      "size": 5664,
+      "lastModified": "2025-10-24T18:56:23.268Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:path",
+        "@external:child_process",
+        "@external:perf_hooks",
+        "@external:async_hooks"
+      ],
+      "symbols": [
+        "getRuntimeData",
+        "perfData",
+        "asyncHook",
+        "lastCheck",
+        "now",
+        "lag",
+        "runtimeData",
+        "saveRuntimeDataSync",
+        "cwd",
+        "runtimeDir",
+        "branch",
+        "commit",
+        "lagStats",
+        "trace",
+        "traceFile",
+        "saveRuntimeData"
+      ]
+    },
+    "packages/cli/runtime/enhanced-v8-converter.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 244,
+        "complexity": 50,
+        "coverage": 0
+      },
+      "hash": "6e05c11209d307491364e84a5a65072e962346e4c25e22c9e5f28230eba5a59e",
+      "size": 7626,
+      "lastModified": "2025-10-24T21:04:30.026Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:path",
+        "@external:url",
+        "@external:child_process"
+      ],
+      "symbols": [
+        "convertV8ToRuntime",
+        "files",
+        "coverageFiles",
+        "allCoverage",
+        "data",
+        "file",
+        "staticGraph",
+        "modules",
+        "executedFunctions",
+        "filePath",
+        "relativePath",
+        "totalChars",
+        "coveredChars",
+        "executedFuncs",
+        "totalFuncs",
+        "funcExecuted",
+        "rangeSize",
+        "range",
+        "funcKey",
+        "func"
+      ]
+    },
+    "packages/cli/runtime/loader.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 137,
+        "complexity": 32,
+        "coverage": 0
+      },
+      "hash": "15d8d8e38ac2f2a91b32fc02e3120d2139fea74966d26e2d2b2079dd2b405ea0",
+      "size": 3663,
+      "lastModified": "2025-10-24T18:55:49.409Z",
+      "dependencies": [
+        "@external:url",
+        "@external:path",
+        "@external:fs"
+      ],
+      "symbols": [
+        "__filename",
+        "__dirname",
+        "runtimeData",
+        "resolve",
+        "result",
+        "parentPath",
+        "childPath",
+        "cwd",
+        "from",
+        "to",
+        "edgeKey",
+        "load",
+        "startTime",
+        "filePath",
+        "relativePath",
+        "loadTime",
+        "stats",
+        "module"
+      ]
+    },
+    "packages/cli/watcher.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 6,
+        "depth": 2,
+        "churn": 0,
+        "loc": 110,
+        "complexity": 19,
+        "coverage": 0
+      },
+      "hash": "55d92cea0ccfade203fb084087e1597ff6c9abcc307bd21299b56302102e4068",
+      "size": 2689,
+      "lastModified": "2025-10-23T05:09:02.750Z",
+      "dependencies": [
+        "@external:chokidar",
+        "packages/cli/indexers/esbuildGraph.js",
+        "packages/cli/indexers/pythonGraph.js",
+        "packages/cli/indexers/mergeGraphs.js",
+        "@external:fs-extra",
+        "@external:node:path"
+      ],
+      "symbols": [
+        "watchAndRebuild",
+        "watchPaths",
+        "entryDir",
+        "nodeDir",
+        "watcher",
+        "isRebuilding",
+        "rebuild",
+        "graphs",
+        "merged",
+        "rebuildTimeout"
+      ]
+    },
+    "packages/server/package.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 3,
+        "loc": 17,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "d54bfefca4ecde0882d9f1c6d0499b332921b1d00eb5a8fa76958768e9e549d0",
+      "size": 299,
+      "lastModified": "2025-10-24T17:32:48.026Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/server/reload.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 40,
+        "complexity": 7,
+        "coverage": 0
+      },
+      "hash": "9df1e8570d4b692c40e1073f2a2bba40983ff831011381bbc72c693a7860c876",
+      "size": 870,
+      "lastModified": "2025-10-23T05:09:09.458Z",
+      "dependencies": [],
+      "symbols": [
+        "clients",
+        "setupSSE",
+        "notifyClients",
+        "message",
+        "client"
+      ]
+    },
+    "packages/server/runtime-analyzer.js": {
+      "metrics": {
+        "fanin": 2,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 355,
+        "complexity": 74,
+        "coverage": 0
+      },
+      "hash": "87ff73d51d6185e36c413a0cac8f1446fa0d9b849a28071c008f15da0349348d",
+      "size": 11956,
+      "lastModified": "2025-10-24T21:03:58.709Z",
+      "dependencies": [],
+      "symbols": [
+        "mergeRuntimeData",
+        "runtimeEdgeMap",
+        "runtimeNodeMap",
+        "key",
+        "annotatedEdges",
+        "runtimeData",
+        "annotatedNodes",
+        "staticEdgeKeys",
+        "runtimeOnlyEdges",
+        "totalStaticEdges",
+        "executedEdges",
+        "coveragePercent",
+        "totalNodes",
+        "executedNodes",
+        "nodeCoveragePercent",
+        "analyzePerformanceHotspots",
+        "hotEdges",
+        "hotNodes",
+        "totalTime",
+        "top10Time"
+      ]
+    },
+    "packages/server/runtime-analyzer.test.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 2,
+        "churn": 0,
+        "loc": 194,
+        "complexity": 23,
+        "coverage": 0
+      },
+      "hash": "30e42177faa180244cc0e6c63c2003f273fb2f670b6fbe9f159aaa235882cbb2",
+      "size": 5357,
+      "lastModified": "2025-10-24T17:42:48.059Z",
+      "dependencies": [
+        "@external:@jest/globals",
+        "packages/server/runtime-analyzer.js"
+      ],
+      "symbols": [
+        "staticGraph",
+        "runtimeTrace",
+        "result",
+        "graph",
+        "hotspots",
+        "deadCode",
+        "report"
+      ]
+    },
+    "packages/server/server.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 11,
+        "depth": 2,
+        "churn": 328,
+        "loc": 916,
+        "complexity": 180,
+        "coverage": 0
+      },
+      "hash": "e236db7131a524febb98b8b1b7ed18b78bee952e011b6aba580da72bc21a4c58",
+      "size": 27314,
+      "lastModified": "2025-10-25T06:36:59.546Z",
+      "dependencies": [
+        "@external:express",
+        "@external:cors",
+        "@external:fs-extra",
+        "@external:node:path",
+        "@external:node:url",
+        "packages/server/reload.js",
+        "packages/cli/indexers/esbuildGraph.js",
+        "packages/cli/indexers/pythonGraph.js",
+        "packages/cli/indexers/mergeGraphs.js",
+        "packages/server/runtime-analyzer.js",
+        "@external:node:child_process"
+      ],
+      "symbols": [
+        "__filename",
+        "__dirname",
+        "app",
+        "port",
+        "watch",
+        "currentRepoPath",
+        "intellimapRoot",
+        "graphPath",
+        "graph",
+        "path",
+        "fullPath",
+        "stats",
+        "items",
+        "repoPath",
+        "detected",
+        "frontendCandidates",
+        "candidatePath",
+        "candidate",
+        "nodeCandidates",
+        "pythonCandidates"
+      ]
+    },
+    "packages/ui/eslint.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 5,
+        "loc": 66,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "683e3ddff6b26a022047f8ba026af2f84dc29cf2d821857b9e97868316278982",
+      "size": 1635,
+      "lastModified": "2025-10-24T03:46:52.527Z",
+      "dependencies": [
+        "@external:@eslint/js",
+        "@external:eslint-plugin-react",
+        "@external:eslint-plugin-react-hooks"
+      ],
+      "symbols": []
+    },
+    "packages/ui/index.html": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 18,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "e5a65111ea9574210e7ef3bd20ace8fc57cb02d07e10f585fef38a64274a1eff",
+      "size": 1496,
+      "lastModified": "2025-10-23T23:31:08.245Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/ui/package.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 29,
+        "loc": 39,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "c74fecb7fae6c41d3376f0c48fe3a7dd9fb01cdbddecfe6f81f59ac7c12b4d1c",
+      "size": 1008,
+      "lastModified": "2025-10-24T17:33:09.263Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/ui/postcss.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 8,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "99debd91ee55ba39fa2378744a23239d71fbfced132ed7ee36a5e845eb132605",
+      "size": 82,
+      "lastModified": "2025-10-23T04:46:11.502Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/ui/src/App.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 8,
+        "depth": 3,
+        "churn": 428,
+        "loc": 446,
+        "complexity": 66,
+        "coverage": 0
+      },
+      "hash": "a5d0cdddda0ab94668f5fe05b1baa19142acfce2c784ff3aa4a324c183e3e1b1",
+      "size": 15711,
+      "lastModified": "2025-10-25T07:17:38.132Z",
+      "dependencies": [
+        "@external:react",
+        "packages/ui/src/components/GraphView.jsx",
+        "packages/ui/src/components/Sidebar.jsx",
+        "packages/ui/src/components/Toolbar.jsx",
+        "packages/ui/src/components/Inspector.jsx",
+        "packages/ui/src/components/PlaneSwitcher.jsx",
+        "packages/ui/src/components/RepoLoader.jsx",
+        "packages/ui/src/components/SearchBox.jsx"
+      ],
+      "symbols": [
+        "App",
+        "loadPersistedSettings",
+        "saved",
+        "persistedSettings",
+        "cyRef",
+        "selectedNodeRef",
+        "settings",
+        "saveViewport",
+        "viewport",
+        "timeout",
+        "handleViewportChange",
+        "savedGraphId",
+        "currentGraphId",
+        "handleNavigate",
+        "handleKeyDown",
+        "cy",
+        "visibleNodes",
+        "opacity",
+        "nodeElement",
+        "eventSource"
+      ]
+    },
+    "packages/ui/src/components/CodeAnalysisModal.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 0,
+        "loc": 376,
+        "complexity": 24,
+        "coverage": 0
+      },
+      "hash": "5c4b77e024e9382092f2ea4a25cde019336f5bfe1f5490db2fde0555f8ad4eb2",
+      "size": 14657,
+      "lastModified": "2025-10-25T15:23:28.878Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "CodeAnalysisModal",
+        "hasIssues",
+        "generateReport",
+        "report",
+        "handleCopy"
+      ]
+    },
+    "packages/ui/src/components/CycleModal.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 142,
+        "loc": 267,
+        "complexity": 12,
+        "coverage": 0
+      },
+      "hash": "e0725d084da69af43913a7b89ebc01c3e66b47fb4cb7b2d21a187c8c9ecfb2c6",
+      "size": 10238,
+      "lastModified": "2025-10-25T15:23:28.882Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "CycleModal",
+        "hasCycles",
+        "generateReport",
+        "report",
+        "handleCopy"
+      ]
+    },
+    "packages/ui/src/components/FilePreview.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 34,
+        "loc": 128,
+        "complexity": 17,
+        "coverage": 0
+      },
+      "hash": "c8065ebc142e5014f2fa32b7e4fb15c60b58572d4981892d7adfbd1861528434",
+      "size": 3647,
+      "lastModified": "2025-10-25T15:23:28.890Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "FilePreview",
+        "fetchFileContent",
+        "response",
+        "data",
+        "lines",
+        "isTruncated",
+        "displayLines"
+      ]
+    },
+    "packages/ui/src/components/GraphHUD.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 15,
+        "loc": 65,
+        "complexity": 9,
+        "coverage": 0
+      },
+      "hash": "da34b6607b240e0ab195d7a480ffbc8fa432ba9999e72545c5b7ef3316310d23",
+      "size": 2089,
+      "lastModified": "2025-10-25T15:23:28.890Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "GraphHUD",
+        "updateIntervalRef",
+        "cy",
+        "updateHUD"
+      ]
+    },
+    "packages/ui/src/components/GraphView.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 10,
+        "depth": 2,
+        "churn": 1076,
+        "loc": 837,
+        "complexity": 207,
+        "coverage": 0
+      },
+      "hash": "f188db09eced494c2fb10f408658dc7f9d0ad12eb3137b19e22fd05b334b71d5",
+      "size": 29414,
+      "lastModified": "2025-10-25T18:00:40.197Z",
+      "dependencies": [
+        "@external:react",
+        "@external:cytoscape",
+        "@external:cytoscape-elk",
+        "@external:cytoscape-navigator",
+        "@external:cytoscape-navigator/cytoscape.js-navigator.css",
+        "@external:cytoscape-dagre",
+        "@external:cytoscape-fcose",
+        "@external:cytoscape-euler",
+        "@external:cytoscape-cola",
+        "packages/ui/src/components/GraphHUD.jsx"
+      ],
+      "symbols": [
+        "getNodeType",
+        "getNodeShape",
+        "shapes",
+        "getNodeColor",
+        "colorMap",
+        "langColors",
+        "GraphView",
+        "containerRef",
+        "edgeOpacityRef",
+        "curveStyleRef",
+        "filteredNodes",
+        "filteredEdges",
+        "nodeIds",
+        "nodeMap",
+        "connectedNodeIds",
+        "elements",
+        "filename",
+        "nodeType",
+        "isUnconnected",
+        "lastDot"
+      ]
+    },
+    "packages/ui/src/components/Inspector.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 2,
+        "depth": 2,
+        "churn": 619,
+        "loc": 432,
+        "complexity": 41,
+        "coverage": 0
+      },
+      "hash": "f6fb983058544c4615eb31e8fecb64a0d2761804d5a2498e10dd180fa5dd1154",
+      "size": 16908,
+      "lastModified": "2025-10-25T15:23:28.898Z",
+      "dependencies": [
+        "@external:react",
+        "packages/ui/src/components/FilePreview.jsx"
+      ],
+      "symbols": [
+        "Inspector",
+        "resizeRef",
+        "handleMouseMove",
+        "newWidth",
+        "handleMouseUp",
+        "isEdge",
+        "fromNode",
+        "toNode",
+        "edgeColor",
+        "edgeType",
+        "connectionType",
+        "sourceLang",
+        "targetLang",
+        "sourceEnv",
+        "targetEnv",
+        "isChanged",
+        "outgoing",
+        "incoming",
+        "fullPath"
+      ]
+    },
+    "packages/ui/src/components/LayoutProgressModal.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 60,
+        "complexity": 4,
+        "coverage": 0
+      },
+      "hash": "382db7f0586233a1140b9870c33a530ecea2141accd061b026984915fca5d93b",
+      "size": 2374,
+      "lastModified": "2025-10-25T15:23:28.898Z",
+      "dependencies": [],
+      "symbols": [
+        "LayoutProgressModal",
+        "progressPercent"
+      ]
+    },
+    "packages/ui/src/components/LayoutSpinner.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 23,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "9d166fedc24ca4cbbeaa346fe0d64f1d88e75c7c95bec359804a6f480bb25825",
+      "size": 928,
+      "lastModified": "2025-10-25T15:23:28.901Z",
+      "dependencies": [],
+      "symbols": [
+        "LayoutSpinner"
+      ]
+    },
+    "packages/ui/src/components/LoadingSpinner.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 29,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "3abd15598edf3c61a15369959bedf5bd74302bafc643129b311d577955dba9fa",
+      "size": 1350,
+      "lastModified": "2025-10-25T15:23:28.901Z",
+      "dependencies": [],
+      "symbols": [
+        "LoadingSpinner"
+      ]
+    },
+    "packages/ui/src/components/PlaneSwitcher.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 38,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "2075ea9d10b80e03d98a7db4260be9444f241bc01c897bcecdda6a2e33a6c06c",
+      "size": 987,
+      "lastModified": "2025-10-25T15:23:28.909Z",
+      "dependencies": [],
+      "symbols": [
+        "PlaneSwitcher"
+      ]
+    },
+    "packages/ui/src/components/RepoLoader.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 2,
+        "depth": 2,
+        "churn": 569,
+        "loc": 475,
+        "complexity": 44,
+        "coverage": 0
+      },
+      "hash": "4b735bfecc73fbe0b2a8b86b048a6c32f95752ff7da5e6fc42b78b302a641480",
+      "size": 18748,
+      "lastModified": "2025-10-25T15:23:28.913Z",
+      "dependencies": [
+        "@external:react",
+        "packages/ui/src/components/LoadingSpinner.jsx"
+      ],
+      "symbols": [
+        "QUICK_PATHS",
+        "RepoLoader",
+        "browsePath",
+        "response",
+        "data",
+        "detectEntryPoints",
+        "handleSelectRepo",
+        "detected",
+        "handleIndexRepo",
+        "handlePathInputChange",
+        "handlePathInputSubmit",
+        "parent"
+      ]
+    },
+    "packages/ui/src/components/ReportViewer.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 5,
+        "loc": 102,
+        "complexity": 11,
+        "coverage": 0
+      },
+      "hash": "2183b74e3af9385271060d631a39908e6f929d14a022ec0a25f92c9371e431cd",
+      "size": 3422,
+      "lastModified": "2025-10-25T15:23:28.913Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "ReportViewer",
+        "handleKeyDown",
+        "handleCopy",
+        "getTitle",
+        "lineCount"
+      ]
+    },
+    "packages/ui/src/components/SearchBox.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 75,
+        "loc": 149,
+        "complexity": 28,
+        "coverage": 0
+      },
+      "hash": "403a8d9879c292b791e2938059a3d5a44d2ee71027a82ad9e8cf66f652b47b7c",
+      "size": 4379,
+      "lastModified": "2025-10-25T15:23:28.917Z",
+      "dependencies": [
+        "@external:react",
+        "@external:fuse.js"
+      ],
+      "symbols": [
+        "SearchBox",
+        "fuse",
+        "fuzzyResults",
+        "matches",
+        "handleSelectResult",
+        "cy",
+        "nodeElement",
+        "pos",
+        "w",
+        "h",
+        "targetZoom",
+        "pan",
+        "handleKeyDown"
+      ]
+    },
+    "packages/ui/src/components/Sidebar.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 3,
+        "depth": 2,
+        "churn": 1202,
+        "loc": 994,
+        "complexity": 168,
+        "coverage": 0
+      },
+      "hash": "18fa9a79063cc65f8b7852af58010243c90c214e7a42c7f3707fea21f36e8758",
+      "size": 38015,
+      "lastModified": "2025-10-25T15:23:28.921Z",
+      "dependencies": [
+        "@external:react",
+        "packages/ui/src/components/ReportViewer.jsx",
+        "packages/ui/src/components/MOTHPanel.jsx"
+      ],
+      "symbols": [
+        "Sidebar",
+        "resizeRef",
+        "handleMouseMove",
+        "newWidth",
+        "handleMouseUp",
+        "handleFilterChange",
+        "runCycleDetection",
+        "components",
+        "visited",
+        "stack",
+        "lowLink",
+        "index",
+        "currentIndex",
+        "strongConnect",
+        "component",
+        "w",
+        "totalCycleNodes",
+        "cycleNodes",
+        "cycleEdges",
+        "report"
+      ]
+    },
+    "packages/ui/src/components/Toolbar.jsx": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 1726,
+        "loc": 745,
+        "complexity": 197,
+        "coverage": 0
+      },
+      "hash": "010f88e97de6c50bba6edcc20f8c267a1847e9b8633a22ab06731056a0d6a6e3",
+      "size": 25807,
+      "lastModified": "2025-10-25T18:06:10.951Z",
+      "dependencies": [
+        "@external:react"
+      ],
+      "symbols": [
+        "Toolbar",
+        "handleFit",
+        "handleCenter",
+        "handleSizingChange",
+        "handleSizeExaggeration",
+        "handleNodeSpacing",
+        "oldSpacing",
+        "scaleFactor",
+        "currentZoom",
+        "currentPan",
+        "viewportCenterX",
+        "viewportCenterY",
+        "pos",
+        "newX",
+        "newY",
+        "handleEdgeOpacity",
+        "baseOpacity",
+        "newOpacity",
+        "handleCurveStyle",
+        "source"
+      ]
+    },
+    "packages/ui/src/index.css": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 1,
+        "depth": 1,
+        "churn": 29,
+        "loc": 165,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "3b5fa5c334cb79eb98ae3497b3df2c52b1bed9c1dad17c1d9d60f6b956fa6a50",
+      "size": 3953,
+      "lastModified": "2025-10-25T07:15:21.653Z",
+      "dependencies": [
+        "@external:url"
+      ],
+      "symbols": []
+    },
+    "packages/ui/src/main.jsx": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 4,
+        "churn": 0,
+        "loc": 12,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "b49de3b809e23aa6a6754892d05dfa5201401dfbf980f8c541b7d860b588d38e",
+      "size": 237,
+      "lastModified": "2025-10-24T03:45:58.057Z",
+      "dependencies": [
+        "@external:react",
+        "@external:react-dom/client",
+        "packages/ui/src/App.jsx",
+        "packages/ui/src/index.css"
+      ],
+      "symbols": []
+    },
+    "packages/ui/tailwind.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 28,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "75795cd6305662a0a2cbf019683a97e31983be7815171358c69b5ec1aadf9130",
+      "size": 561,
+      "lastModified": "2025-10-23T16:26:17.011Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "packages/ui/vite.config.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 21,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "1e4787cef860c51bda02fd1eea663ed344d5ced2eee826f384f3c9f1a8d1d200",
+      "size": 343,
+      "lastModified": "2025-10-23T04:46:05.580Z",
+      "dependencies": [
+        "@external:vite",
+        "@external:@vitejs/plugin-react"
+      ],
+      "symbols": []
+    },
+    "scripts/collect-runtime.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 2,
+        "loc": 272,
+        "complexity": 65,
+        "coverage": 0
+      },
+      "hash": "c097485689db95e1df72eff83660c645b15b7ee101c2d86b1721c69155ca6848",
+      "size": 7576,
+      "lastModified": "2025-10-24T20:31:50.396Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:node:path",
+        "@external:node:child_process"
+      ],
+      "symbols": [
+        "run",
+        "detectTestFramework",
+        "packageJsonPath",
+        "packageJson",
+        "deps",
+        "runJavaScriptCoverage",
+        "success",
+        "nycOutput",
+        "c8Output",
+        "runPythonCoverage",
+        "hasPython",
+        "venvPath",
+        "pythonCmd",
+        "coverageCmd",
+        "testCmd",
+        "convertCoverage",
+        "converted",
+        "main",
+        "framework",
+        "jsType"
+      ]
+    },
+    "scripts/coverage-to-intellimap.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 5,
+        "depth": 1,
+        "churn": 0,
+        "loc": 90,
+        "complexity": 6,
+        "coverage": 0
+      },
+      "hash": "ff05407c5b7b9a22d8855753d98ea527a3e4971965bf70858ce13c077400072d",
+      "size": 2982,
+      "lastModified": "2025-10-24T16:26:26.331Z",
+      "dependencies": [
+        "@external:datetime",
+        "@external:json",
+        "@external:os",
+        "@external:pathlib",
+        "@external:subprocess"
+      ],
+      "symbols": [
+        "convert_coverage",
+        "get_git_info"
+      ]
+    },
+    "scripts/nyc-to-intellimap.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 47,
+        "loc": 209,
+        "complexity": 50,
+        "coverage": 0
+      },
+      "hash": "cad15606290efea196e0cda8d501004a9657a2661a81b4e9a6d634b8a74628e4",
+      "size": 6790,
+      "lastModified": "2025-10-24T21:05:15.576Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:node:path",
+        "@external:node:child_process",
+        "@external:path"
+      ],
+      "symbols": [
+        "convertNYCToIntelliMap",
+        "nycCoveragePath",
+        "nycData",
+        "graphPath",
+        "staticGraph",
+        "nodes",
+        "edges",
+        "executionMap",
+        "cwd",
+        "relativePath",
+        "totalStatements",
+        "executedStatements",
+        "totalFunctions",
+        "executedFunctions",
+        "totalBranches",
+        "executedBranches",
+        "total",
+        "executed",
+        "coveragePercent",
+        "executionCount"
+      ]
+    },
+    "scripts/setup-runtime.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 3,
+        "depth": 1,
+        "churn": 0,
+        "loc": 333,
+        "complexity": 52,
+        "coverage": 0
+      },
+      "hash": "f20e94abc324d4d7541d11d3a0b230f8c0448e8588851c48ac11900f50eea05c",
+      "size": 9525,
+      "lastModified": "2025-10-24T16:25:20.319Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:node:path",
+        "@external:node:child_process"
+      ],
+      "symbols": [
+        "VENV_PATH",
+        "run",
+        "setupJavaScript",
+        "nycrcPath",
+        "nycConfig",
+        "c8ConfigPath",
+        "c8Config",
+        "setupPython",
+        "pipCmd",
+        "coveragercPath",
+        "coverageConfig",
+        "createHelperScripts",
+        "pythonConverterPath",
+        "pythonConverter",
+        "updateGitignore",
+        "gitignorePath",
+        "entries",
+        "gitignore",
+        "updated",
+        "entry"
+      ]
+    },
+    "scripts/v8-to-intellimap.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 4,
+        "depth": 1,
+        "churn": 0,
+        "loc": 183,
+        "complexity": 45,
+        "coverage": 0
+      },
+      "hash": "f0a53e22d58e2b06159be29eb4802c01e23ba8105b248c04b4f84c64c0b1860e",
+      "size": 5472,
+      "lastModified": "2025-10-24T18:41:01.385Z",
+      "dependencies": [
+        "@external:fs-extra",
+        "@external:path",
+        "@external:url",
+        "@external:child_process"
+      ],
+      "symbols": [
+        "__filename",
+        "__dirname",
+        "convertV8Coverage",
+        "files",
+        "coverageFiles",
+        "allCoverage",
+        "data",
+        "file",
+        "graphPath",
+        "staticGraph",
+        "branch",
+        "commit",
+        "nodes",
+        "executionMap",
+        "url",
+        "filePath",
+        "relativePath",
+        "totalChars",
+        "coveredChars",
+        "rangeSize"
+      ]
+    },
+    "test-app/demo.sh": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 37,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "bcca801995710a91128e11f6301e25550bced5faad95e2f0e1f84cf62a42076a",
+      "size": 936,
+      "lastModified": "2025-10-24T18:34:00.207Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "test-app/lib/email.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 15,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "220c89f1f6bf692a0ed8450acd356dd5b46b6f2404efe9cb2150c0732cf3f97b",
+      "size": 340,
+      "lastModified": "2025-10-24T18:33:28.398Z",
+      "dependencies": [],
+      "symbols": [
+        "sendEmail"
+      ]
+    },
+    "test-app/lib/logger.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 14,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "64c8fe239383f8feb380ba599b45fd8e9e83eb840f3c2cd95fcd9d4f1255e0a4",
+      "size": 361,
+      "lastModified": "2025-10-24T18:33:36.549Z",
+      "dependencies": [],
+      "symbols": [
+        "logActivity",
+        "timestamp",
+        "logError"
+      ]
+    },
+    "test-app/lib/orders.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 25,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "388971883fc42fc8edf10bfdf3ac36a6d90803d4b92ed6aabd75ab6e60503c49",
+      "size": 571,
+      "lastModified": "2025-10-24T18:33:20.317Z",
+      "dependencies": [],
+      "symbols": [
+        "processOrder",
+        "cancelOrder"
+      ]
+    },
+    "test-app/lib/products.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 24,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "28fe79c857a107e101ab1d318f351c5d1d83a68e41997b70b8f5f41a588c4819",
+      "size": 518,
+      "lastModified": "2025-10-24T18:33:11.498Z",
+      "dependencies": [],
+      "symbols": [
+        "getProductData",
+        "getProductById"
+      ]
+    },
+    "test-app/lib/users.js": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 24,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "b9f55c6790e4ff758892abed20f60c6c66f9e8eb190d9ea59bd118da1c5c2f4d",
+      "size": 486,
+      "lastModified": "2025-10-24T18:33:02.714Z",
+      "dependencies": [],
+      "symbols": [
+        "getUserData",
+        "getAllUsers"
+      ]
+    },
+    "test-app/package-lock.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 833,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "8e0d755a4fb0ec2b051d8894628f671055536af89f0c7d263f15a3e1e515ffb6",
+      "size": 29518,
+      "lastModified": "2025-10-24T18:35:15.890Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "test-app/package.json": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 15,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "fdcd62596166db592a8d2fefcc40aa6df80b028796e699eb027041e092d4ee3a",
+      "size": 252,
+      "lastModified": "2025-10-24T18:33:44.517Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "test-app/server.js": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 6,
+        "depth": 2,
+        "churn": 0,
+        "loc": 60,
+        "complexity": 5,
+        "coverage": 0
+      },
+      "hash": "1b57d3d56fcdc5acb7d5296c2502e24bedaaac43d981e4e3a007a2218625ec6c",
+      "size": 1758,
+      "lastModified": "2025-10-24T18:35:59.936Z",
+      "dependencies": [
+        "@external:express",
+        "test-app/lib/users.js",
+        "test-app/lib/products.js",
+        "test-app/lib/orders.js",
+        "test-app/lib/email.js",
+        "test-app/lib/logger.js"
+      ],
+      "symbols": [
+        "app",
+        "PORT",
+        "user",
+        "products",
+        "order"
+      ]
+    },
+    "test-project/backend/__init__.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 2,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "c7ccc15d4e63ceb3b51c621d7bd3e7e2091b6e0ff5c76c1c3b5400e53e968413",
+      "size": 22,
+      "lastModified": "2025-10-23T04:50:25.552Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "test-project/backend/api/__init__.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 2,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "46072ff3331d53201c9b6a7223e239840b0e9e1315efcad85216dbf710868ab0",
+      "size": 17,
+      "lastModified": "2025-10-23T04:50:30.133Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "test-project/backend/api/routes.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 5,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "6cdafdbe3b594bcde9f2475ef245f62531adba396b95b9add3ef883cb30e11f7",
+      "size": 50,
+      "lastModified": "2025-10-23T04:50:39.397Z",
+      "dependencies": [],
+      "symbols": [
+        "get_routes"
+      ]
+    },
+    "test-project/backend/api/server.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 2,
+        "depth": 1,
+        "churn": 0,
+        "loc": 9,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "2a4abedc735da34eebc9fa9b2e506b80f9be33f0389a2b9101bbfb35f38bbf1a",
+      "size": 192,
+      "lastModified": "2025-10-23T04:50:34.857Z",
+      "dependencies": [
+        "@external:core.db",
+        "@external:routes"
+      ],
+      "symbols": [
+        "create_app"
+      ]
+    },
+    "test-project/backend/core/__init__.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 2,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "53e03ac72feae2c17c20fbc3559e5941ea714b4c2b8a6f06365eca709fab4064",
+      "size": 18,
+      "lastModified": "2025-10-23T04:50:46.583Z",
+      "dependencies": [],
+      "symbols": []
+    },
+    "test-project/backend/core/db.py": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 0,
+        "loc": 6,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "77bc40ed328db2e99a51f37c1940a65a315641e88c27cdc5a43697056c6360b2",
+      "size": 94,
+      "lastModified": "2025-10-23T04:50:50.831Z",
+      "dependencies": [],
+      "symbols": [
+        "Database",
+        "__init__"
+      ]
+    },
+    "test-project/src/helper.ts": {
+      "metrics": {
+        "fanin": 1,
+        "fanout": 0,
+        "depth": 1,
+        "churn": 6,
+        "loc": 8,
+        "complexity": 2,
+        "coverage": 0
+      },
+      "hash": "22e5de99b33cf2fb9e8227a51bc0f20a09a5d9be0b6da766c6d2384926add932",
+      "size": 142,
+      "lastModified": "2025-10-23T05:08:20.069Z",
+      "dependencies": [],
+      "symbols": [
+        "helper",
+        "newHelper"
+      ]
+    },
+    "test-project/src/index.ts": {
+      "metrics": {
+        "fanin": 0,
+        "fanout": 1,
+        "depth": 2,
+        "churn": 0,
+        "loc": 8,
+        "complexity": 1,
+        "coverage": 0
+      },
+      "hash": "40867786e575c008d4b9ed58928b8156e19ae24857ce8c12bd75d3a04488f5d4",
+      "size": 97,
+      "lastModified": "2025-10-23T04:48:27.694Z",
+      "dependencies": [
+        "test-project/src/helper.ts"
+      ],
+      "symbols": [
+        "main"
+      ]
+    }
+  }
+}

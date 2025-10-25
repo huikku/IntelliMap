@@ -151,20 +151,43 @@ export async function convertV8ToRuntime(coverageDir, runtimeDir, cwd, staticGra
   
   console.log(`✅ Detected ${runtimeEdges.length} runtime edges`);
   
-  // Get git metadata
+  // Get git metadata and repo name
   let branch = 'unknown';
   let commit = 'unknown';
+  let repository = path.basename(cwd);
   try {
     branch = execSync('git rev-parse --abbrev-ref HEAD', { cwd, encoding: 'utf8' }).trim();
     commit = execSync('git rev-parse --short HEAD', { cwd, encoding: 'utf8' }).trim();
+    // Try to get repo name from git remote
+    try {
+      const remote = execSync('git config --get remote.origin.url', { cwd, encoding: 'utf8' }).trim();
+      const match = remote.match(/\/([^\/]+?)(\.git)?$/);
+      if (match) {
+        repository = match[1];
+      }
+    } catch (e) {
+      // No remote, use directory name
+    }
   } catch (e) {
-    // Not a git repo
+    // Not a git repo, use directory name
   }
-  
+
+  // Convert modules to nodes format (for compatibility with runtime-analyzer.js)
+  const nodes = Array.from(modules.values()).map(module => ({
+    id: module.path,
+    executionCount: module.loadCount,
+    totalTime: 0, // V8 coverage doesn't provide timing
+    coverage: module.coverage,
+    executedFunctions: module.executedFunctions,
+    totalFunctions: module.totalFunctions,
+    size: module.size,
+  }));
+
   // Create enhanced runtime trace
   const trace = {
     metadata: {
       timestamp: Date.now(),
+      repository,
       branch,
       commit,
       runId: `runtime-${Date.now()}`,
@@ -172,8 +195,9 @@ export async function convertV8ToRuntime(coverageDir, runtimeDir, cwd, staticGra
       source: 'v8-coverage-enhanced',
       description: 'Enhanced V8 runtime coverage with function-level tracking',
     },
-    modules: Array.from(modules.values()),
+    nodes, // Use nodes format for compatibility
     edges: runtimeEdges,
+    modules: Array.from(modules.values()), // Keep modules for detailed analysis
     functions: Array.from(executedFunctions.values()),
     summary: {
       totalModules: modules.size,

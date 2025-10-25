@@ -6,7 +6,7 @@ export default function PlaneSwitcher({ plane, setPlane }) {
         className={`px-3 py-1 rounded text-sm ${
           plane === 'static'
             ? 'bg-green-600 text-white'
-            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+            : 'bg-[#0a0a0a] text-[#a0a0a0] hover:bg-[#1a1a1a]'
         }`}
       >
         Static
@@ -16,7 +16,7 @@ export default function PlaneSwitcher({ plane, setPlane }) {
         className={`px-3 py-1 rounded text-sm ${
           plane === 'backend'
             ? 'bg-purple-600 text-white'
-            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+            : 'bg-[#0a0a0a] text-[#a0a0a0] hover:bg-[#1a1a1a]'
         }`}
       >
         Backend
@@ -26,7 +26,7 @@ export default function PlaneSwitcher({ plane, setPlane }) {
         className={`px-3 py-1 rounded text-sm ${
           plane === 'diff'
             ? 'bg-red-600 text-white'
-            : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+            : 'bg-[#0a0a0a] text-[#a0a0a0] hover:bg-[#1a1a1a]'
         }`}
       >
         Diff

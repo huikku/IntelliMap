@@ -1,0 +1,179 @@
+#MOTH:repo
+meta:{project:IntelliMap;version:1.2;date:2025-10-25;hash:sha256:8aff239de1dc1cd8b07e80a547162caabf522c6fde04168d6d9ce7febc8ce6dd;parent:sha256:none}
+@INDEX count:96 checksum:sha1:dfed86baa2ce8ca0019f1512358e7c1028fcc950
+@FILES
+.augment/rules/coding-standards.moth | {fanin:0;fanout:0;depth:1;churn:0;loc:166;complexity:1;coverage:0} |  |  | No documentation available | rules coding-standards.moth (large file)
+.augment/rules/prd.moth | {fanin:0;fanout:0;depth:1;churn:0;loc:175;complexity:1;coverage:0} |  |  | No documentation available | rules prd.moth (large file)
+.c8rc.json | {fanin:0;fanout:0;depth:1;churn:0;loc:22;complexity:1;coverage:0} |  |  | No documentation available | root .c8rc.json
+.coveragerc | {fanin:0;fanout:0;depth:1;churn:0;loc:16;complexity:1;coverage:0} |  |  | tests/* | root .coveragerc
+.gitignore | {fanin:0;fanout:0;depth:1;churn:0;loc:53;complexity:1;coverage:0} |  |  | .swp | root .gitignore
+.nycrc.json | {fanin:0;fanout:0;depth:1;churn:0;loc:31;complexity:1;coverage:0} |  |  | No documentation available | root .nycrc.json
+IMPLEMENTATION_SUMMARY.md | {fanin:0;fanout:1;depth:1;churn:0;loc:158;complexity:16;coverage:0} | →[@external:extraction] |  | Backend:** | root IMPLEMENTATION_SUMMARY.md (large file)
+README.md | {fanin:0;fanout:1;depth:1;churn:134;loc:185;complexity:5;coverage:0} | →[@external:
+    }
+  ],
+  ] |  | In-App Workflow (Recommended):** | root README.md (large file) (frequently changed)
+docs/AUTOMATED-RUNTIME-ANALYSIS.md | {fanin:0;fanout:0;depth:1;churn:0;loc:354;complexity:2;coverage:0} |  |  | 100% automated** - no manual setup required! | root AUTOMATED-RUNTIME-ANALYSIS.md (large file)
+docs/IN-APP-RUNTIME-GUIDE.md | {fanin:0;fanout:0;depth:1;churn:0;loc:395;complexity:12;coverage:0} |  |  | Run everything from the browser - no terminal commands needed!** | root IN-APP-RUNTIME-GUIDE.md (large file)
+docs/REAL-RUNTIME-DATA-GUIDE.md | {fanin:0;fanout:6;depth:1;churn:0;loc:346;complexity:48;coverage:0} | →[@external:fs-extra,@external:node:path,docs/runtime-tracer.js,docs/utils.js,@external:fs,@external:avgTime] | fn:[tracer,RuntimeTracer] | Read NYC coverage data | root REAL-RUNTIME-DATA-GUIDE.md (large file) (high complexity)
+docs/RUNTIME-ANALYSIS-GUIDE.md | {fanin:0;fanout:0;depth:1;churn:0;loc:349;complexity:7;coverage:0} |  |  | Analyze what code actually executes when you run your app!** | root RUNTIME-ANALYSIS-GUIDE.md (large file)
+docs/RUNTIME-QUICK-START.md | {fanin:0;fanout:0;depth:1;churn:0;loc:312;complexity:3;coverage:0} |  |  | What it does:** | root RUNTIME-QUICK-START.md (large file)
+docs/Run-Based-Derived-Reports-Plan.md | {fanin:0;fanout:0;depth:1;churn:0;loc:204;complexity:3;coverage:0} |  |  | Coverage % of dependencies** | root Run-Based-Derived-Reports-Plan.md (large file)
+docs/intellimap_llm_integration_plan.md | {fanin:0;fanout:0;depth:1;churn:0;loc:356;complexity:32;coverage:0} |  | fn:[LLMProvider] | Serialization rules (one-line safety):** | root intellimap_llm_integration_plan.md (large file) (high complexity)
+docs/intellimap_llm_integration_plan.md:Zone.Identifier | {fanin:0;fanout:0;depth:1;churn:0;loc:3;complexity:1;coverage:0} |  |  | No documentation available | root intellimap_llm_integration_plan.md:Zone.Identifier (small file)
+docs/intellimap_runtime_plan.md | {fanin:0;fanout:10;depth:1;churn:146;loc:256;complexity:18;coverage:0} | →[@external:node:fs,@external:node:inspector,docs/cpu-profiler.js,@external:node:v8,@external:tracing,@external:edges.,@external:hook,@external:fs,@external:inspector,@external:v8] |  | Key Properties:** | root intellimap_runtime_plan.md (large file) (frequently changed)
+docs/intellimap_runtime_plan.md:Zone.Identifier | {fanin:0;fanout:0;depth:1;churn:0;loc:3;complexity:1;coverage:0} |  |  | No documentation available | root intellimap_runtime_plan.md:Zone.Identifier (small file)
+docs/layout.md | {fanin:0;fanout:1;depth:1;churn:0;loc:164;complexity:18;coverage:0} | →[@external:hierarchies.] |  | Use when:** You want a clear *top-to-bottom dependency tree* — e.g., module import hierarchies. | root layout.md (large file)
+docs/newFeatures.md | {fanin:0;fanout:0;depth:1;churn:0;loc:96;complexity:5;coverage:0} |  |  | Lines of Code / Complexity overlays** (via `cloc` or `radon`). | root newFeatures.md
+docs/novelFeatures.md | {fanin:0;fanout:2;depth:1;churn:0;loc:216;complexity:11;coverage:0} | →[@external:edges,@external:depth] |  | Framework: **React + TypeScript + Cytoscape.js + Vite + Tailwind** | root novelFeatures.md (large file)
+docs/prd-expanded.md | {fanin:0;fanout:5;depth:1;churn:0;loc:280;complexity:13;coverage:0} | →[@external:},
+    {,@external:}
+  ]
+}
+```
+
+### 6.2 Express Server
+
+Serves both `graph.json` and static UI. Supports auto-refresh via SSE when graph updates.
+
+### 6.3 React UI (Vite + Cytoscape.js + Tailwind + shadcn/ui)
+
+Uses React + Vite for dev speed, Tailwind for styling, and shadcn/ui for polished components.
+
+**Libraries:** `react`, `vite`, `cytoscape`, `cytoscape-elk`, `framer-motion`, `lucide-react`
+
+**Filters:** `Language` (JS/TS, Python), `Environment` (frontend, backend)
+
+**Main Components:**
+
+| Component           | Description                          |
+| ------------------- | ------------------------------------ |
+| `<GraphView />`     | Cytoscape visualization layer        |
+| `<Sidebar />`       | Search, filter, layout toggles       |
+| `<Toolbar />`       | Graph control buttons                |
+| `<Inspector />`     | Node detail + dependency info        |
+| `<PlaneSwitcher />` | Plane selector (static/backend/diff) |
+
+---
+
+## 7. File Hierarchy
+
+```
+intellimap/
+├── package.json
+├── README.md
+├── packages/
+│   ├── cli/
+│   │   ├── index.js
+│   │   ├── esbuildGraph.js
+│   │   ├── mergeGraphs.js
+│   │   └── watcher.js
+│   ├── py/
+│   │   ├── indexer.py
+│   │   ├── resolver.py
+│   │   └── requirements.txt
+│   ├── server/
+│   │   ├── server.js
+│   │   └── reload.js
+│   └── ui/
+│       ├── src/
+│       │   ├── App.jsx
+│       │   ├── components/
+│       │   │   ├── GraphView.jsx
+│       │   │   ├── Sidebar.jsx
+│       │   │   ├── Toolbar.jsx
+│       │   │   ├── Inspector.jsx
+│       │   │   └── PlaneSwitcher.jsx
+│       │   └── styles/theme.css
+│       └── vite.config.js
+└── .intellimap/
+    ├── graph.json
+    ├── js-graph.json
+    ├── py-graph.json
+    └── config.json
+```
+
+---
+
+## 8. UI Overview (KablUI Summary)
+
+```
+@APP[theme:dark id:intellimap]
+  @HEADER[h:48 bg:#1e1e1e]
+    ,docs/...,@external:graph,@external:and] |  | Single-user, local execution only** | root prd-expanded.md (large file)
+docs/runtime-analysis-guide.md | {fanin:0;fanout:5;depth:1;churn:0;loc:331;complexity:17;coverage:0} | →[@external:v8,@external:sys,@external:json,@external:time,@external:my_app] | fn:[recordEdge] | Metadata:** | root runtime-analysis-guide.md (large file)
+docs/sizing.md | {fanin:0;fanout:0;depth:1;churn:0;loc:136;complexity:4;coverage:0} |  |  | Centrality (betweenness, closeness, eigenvector) | root sizing.md (large file)
+docs/testing-suite-plan.md | {fanin:0;fanout:2;depth:1;churn:0;loc:455;complexity:17;coverage:0} | →[@external:edges,@external:depth] |  | Framework: **React + TypeScript + Cytoscape.js + Vite + Tailwind** | root testing-suite-plan.md (large file)
+jest.config.js | {fanin:0;fanout:0;depth:1;churn:0;loc:20;complexity:1;coverage:0} |  |  | No documentation available | root jest.config.js
+package-lock.json | {fanin:0;fanout:2;depth:1;churn:8235;loc:11356;complexity:13;coverage:0} | →[@external:: {
+      ,@external:: ] |  | No documentation available | root package-lock.json (large file) (frequently changed)
+package.json | {fanin:0;fanout:0;depth:1;churn:20;loc:52;complexity:1;coverage:0} |  |  | No documentation available | root package.json
+packages/cli/commands/diff.js | {fanin:1;fanout:2;depth:1;churn:8;loc:41;complexity:11;coverage:0} | →[@external:fs-extra,@external:simple-git] | fn:[diffCommand,git,diff,changedFiles,graphPath] | Get list of changed files | cli diff.js
+packages/cli/commands/index.js | {fanin:1;fanout:5;depth:2;churn:8;loc:49;complexity:6;coverage:0} | →[packages/cli/indexers/esbuildGraph.js,packages/cli/indexers/pythonGraph.js,packages/cli/indexers/mergeGraphs.js,@external:fs-extra,@external:node:path] | fn:[indexCommand,graphs,merged] | Build JS/TS graph | cli index.js
+packages/cli/commands/run.js | {fanin:1;fanout:5;depth:2;churn:37;loc:277;complexity:55;coverage:0} | →[@external:child_process,@external:fs-extra,@external:path,@external:url,packages/cli/runtime/enhanced-v8-converter.js] | fn:[__filename,__dirname,runWithCoverage,cwd,coverageDir] |  | cli run.js (large file) (high complexity)
+packages/cli/commands/serve.js | {fanin:1;fanout:4;depth:3;churn:31;loc:56;complexity:10;coverage:0} | →[@external:node:child_process,@external:node:url,@external:node:path,packages/cli/watcher.js] | fn:[__filename,__dirname,serveCommand,serverPath,serverProcess] | Start watcher if enabled | cli serve.js
+packages/cli/generate-sample-trace.js | {fanin:0;fanout:2;depth:1;churn:0;loc:123;complexity:28;coverage:0} | →[@external:fs-extra,@external:node:path] | fn:[generateSampleTrace,graphPath,staticGraph,executedEdges,executedNodes] |  | cli generate-sample-trace.js (large file) (high complexity)
+packages/cli/index.js | {fanin:0;fanout:7;depth:4;churn:0;loc:61;complexity:6;coverage:0} | →[@external:commander,packages/cli/commands/index.js,packages/cli/commands/diff.js,packages/cli/commands/serve.js,packages/cli/commands/run.js,packages/cli/commands/capture.js,packages/cli/commands/moth.js] | fn:[program] | No documentation available | cli index.js
+packages/cli/indexers/esbuildGraph.js | {fanin:3;fanout:4;depth:1;churn:776;loc:352;complexity:79;coverage:0} | →[@external:esbuild,@external:fs-extra,@external:glob,packages/cli/indexers/metricsComputer.js] | fn:[scanBackendFiles,nodes,nodeMap,patterns,files] |  | cli esbuildGraph.js (large file) (high complexity) (frequently changed)
+packages/cli/indexers/mergeGraphs.js | {fanin:4;fanout:0;depth:1;churn:0;loc:69;complexity:24;coverage:0} |  | fn:[mergeGraphs,nodes,edges,folders,nodeMap] |  | cli mergeGraphs.js (high complexity)
+packages/cli/indexers/mergeGraphs.test.js | {fanin:0;fanout:2;depth:2;churn:0;loc:141;complexity:18;coverage:0} | →[@external:@jest/globals,packages/cli/indexers/mergeGraphs.js] | fn:[graphs,result,graphs1,result1,graphs2] | Should keep first occurrence | cli mergeGraphs.test.js (large file)
+packages/cli/indexers/pythonGraph.js | {fanin:3;fanout:4;depth:1;churn:8;loc:60;complexity:13;coverage:0} | →[@external:node:child_process,@external:node:path,@external:node:url,packages/cli/indexers/metricsComputer.js] | fn:[__filename,__dirname,buildPythonGraph,pythonScript,args] |  | cli pythonGraph.js
+packages/cli/indexers/python_indexer.py | {fanin:0;fanout:5;depth:1;churn:70;loc:119;complexity:21;coverage:0} | →[@external:argparse,@external:ast,@external:json,@external:pathlib,@external:sys] | fn:[build_python_graph,extract_imports,main,resolve_import_path] | No documentation available | cli python_indexer.py (large file) (high complexity) (frequently changed)
+packages/cli/package.json | {fanin:0;fanout:0;depth:1;churn:3;loc:24;complexity:1;coverage:0} |  |  | No documentation available | cli package.json
+packages/cli/runtime-instrument.js | {fanin:0;fanout:7;depth:1;churn:0;loc:226;complexity:26;coverage:0} | →[@external:module,@external:fs-extra,@external:path,@external:perf_hooks,@external:Module,@external:fs,@external:relationship] |  |  | cli runtime-instrument.js (large file) (high complexity)
+packages/cli/runtime/collector.js | {fanin:0;fanout:5;depth:1;churn:0;loc:213;complexity:23;coverage:0} | →[@external:fs-extra,@external:path,@external:child_process,@external:perf_hooks,@external:async_hooks] | fn:[getRuntimeData,perfData,asyncHook,lastCheck,now] |  | cli collector.js (large file) (high complexity)
+packages/cli/runtime/enhanced-v8-converter.js | {fanin:1;fanout:4;depth:1;churn:0;loc:244;complexity:50;coverage:0} | →[@external:fs-extra,@external:path,@external:url,@external:child_process] | fn:[convertV8ToRuntime,files,coverageFiles,allCoverage,data] |  | cli enhanced-v8-converter.js (large file) (high complexity)
+packages/cli/runtime/loader.js | {fanin:0;fanout:3;depth:1;churn:0;loc:137;complexity:32;coverage:0} | →[@external:url,@external:path,@external:fs] | fn:[__filename,__dirname,runtimeData,resolve,result] |  | cli loader.js (large file) (high complexity)
+packages/cli/watcher.js | {fanin:1;fanout:6;depth:2;churn:0;loc:110;complexity:19;coverage:0} | →[@external:chokidar,packages/cli/indexers/esbuildGraph.js,packages/cli/indexers/pythonGraph.js,packages/cli/indexers/mergeGraphs.js,@external:fs-extra,@external:node:path] | fn:[watchAndRebuild,watchPaths,entryDir,nodeDir,watcher] |  | cli watcher.js (large file)
+packages/server/package.json | {fanin:0;fanout:0;depth:1;churn:3;loc:17;complexity:1;coverage:0} |  |  | No documentation available | server package.json
+packages/server/reload.js | {fanin:1;fanout:0;depth:1;churn:0;loc:40;complexity:7;coverage:0} |  | fn:[clients,setupSSE,notifyClients,message,client] |  | server reload.js
+packages/server/runtime-analyzer.js | {fanin:2;fanout:0;depth:1;churn:0;loc:355;complexity:74;coverage:0} |  | fn:[mergeRuntimeData,runtimeEdgeMap,runtimeNodeMap,key,annotatedEdges] |  | server runtime-analyzer.js (large file) (high complexity)
+packages/server/runtime-analyzer.test.js | {fanin:0;fanout:2;depth:2;churn:0;loc:194;complexity:23;coverage:0} | →[@external:@jest/globals,packages/server/runtime-analyzer.js] | fn:[staticGraph,runtimeTrace,result,graph,hotspots] | No documentation available | server runtime-analyzer.test.js (large file) (high complexity)
+packages/server/server.js | {fanin:0;fanout:11;depth:2;churn:328;loc:916;complexity:180;coverage:0} | →[@external:express,@external:cors,@external:fs-extra,@external:node:path,@external:node:url,packages/server/reload.js,packages/cli/indexers/esbuildGraph.js,packages/cli/indexers/pythonGraph.js,packages/cli/indexers/mergeGraphs.js,packages/server/runtime-analyzer.js,@external:node:child_process] | fn:[__filename,__dirname,app,port,watch] | Track current repository path (defaults to server's working directory) | server server.js (large file) (high complexity) (frequently changed)
+packages/ui/eslint.config.js | {fanin:0;fanout:3;depth:1;churn:5;loc:66;complexity:2;coverage:0} | →[@external:@eslint/js,@external:eslint-plugin-react,@external:eslint-plugin-react-hooks] |  | React rules | ui eslint.config.js
+packages/ui/index.html | {fanin:0;fanout:0;depth:1;churn:0;loc:18;complexity:1;coverage:0} |  |  | No documentation available | ui index.html
+packages/ui/package.json | {fanin:0;fanout:0;depth:1;churn:29;loc:39;complexity:1;coverage:0} |  |  | No documentation available | ui package.json
+packages/ui/postcss.config.js | {fanin:0;fanout:0;depth:1;churn:0;loc:8;complexity:1;coverage:0} |  |  | No documentation available | ui postcss.config.js (small file)
+packages/ui/src/App.jsx | {fanin:1;fanout:8;depth:3;churn:428;loc:446;complexity:66;coverage:0} | →[@external:react,packages/ui/src/components/GraphView.jsx,packages/ui/src/components/Sidebar.jsx,packages/ui/src/components/Toolbar.jsx,packages/ui/src/components/Inspector.jsx,packages/ui/src/components/PlaneSwitcher.jsx,packages/ui/src/components/RepoLoader.jsx,packages/ui/src/components/SearchBox.jsx] | fn:[App,loadPersistedSettings,saved,persistedSettings,cyRef] | Load persisted settings from localStorage | ui App.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/components/CodeAnalysisModal.jsx | {fanin:0;fanout:1;depth:1;churn:0;loc:376;complexity:24;coverage:0} | →[@external:react] | fn:[CodeAnalysisModal,hasIssues,generateReport,report,handleCopy] | No documentation available | ui CodeAnalysisModal.jsx (large file) (high complexity)
+packages/ui/src/components/CycleModal.jsx | {fanin:0;fanout:1;depth:1;churn:142;loc:267;complexity:12;coverage:0} | →[@external:react] | fn:[CycleModal,hasCycles,generateReport,report,handleCopy] | Generate detailed report for coding agent | ui CycleModal.jsx (large file) (frequently changed)
+packages/ui/src/components/FilePreview.jsx | {fanin:1;fanout:1;depth:1;churn:34;loc:128;complexity:17;coverage:0} | →[@external:react] | fn:[FilePreview,fetchFileContent,response,data,lines] | Truncate content if too large | ui FilePreview.jsx (large file)
+packages/ui/src/components/GraphHUD.jsx | {fanin:1;fanout:1;depth:1;churn:15;loc:65;complexity:9;coverage:0} | →[@external:react] | fn:[GraphHUD,updateIntervalRef,cy,updateHUD] | Update zoom and pan on any change | ui GraphHUD.jsx
+packages/ui/src/components/GraphView.jsx | {fanin:1;fanout:10;depth:2;churn:1076;loc:837;complexity:207;coverage:0} | →[@external:react,@external:cytoscape,@external:cytoscape-elk,@external:cytoscape-navigator,@external:cytoscape-navigator/cytoscape.js-navigator.css,@external:cytoscape-dagre,@external:cytoscape-fcose,@external:cytoscape-euler,@external:cytoscape-cola,packages/ui/src/components/GraphHUD.jsx] | fn:[getNodeType,getNodeShape,shapes,getNodeColor,colorMap] | Helper to classify node type based on filename | ui GraphView.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/components/Inspector.jsx | {fanin:1;fanout:2;depth:2;churn:619;loc:432;complexity:41;coverage:0} | →[@external:react,packages/ui/src/components/FilePreview.jsx] | fn:[Inspector,resizeRef,handleMouseMove,newWidth,handleMouseUp] | Check if this is an edge (has 'from' and 'to' properties) | ui Inspector.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/components/LayoutProgressModal.jsx | {fanin:0;fanout:0;depth:1;churn:0;loc:60;complexity:4;coverage:0} |  | fn:[LayoutProgressModal,progressPercent] | No documentation available | ui LayoutProgressModal.jsx
+packages/ui/src/components/LayoutSpinner.jsx | {fanin:0;fanout:0;depth:1;churn:0;loc:23;complexity:2;coverage:0} |  | fn:[LayoutSpinner] | No documentation available | ui LayoutSpinner.jsx
+packages/ui/src/components/LoadingSpinner.jsx | {fanin:1;fanout:0;depth:1;churn:0;loc:29;complexity:2;coverage:0} |  | fn:[LoadingSpinner] | No documentation available | ui LoadingSpinner.jsx
+packages/ui/src/components/PlaneSwitcher.jsx | {fanin:1;fanout:0;depth:1;churn:0;loc:38;complexity:1;coverage:0} |  | fn:[PlaneSwitcher] | No documentation available | ui PlaneSwitcher.jsx
+packages/ui/src/components/RepoLoader.jsx | {fanin:1;fanout:2;depth:2;churn:569;loc:475;complexity:44;coverage:0} | →[@external:react,packages/ui/src/components/LoadingSpinner.jsx] | fn:[QUICK_PATHS,RepoLoader,browsePath,response,data] | Auto-detect entry points | ui RepoLoader.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/components/ReportViewer.jsx | {fanin:1;fanout:1;depth:1;churn:5;loc:102;complexity:11;coverage:0} | →[@external:react] | fn:[ReportViewer,handleKeyDown,handleCopy,getTitle,lineCount] | Handle ESC key to close | ui ReportViewer.jsx (large file)
+packages/ui/src/components/SearchBox.jsx | {fanin:1;fanout:2;depth:1;churn:75;loc:149;complexity:28;coverage:0} | →[@external:react,@external:fuse.js] | fn:[SearchBox,fuse,fuzzyResults,matches,handleSelectResult] | Create fuzzy search index | ui SearchBox.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/components/Sidebar.jsx | {fanin:1;fanout:3;depth:2;churn:1202;loc:994;complexity:168;coverage:0} | →[@external:react,packages/ui/src/components/ReportViewer.jsx,packages/ui/src/components/MOTHPanel.jsx] | fn:[Sidebar,resizeRef,handleMouseMove,newWidth,handleMouseUp] | Store analysis data for interactive file lists | ui Sidebar.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/components/Toolbar.jsx | {fanin:1;fanout:1;depth:1;churn:1726;loc:745;complexity:197;coverage:0} | →[@external:react] | fn:[Toolbar,handleFit,handleCenter,handleSizingChange,handleSizeExaggeration] | Apply node sizing whenever cy, sizing, or sizeExaggeration changes | ui Toolbar.jsx (large file) (high complexity) (frequently changed)
+packages/ui/src/index.css | {fanin:1;fanout:1;depth:1;churn:29;loc:165;complexity:1;coverage:0} | →[@external:url] |  | Nostromo Cockpit Theme - Monochrome CRT Aesthetic */ | ui index.css (large file)
+packages/ui/src/main.jsx | {fanin:0;fanout:4;depth:4;churn:0;loc:12;complexity:1;coverage:0} | →[@external:react,@external:react-dom/client,packages/ui/src/App.jsx,packages/ui/src/index.css] |  | No documentation available | ui main.jsx
+packages/ui/tailwind.config.js | {fanin:0;fanout:0;depth:1;churn:0;loc:28;complexity:1;coverage:0} |  |  | No documentation available | ui tailwind.config.js
+packages/ui/vite.config.js | {fanin:0;fanout:2;depth:1;churn:0;loc:21;complexity:1;coverage:0} | →[@external:vite,@external:@vitejs/plugin-react] |  | No documentation available | ui vite.config.js
+scripts/collect-runtime.js | {fanin:0;fanout:3;depth:1;churn:2;loc:272;complexity:65;coverage:0} | →[@external:fs-extra,@external:node:path,@external:node:child_process] | fn:[run,detectTestFramework,packageJsonPath,packageJson,deps] |  | root collect-runtime.js (large file) (high complexity)
+scripts/coverage-to-intellimap.py | {fanin:0;fanout:5;depth:1;churn:0;loc:90;complexity:6;coverage:0} | →[@external:datetime,@external:json,@external:os,@external:pathlib,@external:subprocess] | fn:[convert_coverage,get_git_info] | No documentation available | root coverage-to-intellimap.py
+scripts/nyc-to-intellimap.js | {fanin:0;fanout:4;depth:1;churn:47;loc:209;complexity:50;coverage:0} | →[@external:fs-extra,@external:node:path,@external:node:child_process,@external:path] | fn:[convertNYCToIntelliMap,nycCoveragePath,nycData,graphPath,staticGraph] |  | root nyc-to-intellimap.js (large file) (high complexity)
+scripts/setup-runtime.js | {fanin:0;fanout:3;depth:1;churn:0;loc:333;complexity:52;coverage:0} | →[@external:fs-extra,@external:node:path,@external:node:child_process] | fn:[VENV_PATH,run,setupJavaScript,nycrcPath,nycConfig] |  | root setup-runtime.js (large file) (high complexity)
+scripts/v8-to-intellimap.js | {fanin:0;fanout:4;depth:1;churn:0;loc:183;complexity:45;coverage:0} | →[@external:fs-extra,@external:path,@external:url,@external:child_process] | fn:[__filename,__dirname,convertV8Coverage,files,coverageFiles] |  | root v8-to-intellimap.js (large file) (high complexity)
+test-app/demo.sh | {fanin:0;fanout:0;depth:1;churn:0;loc:37;complexity:1;coverage:0} |  |  | No documentation available | root demo.sh
+test-app/lib/email.js | {fanin:1;fanout:0;depth:1;churn:0;loc:15;complexity:2;coverage:0} |  | fn:[sendEmail] | Email module - WILL NOT BE EXECUTED (dead code) | lib email.js
+test-app/lib/logger.js | {fanin:1;fanout:0;depth:1;churn:0;loc:14;complexity:5;coverage:0} |  | fn:[logActivity,timestamp,logError] | Logger module - WILL BE EXECUTED | lib logger.js
+test-app/lib/orders.js | {fanin:1;fanout:0;depth:1;churn:0;loc:25;complexity:5;coverage:0} |  | fn:[processOrder,cancelOrder] | Order processing module - WILL NOT BE EXECUTED (dead code) | lib orders.js
+test-app/lib/products.js | {fanin:1;fanout:0;depth:1;churn:0;loc:24;complexity:5;coverage:0} |  | fn:[getProductData,getProductById] | Product data module - WILL BE EXECUTED | lib products.js
+test-app/lib/users.js | {fanin:1;fanout:0;depth:1;churn:0;loc:24;complexity:5;coverage:0} |  | fn:[getUserData,getAllUsers] | User data module - WILL BE EXECUTED | lib users.js
+test-app/package-lock.json | {fanin:0;fanout:0;depth:1;churn:0;loc:833;complexity:1;coverage:0} |  |  | No documentation available | root package-lock.json (large file)
+test-app/package.json | {fanin:0;fanout:0;depth:1;churn:0;loc:15;complexity:1;coverage:0} |  |  | No documentation available | root package.json
+test-app/server.js | {fanin:0;fanout:6;depth:2;churn:0;loc:60;complexity:5;coverage:0} | →[@external:express,test-app/lib/users.js,test-app/lib/products.js,test-app/lib/orders.js,test-app/lib/email.js,test-app/lib/logger.js] | fn:[app,PORT,user,products,order] | Simple test server to demonstrate runtime analysis | root server.js
+test-project/backend/__init__.py | {fanin:0;fanout:0;depth:1;churn:0;loc:2;complexity:1;coverage:0} |  |  | No documentation available | backend __init__.py (small file)
+test-project/backend/api/__init__.py | {fanin:0;fanout:0;depth:1;churn:0;loc:2;complexity:1;coverage:0} |  |  | No documentation available | backend __init__.py (small file)
+test-project/backend/api/routes.py | {fanin:0;fanout:0;depth:1;churn:0;loc:5;complexity:1;coverage:0} |  | fn:[get_routes] | No documentation available | backend routes.py (small file)
+test-project/backend/api/server.py | {fanin:0;fanout:2;depth:1;churn:0;loc:9;complexity:1;coverage:0} | →[@external:core.db,@external:routes] | fn:[create_app] | No documentation available | backend server.py (small file)
+test-project/backend/core/__init__.py | {fanin:0;fanout:0;depth:1;churn:0;loc:2;complexity:1;coverage:0} |  |  | No documentation available | backend __init__.py (small file)
+test-project/backend/core/db.py | {fanin:0;fanout:0;depth:1;churn:0;loc:6;complexity:1;coverage:0} |  | fn:[Database,__init__] | No documentation available | backend db.py (small file)
+test-project/src/helper.ts | {fanin:1;fanout:0;depth:1;churn:6;loc:8;complexity:2;coverage:0} |  | fn:[helper,newHelper] | No documentation available | src helper.ts (small file)
+test-project/src/index.ts | {fanin:0;fanout:1;depth:2;churn:0;loc:8;complexity:1;coverage:0} | →[test-project/src/helper.ts] | fn:[main] | No documentation available | src index.ts (small file)
+@END

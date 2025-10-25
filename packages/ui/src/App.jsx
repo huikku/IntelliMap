@@ -291,10 +291,11 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-dark-900 text-white">
+      <div className="flex items-center justify-center h-screen bg-black">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">🗺️ IntelliMap</h1>
-          <p className="text-gray-400">Loading architecture graph...</p>
+          <img src="/logo-mono.png" alt="MOTH" className="w-24 h-24 mx-auto mb-4 opacity-60" />
+          <h1 className="text-2xl font-bold mb-2 text-[#b8b8b8]" style={{ fontFamily: "'Poppins', sans-serif" }}>MOTHlab</h1>
+          <p className="text-[#6a6a6a] text-sm" style={{ fontFamily: "'JetBrains Mono', monospace" }}>INITIALIZING ARCHITECTURE GRAPH...</p>
         </div>
       </div>
     );
@@ -302,13 +303,15 @@ export default function App() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-dark-900 text-white">
+      <div className="flex items-center justify-center h-screen bg-black">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4 text-red-500">❌ Error</h1>
-          <p className="text-gray-400">{error}</p>
+          <div className="text-4xl mb-4 text-[#8b7355]">⚠</div>
+          <h1 className="text-2xl font-bold mb-2 text-[#8b7355]" style={{ fontFamily: "'Poppins', sans-serif" }}>SYSTEM ERROR</h1>
+          <p className="text-[#6a6a6a] mb-4 text-sm font-mono" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{error}</p>
           <button
             onClick={fetchGraph}
-            className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 rounded"
+            className="px-6 py-3 bg-white text-black rounded hover:opacity-90 transition font-semibold"
+            style={{ fontFamily: "'Barlow Semi Condensed', sans-serif" }}
           >
             Retry
           </button>
@@ -329,32 +332,42 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-dark-900 text-white">
-      {/* Header */}
-      <header className="h-12 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-4 gap-4">
-        <div className="flex items-center gap-4">
-          <h1 className="text-lg font-heading font-bold">🗺️ IntelliMap</h1>
-          {currentRepo && (
-            <span className="text-xs text-gray-400 truncate max-w-xs font-condensed">
-              {currentRepo.split('/').pop()}
-            </span>
-          )}
+    <div className="flex flex-col h-screen bg-black text-[#b8b8b8]">
+      {/* Header - Nostromo Cockpit Style */}
+      <header className="h-16 bg-[#0a0a0a] border-b border-[#3a3a3a]/30 flex items-center justify-between px-6 gap-4 flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <img src="/logo-mono.png" alt="MOTH" className="w-8 h-8 opacity-80" />
+          <div>
+            <h1 className="text-lg font-bold text-[#d4d4d4] tracking-wide" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              MOTHlab
+            </h1>
+            <p className="text-[9px] text-[#6a6a6a] uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              ARCHITECTURE VISUALIZER
+            </p>
+          </div>
         </div>
         <SearchBox graph={graph} cyRef={cyRef} onSearch={setSelectedNode} />
-        <div className="flex gap-2">
+        <div className="flex items-center gap-3">
+          {currentRepo && (
+            <div className="text-xs text-[#6a6a6a] font-mono max-w-xs truncate">
+              {currentRepo}
+            </div>
+          )}
           <button
             onClick={() => setShowRepoLoader(true)}
-            className="px-3 py-1 bg-blue-700 hover:bg-blue-600 rounded text-sm"
+            className="px-3 py-1.5 bg-[#1a1a1a] text-[#a0a0a0] border border-[#3a3a3a] rounded hover:border-[#5a5a5a] hover:bg-[#2a2a2a] transition text-xs"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
             title="Open a different repository"
           >
-            📁 Open Repo
+            BROWSE
           </button>
           <button
             onClick={handleReloadRepo}
-            className="px-3 py-1 bg-green-700 hover:bg-green-600 rounded text-sm"
+            className="px-3 py-1.5 bg-[#1a1a1a] text-[#a0a0a0] border border-[#3a3a3a] rounded hover:border-[#5a5a5a] hover:bg-[#2a2a2a] transition text-xs"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
             title={currentRepo ? `Reload ${currentRepo.split('/').pop()}` : 'Reload current graph'}
           >
-            🔄 Reload
+            RELOAD
           </button>
           <PlaneSwitcher plane={plane} setPlane={setPlane} />
         </div>
@@ -417,11 +430,13 @@ export default function App() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="h-6 bg-gray-950 border-t border-gray-800 flex items-center justify-between px-4 text-xs text-gray-500">
-        <span>© 2025 IntelliMap</span>
-        <span>
-          {graph?.nodes?.length || 0} nodes • {graph?.edges?.length || 0} edges
+      {/* Footer - Nostromo Style */}
+      <footer className="h-8 bg-[#0a0a0a] border-t border-[#3a3a3a]/30 flex items-center justify-between px-6 text-[10px] text-[#6a6a6a] flex-shrink-0">
+        <span style={{ fontFamily: "'JetBrains Mono', monospace" }} className="uppercase tracking-wider">
+          © 2025 MOTHlab • <a href="https://www.alienrobot.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#a0a0a0] transition">Alienrobot LLC</a>
+        </span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace" }} className="uppercase tracking-wider">
+          {graph?.nodes?.length || 0} NODES • {graph?.edges?.length || 0} EDGES
         </span>
       </footer>
     </div>

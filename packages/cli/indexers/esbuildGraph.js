@@ -1,6 +1,7 @@
 import * as esbuild from 'esbuild';
 import fs from 'fs-extra';
 import { globSync } from 'glob';
+import { enrichNodesWithMetrics, computeFolderAggregates } from './metricsComputer.js';
 
 /**
  * Scan backend directory for all JS/TS files
@@ -330,11 +331,21 @@ export async function buildJSGraph(options) {
       }
     }
 
-    return { nodes, edges };
+    // Enrich nodes with LOC and complexity metrics
+    const enrichedNodes = enrichNodesWithMetrics(nodes);
+
+    // Compute folder aggregates
+    const folders = computeFolderAggregates(enrichedNodes);
+
+    return {
+      nodes: enrichedNodes,
+      edges,
+      folders, // Include folder aggregates for compound nodes
+    };
 
   } catch (error) {
     console.error('Error building JS graph:', error.message);
-    return { nodes: [], edges: [] };
+    return { nodes: [], edges: [], folders: [] };
   }
 }
 

@@ -5,6 +5,8 @@ import { indexCommand } from './commands/index.js';
 import { diffCommand } from './commands/diff.js';
 import { serveCommand } from './commands/serve.js';
 import { runCommand } from './commands/run.js';
+import captureCommand from './commands/capture.js';
+import mothCommand from './commands/moth.js';
 
 const program = new Command();
 
@@ -42,6 +44,17 @@ program
   .description('Run your app with runtime analysis (captures actual execution)')
   .argument('<command...>', 'Command to run (e.g., "npm start", "node server.js")')
   .action((command) => runCommand(command));
+
+program
+  .command('capture')
+  .description('Capture runtime execution by running your app with V8 coverage')
+  .argument('<command>', 'Command to run (e.g., "npm start", "node server.js")')
+  .action(captureCommand);
+
+program
+  .command('moth')
+  .description('Generate MOTH manifest for the repository')
+  .action(mothCommand);
 
 program.parse(process.argv);
 
