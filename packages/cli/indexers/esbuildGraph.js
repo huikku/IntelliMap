@@ -1,7 +1,9 @@
 import * as esbuild from 'esbuild';
 import fs from 'fs-extra';
+import path from 'node:path';
 import { globSync } from 'glob';
 import { enrichNodesWithMetrics, computeFolderAggregates } from './metricsComputer.js';
+import { buildStaticGraph } from './staticGraph.js';
 
 /**
  * Scan backend directory for all JS/TS files
@@ -91,6 +93,18 @@ export async function buildJSGraph(options) {
       return { nodes: [], edges: [] };
     }
 
+    // Check if this is a static site (no package.json or no dependencies)
+    const packageJsonPath = path.join(process.cwd(), 'package.json');
+    const isStaticSite = !fs.existsSync(packageJsonPath);
+
+    if (isStaticSite) {
+      console.log('📄 Detected static site (no package.json), using file crawler...');
+      return await buildStaticGraph({
+        entry: entryPoints[0]?.replace(/^\.\//, ''),
+        rootDir: process.cwd()
+      });
+    }
+
     // Build with esbuild to get metafile
     console.log('🔨 Building with esbuild, entryPoints:', entryPoints);
 
@@ -123,7 +137,7 @@ export async function buildJSGraph(options) {
           logLevel: 'silent',
           platform: 'browser',
           target: 'es2020',
-          format: 'esm',
+          format: 'iife', // Use IIFE for static sites (more compatible)
           jsx: 'automatic',
           jsxImportSource: 'react',
           absWorkingDir: process.cwd(),
@@ -152,6 +166,35 @@ export async function buildJSGraph(options) {
         metafile.inputs = { ...metafile.inputs, ...frontendResult.metafile.inputs };
       } catch (error) {
         console.warn('⚠️  Frontend build failed:', error.message);
+        console.log('📄 Falling back to static site crawler...');
+
+        // Fallback: Use static site crawler to find all files
+        try {
+          const staticGraph = await buildStaticGraph({
+            entry: frontendEntries[0]?.replace(/^\.\//, ''),
+            rootDir: process.cwd()
+          });
+
+          // Return the static graph directly instead of trying to merge with metafile
+          console.log(`   ✓ Static crawler found ${staticGraph.nodes.length} files`);
+          return staticGraph;
+        } catch (staticError) {
+          console.error('❌ Static crawler also failed:', staticError.message);
+          // Last resort: just return the entry file
+          for (const entryPoint of frontendEntries) {
+            const normalizedPath = entryPoint.replace(/^\.\//, '');
+            const absolutePath = path.resolve(process.cwd(), normalizedPath);
+
+            if (fs.existsSync(absolutePath)) {
+              const stats = fs.statSync(absolutePath);
+              metafile.inputs[absolutePath] = {
+                bytes: stats.size,
+                imports: [],
+              };
+              console.log(`   ✓ Added static file: ${normalizedPath}`);
+            }
+          }
+        }
       }
     }
 

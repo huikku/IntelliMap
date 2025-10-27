@@ -120,44 +120,82 @@ app.get('/api/detect-entry-points', (req, res) => {
       pyExtraPath: null,
     };
 
-    // Look for common frontend entry points (including monorepo patterns)
-    const frontendCandidates = [
-      'src/main.tsx',
-      'src/main.ts',
-      'src/main.jsx',
-      'src/main.js',
-      'src/index.tsx',
-      'src/index.ts',
-      'src/index.jsx',
-      'src/index.js',
-      'index.tsx',
-      'index.ts',
-      'index.jsx',
-      'index.js',
-      // Monorepo patterns
-      'packages/ui/src/main.tsx',
-      'packages/ui/src/main.ts',
-      'packages/ui/src/main.jsx',
-      'packages/ui/src/main.js',
-      'packages/ui/src/index.tsx',
-      'packages/ui/src/index.ts',
-      'packages/ui/src/index.jsx',
-      'packages/ui/src/index.js',
-      'packages/frontend/src/main.tsx',
-      'packages/frontend/src/main.ts',
-      'packages/frontend/src/main.jsx',
-      'packages/frontend/src/main.js',
-      'packages/client/src/main.tsx',
-      'packages/client/src/main.ts',
-      'packages/client/src/main.jsx',
-      'packages/client/src/main.js',
-    ];
+    // Look for HTML files with <script> tags (static sites)
+    const htmlCandidates = ['index.html', 'public/index.html', 'dist/index.html'];
+    for (const htmlFile of htmlCandidates) {
+      const htmlPath = join(fullPath, htmlFile);
+      if (fs.existsSync(htmlPath)) {
+        try {
+          const htmlContent = fs.readFileSync(htmlPath, 'utf-8');
+          // Parse <script src="..."> tags
+          const scriptRegex = /<script[^>]+src=["']([^"']+)["']/gi;
+          let match;
+          const scripts = [];
+          while ((match = scriptRegex.exec(htmlContent)) !== null) {
+            let scriptSrc = match[1];
+            // Skip external URLs
+            if (scriptSrc.startsWith('http://') || scriptSrc.startsWith('https://') || scriptSrc.startsWith('//')) {
+              continue;
+            }
+            // Remove leading slash
+            if (scriptSrc.startsWith('/')) {
+              scriptSrc = scriptSrc.substring(1);
+            }
+            scripts.push(scriptSrc);
+          }
 
-    for (const candidate of frontendCandidates) {
-      const candidatePath = join(fullPath, candidate);
-      if (fs.existsSync(candidatePath)) {
-        detected.entry = candidate;
-        break;
+          if (scripts.length > 0) {
+            // Use the first local script as entry point
+            detected.entry = scripts[0];
+            console.log(`📄 Detected HTML entry point: ${htmlFile} → ${scripts[0]}`);
+            break;
+          }
+        } catch (err) {
+          console.error(`Error parsing ${htmlFile}:`, err.message);
+        }
+      }
+    }
+
+    // If no HTML entry found, look for common frontend entry points (including monorepo patterns)
+    if (!detected.entry) {
+      const frontendCandidates = [
+        'src/main.tsx',
+        'src/main.ts',
+        'src/main.jsx',
+        'src/main.js',
+        'src/index.tsx',
+        'src/index.ts',
+        'src/index.jsx',
+        'src/index.js',
+        'index.tsx',
+        'index.ts',
+        'index.jsx',
+        'index.js',
+        // Monorepo patterns
+        'packages/ui/src/main.tsx',
+        'packages/ui/src/main.ts',
+        'packages/ui/src/main.jsx',
+        'packages/ui/src/main.js',
+        'packages/ui/src/index.tsx',
+        'packages/ui/src/index.ts',
+        'packages/ui/src/index.jsx',
+        'packages/ui/src/index.js',
+        'packages/frontend/src/main.tsx',
+        'packages/frontend/src/main.ts',
+        'packages/frontend/src/main.jsx',
+        'packages/frontend/src/main.js',
+        'packages/client/src/main.tsx',
+        'packages/client/src/main.ts',
+        'packages/client/src/main.jsx',
+        'packages/client/src/main.js',
+      ];
+
+      for (const candidate of frontendCandidates) {
+        const candidatePath = join(fullPath, candidate);
+        if (fs.existsSync(candidatePath)) {
+          detected.entry = candidate;
+          break;
+        }
       }
     }
 

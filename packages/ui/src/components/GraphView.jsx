@@ -8,6 +8,7 @@ import fcose from 'cytoscape-fcose';
 import euler from 'cytoscape-euler';
 import cola from 'cytoscape-cola';
 import GraphHUD from './GraphHUD';
+import { nodeRenderer } from '../utils/litegraphStyleRenderer';
 
 cytoscape.use(elk);
 cytoscape.use(dagre);
@@ -59,6 +60,43 @@ function getNodeColor(lang, nodeType, changed) {
 
   const langColors = colorMap[lang] || colorMap.ts;
   return langColors[nodeType] || langColors.default;
+}
+
+/**
+ * Detect port direction from layout configuration
+ */
+function getPortDirection(layoutConfig) {
+  const layoutName = layoutConfig.name;
+
+  if (layoutName === 'elk') {
+    const direction = layoutConfig.elk?.['elk.direction'] || 'DOWN';
+    return (direction === 'RIGHT' || direction === 'LEFT') ? 'horizontal' : 'vertical';
+  }
+
+  if (layoutName === 'dagre') {
+    const rankDir = layoutConfig.rankDir || 'TB';
+    return (rankDir === 'LR' || rankDir === 'RL') ? 'horizontal' : 'vertical';
+  }
+
+  return 'vertical';
+}
+
+/**
+ * Generate mock timeseries data
+ * TODO: Replace with real data from graph.json
+ */
+function generateMockTimeseries(nodeId) {
+  const seed = nodeId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const random = (index) => {
+    const x = Math.sin(seed + index) * 10000;
+    return Math.abs(x - Math.floor(x));
+  };
+
+  return {
+    churn: Array.from({ length: 8 }, (_, i) => Math.floor(random(i) * 10)),
+    complexity: Array.from({ length: 5 }, (_, i) => Math.floor(random(i + 10) * 100)),
+    coverage: Array.from({ length: 4 }, (_, i) => Math.floor(random(i + 20) * 100))
+  };
 }
 
 export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef, clustering = false, setCyInstance, edgeOpacity = 1.0, curveStyle = 'bezier-tight', navigationMode = null }) {
@@ -127,6 +165,48 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
       connectedNodeIds.add(e.to);
     });
 
+    // ✅ PERFORMANCE FIX: Pre-compute enhanced node data ONCE
+    console.log('⚡ Pre-computing node data and rendering images...');
+    const nodeDataCache = new Map();
+    const initialZoom = 1.0;
+
+    filteredNodes.forEach(n => {
+      // Calculate fanin/fanout ONCE (not on every zoom)
+      const fanin = filteredEdges.filter(e => e.to === n.id).length;
+      const fanout = filteredEdges.filter(e => e.from === n.id).length;
+
+      // Create stable enhanced data
+      const enhancedData = {
+        id: n.id,
+        label: n.id.split('/').pop(),
+        lang: n.lang,
+        env: n.env,
+        changed: n.changed,
+        metrics: {
+          loc: n.loc || n.size / 30 || 50,
+          complexity: n.complexity || (n.cx_q || 3) * 20,
+          coverage: n.coverage || 0, // ✅ Fixed value, not random!
+          fanin,
+          fanout,
+          depth: n.depth || 0
+        },
+        timeseries: generateMockTimeseries(n.id), // Stable based on ID
+        status: {
+          hotspot: (n.complexity || 0) > 75,
+          lowCoverage: (n.coverage || 0) < 50
+        }
+      };
+
+      // ✅ Pre-render image at initial zoom
+      const renderedImage = nodeRenderer.render(enhancedData, initialZoom);
+      enhancedData.renderedImage = renderedImage;
+      enhancedData.renderedZoom = initialZoom;
+
+      nodeDataCache.set(n.id, enhancedData);
+    });
+
+    console.log(`✅ Pre-computed ${nodeDataCache.size} nodes`);
+
     // Build Cytoscape elements with enhanced metadata
     let elements = [
       ...filteredNodes.map(n => {
@@ -138,6 +218,9 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         const lastDot = filename.lastIndexOf('.');
         const baseName = lastDot > 0 ? filename.substring(0, lastDot) : filename;
         const ext = lastDot > 0 ? filename.substring(lastDot) : '';
+
+        // ✅ Get pre-computed enhanced data
+        const enhancedData = nodeDataCache.get(n.id);
 
         return {
           data: {
@@ -158,6 +241,10 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             complexity: n.complexity || 1, // Cyclomatic complexity
             loc_q: n.loc_q || 3, // LOC quantile (1-5)
             cx_q: n.cx_q || 3, // Complexity quantile (1-5)
+            // ✅ Store pre-rendered image and enhanced data
+            renderedImage: enhancedData?.renderedImage || '',
+            renderedZoom: enhancedData?.renderedZoom || 1.0,
+            _enhancedData: enhancedData, // Store for zoom handler
             // parent will be set later if clustering is enabled
           },
         };
@@ -310,118 +397,29 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         {
           selector: 'node',
           style: {
-            'background-color': node => {
-              if (node.data('isCluster')) return '#1f2937';
-
-              // Darken unconnected nodes
-              const isUnconnected = node.data('isUnconnected');
-
-              // Color code by file extension
-              const ext = node.data('ext') || '';
-              const extColors = {
-                // JavaScript/TypeScript
-                '.js': '#f7df1e',
-                '.jsx': '#61dafb',
-                '.ts': '#3178c6',
-                '.tsx': '#3178c6',
-                '.mjs': '#f7df1e',
-                '.cjs': '#f7df1e',
-                // Python
-                '.py': '#3776ab',
-                '.pyx': '#3776ab',
-                '.pyi': '#3776ab',
-                // Web
-                '.html': '#e34c26',
-                '.css': '#264de4',
-                '.scss': '#cc6699',
-                '.sass': '#cc6699',
-                '.less': '#1d365d',
-                // Config/Data
-                '.json': '#5a5a5a',
-                '.yaml': '#cb171e',
-                '.yml': '#cb171e',
-                '.toml': '#9c4221',
-                '.xml': '#e34c26',
-                // Markdown/Docs
-                '.md': '#083fa1',
-                '.mdx': '#083fa1',
-                '.txt': '#6b7280',
-                // Other
-                '.sh': '#89e051',
-                '.bash': '#89e051',
-                '.zsh': '#89e051',
-                '.rs': '#ce422b',
-                '.go': '#00add8',
-                '.java': '#b07219',
-                '.c': '#555555',
-                '.cpp': '#f34b7d',
-                '.h': '#555555',
-                '.hpp': '#f34b7d',
-              };
-
-              let color = extColors[ext.toLowerCase()] || getNodeColor(node.data('lang'), node.data('nodeType'), node.data('changed'));
-
-              // Darken unconnected nodes by reducing brightness
-              if (isUnconnected) {
-                // Convert hex to RGB, reduce brightness by 50%, convert back
-                const hex = color.replace('#', '');
-                const r = parseInt(hex.substring(0, 2), 16);
-                const g = parseInt(hex.substring(2, 4), 16);
-                const b = parseInt(hex.substring(4, 6), 16);
-
-                const darkenedR = Math.floor(r * 0.4);
-                const darkenedG = Math.floor(g * 0.4);
-                const darkenedB = Math.floor(b * 0.4);
-
-                color = `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`;
-              }
-
-              return color;
+            // Use canvas-rendered image for LiteGraph-style nodes
+            'width': 180,
+            'height': 80,
+            'shape': 'roundrectangle',
+            'background-fit': 'cover',
+            'background-clip': 'none',
+            // ✅ PERFORMANCE FIX: Just return pre-computed image, no rendering!
+            'background-image': (node) => {
+              if (node.data('isCluster')) return '';
+              return node.data('renderedImage') || '';
             },
-            'shape': node => {
-              if (node.data('isCluster')) return 'rectangle';
-              // Canonical shape: rectangle for all nodes
-              return 'rectangle';
-            },
-            'label': node => {
-              if (node.data('isCluster')) return node.data('label');
-              // Single-line label: just the filename
-              return node.data('label') || '';
-            },
-            'text-valign': 'center',
-            'text-halign': 'center',
+            'background-opacity': 1,
+            'border-width': 0,
+
+            // Cluster nodes keep traditional style
+            'label': node => node.data('isCluster') ? node.data('label') : '',
             'font-family': 'Barlow Condensed, sans-serif',
-            'font-size': node => {
-              if (node.data('isCluster')) return 12;
-              // Larger font to fill the box better
-              return 11;
-            },
-            'font-weight': node => (node.data('isCluster') ? 'bold' : 'normal'),
+            'font-size': 12,
             'color': '#fff',
-            'text-outline-color': '#000',
-            'text-outline-width': 1.5,
-            'border-width': node => {
-              if (node.data('isCluster')) return 2;
-              // Border thickness encodes complexity quantile (1-5 → 1-4px)
-              const cx_q = node.data('cx_q') || 3;
-              return Math.max(1, Math.min(4, cx_q));
-            },
-            'border-color': node => {
-              if (node.data('isCluster')) return '#4b5563';
-              // Changed files get amber border
-              return node.data('changed') ? '#8b7355' : '#3a3a3a';
-            },
+            'padding': node => (node.data('isCluster') ? 15 : 0),
+            'background-color': node => node.data('isCluster') ? '#1f2937' : 'transparent',
+            'border-color': node => node.data('isCluster') ? '#4b5563' : 'transparent',
             'border-style': node => (node.data('isCluster') ? 'dashed' : 'solid'),
-            'width': 150, // RECTANGLES: Fixed width
-            'height': 30, // RECTANGLES: Fixed height (5:1 ratio)
-            'padding': node => (node.data('isCluster') ? 15 : 4),
-            'text-wrap': 'ellipsis', // Truncate with ... if too long
-            'text-max-width': node => {
-              if (node.data('isCluster')) return 200;
-              // Text should fill almost the entire width (minus padding)
-              const width = node.width ? node.width() : 150;
-              return width - 8; // Leave 4px padding on each side
-            },
             'compound-sizing-wrt-labels': 'include',
           },
         },
@@ -448,6 +446,9 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
             'control-point-distances': [40, -40],
             'control-point-weights': [0.25, 0.75],
             'opacity': 'data(edgeOpacity)', // Use importance-based opacity
+            // Edge endpoints - attach to right side of source, left side of target
+            'source-endpoint': '0deg',  // Right side of source node
+            'target-endpoint': '180deg', // Left side of target node
             'label': edge => {
               // Count parallel edges between same nodes
               const from = edge.data('source');
@@ -536,9 +537,13 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
         },
       },
       // Zoom configuration
-      wheelSensitivity: 0.2, // Reduce mouse wheel zoom speed (default is 1)
+      wheelSensitivity: 0.5, // Faster mouse wheel zoom (default is 1)
       minZoom: 0.1,
       maxZoom: 3,
+      // Enable user interaction
+      userZoomingEnabled: true,
+      userPanningEnabled: true,
+      boxSelectionEnabled: true,
     });
 
     cy.on('tap', 'node', e => {
@@ -625,6 +630,80 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     } catch (error) {
       console.error('❌ Failed to initialize navigator:', error);
     }
+
+    // Detect and set port direction for LiteGraph nodes
+    const layoutConfig = {
+      name: 'elk',
+      elk: {
+        algorithm: 'layered',
+        'elk.direction': 'RIGHT',
+        'elk.spacing.nodeNode': 50,
+        'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
+      },
+    };
+
+    const portDirection = getPortDirection(layoutConfig);
+    console.log(`🔌 Port direction: ${portDirection}`);
+
+    nodeRenderer.setPortDirection(portDirection);
+
+    // Update edge endpoints based on port direction
+    if (portDirection === 'horizontal') {
+      // Horizontal layout: edges go left-to-right
+      cy.style()
+        .selector('edge')
+        .style({
+          'source-endpoint': '0deg',   // Right side of source
+          'target-endpoint': '180deg', // Left side of target
+        })
+        .update();
+    } else {
+      // Vertical layout: edges go top-to-bottom
+      cy.style()
+        .selector('edge')
+        .style({
+          'source-endpoint': '270deg', // Bottom of source
+          'target-endpoint': '90deg',  // Top of target
+        })
+        .update();
+    }
+
+    // ✅ PERFORMANCE FIX: Debounced zoom handler
+    let zoomTimeout;
+    cy.on('zoom', () => {
+      // Clear existing timeout
+      clearTimeout(zoomTimeout);
+
+      // Debounce: wait 150ms after zoom stops
+      zoomTimeout = setTimeout(() => {
+        const zoom = cy.zoom();
+        const zoomKey = Math.round(zoom * 4) / 4; // Larger steps (0.25 increments)
+
+        if (cy._lastZoomKey === zoomKey) return;
+        cy._lastZoomKey = zoomKey;
+
+        console.log(`🔍 Zoom stabilized at ${zoom.toFixed(2)}, updating nodes...`);
+
+        // Batch update all nodes
+        cy.batch(() => {
+          cy.nodes().forEach(node => {
+            if (node.data('isCluster')) return;
+
+            const enhancedData = node.data('_enhancedData');
+            if (!enhancedData) return;
+
+            // Re-render with new zoom level
+            const newImage = nodeRenderer.render(enhancedData, zoom);
+            node.data('renderedImage', newImage);
+            node.data('renderedZoom', zoom);
+
+            // Update style
+            node.style('background-image', newImage);
+          });
+        });
+
+      }, 150); // Wait 150ms after last zoom event
+    });
 
     return () => {
       if (nav && nav.destroy) {
