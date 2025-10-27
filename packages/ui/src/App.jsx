@@ -51,6 +51,9 @@ export default function App() {
   // Dependency navigation state
   const [navigationMode, setNavigationMode] = useState(null); // 'upstream', 'downstream', 'parents', 'children', or null
 
+  // Renderer selection: 'cytoscape' or 'react-flow'
+  const [renderer, setRenderer] = useState(persistedSettings.renderer || 'cytoscape');
+
   // Keep selectedNodeRef in sync with selectedNode
   useEffect(() => {
     selectedNodeRef.current = selectedNode;
@@ -67,6 +70,7 @@ export default function App() {
       curveStyle,
       sizing,
       sizeExaggeration,
+      renderer,
     };
 
     try {
@@ -75,7 +79,7 @@ export default function App() {
     } catch (e) {
       console.error('Failed to save settings:', e);
     }
-  }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration]);
+  }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration, renderer]);
 
   // Persist zoom and pan when cy instance changes
   useEffect(() => {
@@ -369,6 +373,18 @@ export default function App() {
           >
             RELOAD
           </button>
+          <button
+            onClick={() => setRenderer(renderer === 'cytoscape' ? 'react-flow' : 'cytoscape')}
+            className={`px-3 py-1.5 border rounded transition text-xs ${
+              renderer === 'react-flow'
+                ? 'bg-[#667eea] text-white border-[#667eea]'
+                : 'bg-[#1a1a1a] text-[#a0a0a0] border-[#3a3a3a] hover:border-[#5a5a5a] hover:bg-[#2a2a2a]'
+            }`}
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            title={`Switch to ${renderer === 'cytoscape' ? 'React Flow' : 'Cytoscape'} renderer`}
+          >
+            {renderer === 'cytoscape' ? 'CYTOSCAPE' : 'REACT FLOW'}
+          </button>
           <PlaneSwitcher plane={plane} setPlane={setPlane} />
         </div>
       </header>
@@ -416,6 +432,8 @@ export default function App() {
             edgeOpacity={edgeOpacity}
             curveStyle={curveStyle}
             navigationMode={navigationMode}
+            renderer={renderer}
+            layout={layout}
           />
         </main>
 

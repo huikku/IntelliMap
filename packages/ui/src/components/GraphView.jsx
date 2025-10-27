@@ -9,6 +9,7 @@ import euler from 'cytoscape-euler';
 import cola from 'cytoscape-cola';
 import GraphHUD from './GraphHUD';
 import { nodeRenderer } from '../utils/litegraphStyleRenderer';
+import { ReactFlowGraph } from './ReactFlowGraph';
 
 cytoscape.use(elk);
 cytoscape.use(dagre);
@@ -99,7 +100,7 @@ function generateMockTimeseries(nodeId) {
   };
 }
 
-export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef, clustering = false, setCyInstance, edgeOpacity = 1.0, curveStyle = 'bezier-tight', navigationMode = null }) {
+export default function GraphView({ graph, plane, filters, selectedNode, setSelectedNode, cyRef, clustering = false, setCyInstance, edgeOpacity = 1.0, curveStyle = 'bezier-tight', navigationMode = null, renderer = 'cytoscape', layout = 'elk' }) {
   const containerRef = useRef(null);
   const edgeOpacityRef = useRef(edgeOpacity);
   const curveStyleRef = useRef(curveStyle);
@@ -879,6 +880,33 @@ export default function GraphView({ graph, plane, filters, selectedNode, setSele
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigationMode, selectedNode]);
 
+  // Use React Flow renderer if selected
+  if (renderer === 'react-flow') {
+    // Convert layout name to React Flow format
+    const layoutAlgorithm = layout === 'dagre' ? 'dagre' : 'elk';
+    const layoutDirection = layout === 'dagre' ? 'LR' : 'RIGHT';
+
+    // Prepare filtered graph data for React Flow
+    const filteredGraphData = {
+      nodes: filteredNodes.map(n => ({ data: n.data || n })),
+      edges: filteredEdges.map(e => ({ data: e.data || e })),
+    };
+
+    return (
+      <div className="relative w-full h-full">
+        <ReactFlowGraph
+          graphData={filteredGraphData}
+          selectedNode={selectedNode}
+          onNodeSelect={setSelectedNode}
+          layoutAlgorithm={layoutAlgorithm}
+          layoutDirection={layoutDirection}
+        />
+        <GraphHUD cyRef={cyRef} graph={graph} />
+      </div>
+    );
+  }
+
+  // Default: Use Cytoscape renderer
   return (
     <div className="relative w-full h-full">
       <style>{`

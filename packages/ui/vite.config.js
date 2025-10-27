@@ -16,5 +16,14 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  optimizeDeps: {
+    exclude: ['elkjs'],
+  },
+  resolve: {
+    alias: {
+      // Fix ELK worker issue in browser
+      'web-worker': 'elkjs/lib/elk-api.js',
+    },
+  },
 });
 
