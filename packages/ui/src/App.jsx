@@ -39,6 +39,7 @@ export default function App() {
   const cyRef = useRef(null);
   const selectedNodeRef = useRef(null);
   const [cyInstance, setCyInstance] = useState(null);
+  const reactFlowInstanceRef = useRef(null); // Ref for React Flow instance
 
   // Edge and curve settings that should persist across view changes
   const [edgeOpacity, setEdgeOpacity] = useState(persistedSettings.edgeOpacity || 1.0);
@@ -52,7 +53,7 @@ export default function App() {
   const [navigationMode, setNavigationMode] = useState(null); // 'upstream', 'downstream', 'parents', 'children', or null
 
   // Renderer selection: 'cytoscape' or 'react-flow'
-  const [renderer, setRenderer] = useState(persistedSettings.renderer || 'cytoscape');
+  const [renderer, setRenderer] = useState(persistedSettings.renderer || 'react-flow');
 
   // Keep selectedNodeRef in sync with selectedNode
   useEffect(() => {
@@ -159,53 +160,63 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Press 'f' to focus/fit all visible nodes (or selected node if none are highlighted)
-      if (e.key === 'f' && cyRef.current) {
+      if (e.key === 'f') {
         e.preventDefault();
-        const cy = cyRef.current;
 
-        // Get all visible nodes (opacity > 0.5 means highlighted, not faded)
-        // This works with both class-based fading and opacity-based highlighting
-        const visibleNodes = cy.nodes().filter(node => {
-          const opacity = node.style('opacity');
-          return opacity > 0.5; // Highlighted nodes have opacity 1, faded have 0.15
-        });
+        // React Flow renderer
+        if (renderer === 'react-flow' && reactFlowInstanceRef.current) {
+          const instance = reactFlowInstanceRef.current;
+          instance.fitView({ padding: 0.2, duration: 500 });
+          console.log(`🔍 React Flow: Fitted view`);
+        }
+        // Cytoscape renderer
+        else if (renderer === 'cytoscape' && cyRef.current) {
+          const cy = cyRef.current;
 
-        if (visibleNodes.length > 0 && visibleNodes.length < cy.nodes().length) {
-          // Fit to highlighted nodes (not all nodes)
-          cy.animate({
-            fit: {
-              eles: visibleNodes,
-              padding: 50,
-            },
-          }, {
-            duration: 500,
+          // Get all visible nodes (opacity > 0.5 means highlighted, not faded)
+          // This works with both class-based fading and opacity-based highlighting
+          const visibleNodes = cy.nodes().filter(node => {
+            const opacity = node.style('opacity');
+            return opacity > 0.5; // Highlighted nodes have opacity 1, faded have 0.15
           });
-          console.log(`🔍 Fitted to ${visibleNodes.length} highlighted nodes`);
-        } else if (selectedNodeRef.current) {
-          // Fallback: if no filtering active, zoom to selected node
-          const nodeElement = cy.getElementById(selectedNodeRef.current.id);
-          if (nodeElement.length > 0) {
+
+          if (visibleNodes.length > 0 && visibleNodes.length < cy.nodes().length) {
+            // Fit to highlighted nodes (not all nodes)
             cy.animate({
               fit: {
-                eles: nodeElement,
-                padding: 100,
+                eles: visibleNodes,
+                padding: 50,
               },
             }, {
               duration: 500,
             });
-            console.log(`🔍 Fitted to selected node: ${selectedNodeRef.current.id}`);
+            console.log(`🔍 Fitted to ${visibleNodes.length} highlighted nodes`);
+          } else if (selectedNodeRef.current) {
+            // Fallback: if no filtering active, zoom to selected node
+            const nodeElement = cy.getElementById(selectedNodeRef.current.id);
+            if (nodeElement.length > 0) {
+              cy.animate({
+                fit: {
+                  eles: nodeElement,
+                  padding: 100,
+                },
+              }, {
+                duration: 500,
+              });
+              console.log(`🔍 Fitted to selected node: ${selectedNodeRef.current.id}`);
+            }
+          } else {
+            // No selection, fit all nodes
+            cy.fit(cy.nodes(), 50);
+            console.log(`🔍 Fitted to all nodes`);
           }
-        } else {
-          // No selection, fit all nodes
-          cy.fit(cy.nodes(), 50);
-          console.log(`🔍 Fitted to all nodes`);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [renderer]);
 
   useEffect(() => {
     fetchGraph();
@@ -333,19 +344,21 @@ export default function App() {
     setCurrentRepo(repoPath);
     setSelectedNode(null);
     setPlane('static');
+    setShowRepoLoader(false); // Close the modal
+    console.log('✅ Repository loaded, modal should close');
   };
 
   return (
-    <div className="flex flex-col h-screen bg-black text-[#b8b8b8]">
+    <div className="flex flex-col h-screen bg-black text-cream">
       {/* Header - Nostromo Cockpit Style */}
-      <header className="h-16 bg-[#0a0a0a] border-b border-[#3a3a3a]/30 flex items-center justify-between px-6 gap-4 flex-shrink-0">
+      <header className="h-16 bg-navy border-b border-slate/50 flex items-center justify-between px-6 gap-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <img src="/logo-mono.png" alt="MOTH" className="w-8 h-8 opacity-80" />
           <div>
-            <h1 className="text-lg font-bold text-[#d4d4d4] tracking-wide" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            <h1 className="text-lg font-bold text-cream tracking-wide" style={{ fontFamily: "'Poppins', sans-serif" }}>
               MOTHlab
             </h1>
-            <p className="text-[9px] text-[#6a6a6a] uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <p className="text-[9px] text-teal uppercase tracking-widest" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               ARCHITECTURE VISUALIZER
             </p>
           </div>
@@ -353,13 +366,13 @@ export default function App() {
         <SearchBox graph={graph} cyRef={cyRef} onSearch={setSelectedNode} />
         <div className="flex items-center gap-3">
           {currentRepo && (
-            <div className="text-xs text-[#6a6a6a] font-mono max-w-xs truncate">
+            <div className="text-xs text-mint font-mono max-w-xs truncate">
               {currentRepo}
             </div>
           )}
           <button
             onClick={() => setShowRepoLoader(true)}
-            className="px-3 py-1.5 bg-[#1a1a1a] text-[#a0a0a0] border border-[#3a3a3a] rounded hover:border-[#5a5a5a] hover:bg-[#2a2a2a] transition text-xs"
+            className="px-3 py-1.5 bg-slate text-cream border border-teal/30 rounded hover:border-teal hover:bg-teal/20 transition text-xs"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
             title="Open a different repository"
           >
@@ -367,7 +380,7 @@ export default function App() {
           </button>
           <button
             onClick={handleReloadRepo}
-            className="px-3 py-1.5 bg-[#1a1a1a] text-[#a0a0a0] border border-[#3a3a3a] rounded hover:border-[#5a5a5a] hover:bg-[#2a2a2a] transition text-xs"
+            className="px-3 py-1.5 bg-slate text-cream border border-teal/30 rounded hover:border-teal hover:bg-teal/20 transition text-xs"
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
             title={currentRepo ? `Reload ${currentRepo.split('/').pop()}` : 'Reload current graph'}
           >
@@ -377,8 +390,8 @@ export default function App() {
             onClick={() => setRenderer(renderer === 'cytoscape' ? 'react-flow' : 'cytoscape')}
             className={`px-3 py-1.5 border rounded transition text-xs ${
               renderer === 'react-flow'
-                ? 'bg-[#667eea] text-white border-[#667eea]'
-                : 'bg-[#1a1a1a] text-[#a0a0a0] border-[#3a3a3a] hover:border-[#5a5a5a] hover:bg-[#2a2a2a]'
+                ? 'bg-teal text-white border-teal'
+                : 'bg-slate text-cream border-teal/30 hover:border-teal hover:bg-teal/20'
             }`}
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
             title={`Switch to ${renderer === 'cytoscape' ? 'React Flow' : 'Cytoscape'} renderer`}
@@ -434,6 +447,7 @@ export default function App() {
             navigationMode={navigationMode}
             renderer={renderer}
             layout={layout}
+            reactFlowInstanceRef={reactFlowInstanceRef}
           />
         </main>
 

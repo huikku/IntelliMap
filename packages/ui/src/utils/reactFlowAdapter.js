@@ -12,6 +12,23 @@ export function convertToReactFlow(graphData) {
     return { nodes: [], edges: [] };
   }
 
+  // Helper to get a better label for files with common names
+  const getNodeLabel = (fullPath) => {
+    const parts = fullPath.split('/');
+    const filename = parts[parts.length - 1];
+
+    // For common filenames (index.*, package.json, etc.), include parent directory
+    const commonNames = ['index.html', 'index.js', 'index.ts', 'index.jsx', 'index.tsx',
+                         'package.json', 'tsconfig.json', 'README.md', 'main.js', 'app.js'];
+
+    if (commonNames.some(name => filename === name) && parts.length > 1) {
+      const parent = parts[parts.length - 2];
+      return `${parent}/${filename}`;
+    }
+
+    return filename;
+  };
+
   // Convert nodes
   const nodes = graphData.nodes.map(node => {
     const nodeData = node.data || node;
@@ -23,7 +40,7 @@ export function convertToReactFlow(graphData) {
       data: {
         // Identity
         id: nodeData.id,
-        label: nodeData.id.split('/').pop(),
+        label: getNodeLabel(nodeData.id),
         fullPath: nodeData.id,
 
         // Language & Environment

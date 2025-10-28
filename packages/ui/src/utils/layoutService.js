@@ -3,7 +3,6 @@
  * Supports ELK and Dagre layout algorithms
  */
 
-import ELK from 'elkjs';
 import dagre from 'dagre';
 
 /**
@@ -29,45 +28,91 @@ export async function layoutGraph(nodes, edges, algorithm = 'elk', direction = '
  * Layout with ELK (Eclipse Layout Kernel)
  */
 async function layoutWithELK(nodes, edges, direction = 'RIGHT') {
-  const elk = new ELK();
-
-  const graph = {
-    id: 'root',
-    layoutOptions: {
-      'elk.algorithm': 'layered',
-      'elk.direction': direction,
-      'elk.spacing.nodeNode': '50',
-      'elk.layered.spacing.nodeNodeBetweenLayers': '50',
-      'elk.layered.spacing.edgeEdgeBetweenLayers': '20',
-      'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
-    },
-    children: nodes.map(node => ({
-      id: node.id,
-      width: getNodeWidth(node),
-      height: getNodeHeight(node),
-    })),
-    edges: edges.map(edge => ({
-      id: edge.id,
-      sources: [edge.source],
-      targets: [edge.target],
-    })),
-  };
-
   try {
-    const layout = await elk.layout(graph);
+    // Separate connected and isolated nodes
+    const nodeIds = new Set(nodes.map(n => n.id));
+    const connectedNodeIds = new Set();
 
-    return nodes.map(node => {
-      const layoutNode = layout.children.find(n => n.id === node.id);
-      if (!layoutNode) return node;
+    edges.forEach(edge => {
+      if (nodeIds.has(edge.source)) connectedNodeIds.add(edge.source);
+      if (nodeIds.has(edge.target)) connectedNodeIds.add(edge.target);
+    });
 
-      return {
+    const connectedNodes = nodes.filter(n => connectedNodeIds.has(n.id));
+    const isolatedNodes = nodes.filter(n => !connectedNodeIds.has(n.id));
+
+    console.log(`📊 Layout: ${connectedNodes.length} connected, ${isolatedNodes.length} isolated nodes`);
+
+    // Layout connected nodes with ELK
+    let layoutedNodes = [];
+
+    if (connectedNodes.length > 0) {
+      const ELK = (await import('elkjs/lib/elk.bundled.js')).default;
+      const elk = new ELK();
+
+      const graph = {
+        id: 'root',
+        layoutOptions: {
+          'elk.algorithm': 'layered',
+          'elk.direction': direction,
+          'elk.spacing.nodeNode': '80',
+          'elk.layered.spacing.nodeNodeBetweenLayers': '100',
+          'elk.layered.spacing.edgeEdgeBetweenLayers': '30',
+          'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
+          'elk.padding': '[top=50,left=50,bottom=50,right=50]',
+        },
+        children: connectedNodes.map(node => ({
+          id: node.id,
+          width: getNodeWidth(node),
+          height: getNodeHeight(node),
+        })),
+        edges: edges.map(edge => ({
+          id: edge.id,
+          sources: [edge.source],
+          targets: [edge.target],
+        })),
+      };
+
+      const layout = await elk.layout(graph);
+
+      layoutedNodes = connectedNodes.map(node => {
+        const layoutNode = layout.children.find(n => n.id === node.id);
+        if (!layoutNode) return node;
+
+        return {
+          ...node,
+          position: {
+            x: layoutNode.x || 0,
+            y: layoutNode.y || 0,
+          },
+        };
+      });
+    }
+
+    // Layout isolated nodes in a spread-out grid at the bottom-right
+    if (isolatedNodes.length > 0) {
+      const cols = Math.min(8, Math.ceil(Math.sqrt(isolatedNodes.length)));
+      const nodeWidth = 200;
+      const nodeHeight = 150;
+      const spacingX = 100; // Increased horizontal spacing
+      const spacingY = 80;  // Increased vertical spacing
+
+      // Position isolated nodes in bottom-right corner
+      const startX = 50;
+      const startY = (connectedNodes.length > 0 ? 800 : 50); // Below main graph or at top if no connected nodes
+
+      const isolatedLayouted = isolatedNodes.map((node, index) => ({
         ...node,
         position: {
-          x: layoutNode.x || 0,
-          y: layoutNode.y || 0,
+          x: startX + (index % cols) * (nodeWidth + spacingX),
+          y: startY + Math.floor(index / cols) * (nodeHeight + spacingY),
         },
-      };
-    });
+      }));
+
+      layoutedNodes = [...layoutedNodes, ...isolatedLayouted];
+    }
+
+    return layoutedNodes;
   } catch (error) {
     console.error('ELK layout failed:', error);
     return fallbackLayout(nodes);
@@ -78,50 +123,93 @@ async function layoutWithELK(nodes, edges, direction = 'RIGHT') {
  * Layout with Dagre
  */
 function layoutWithDagre(nodes, edges, direction = 'LR') {
-  const g = new dagre.graphlib.Graph();
+  // Separate connected and isolated nodes
+  const nodeIds = new Set(nodes.map(n => n.id));
+  const connectedNodeIds = new Set();
 
-  g.setGraph({
-    rankdir: direction,
-    nodesep: 50,
-    ranksep: 50,
-    marginx: 20,
-    marginy: 20,
-  });
-
-  g.setDefaultEdgeLabel(() => ({}));
-
-  // Add nodes to graph
-  nodes.forEach(node => {
-    g.setNode(node.id, {
-      width: getNodeWidth(node),
-      height: getNodeHeight(node),
-    });
-  });
-
-  // Add edges to graph
   edges.forEach(edge => {
-    g.setEdge(edge.source, edge.target);
+    if (nodeIds.has(edge.source)) connectedNodeIds.add(edge.source);
+    if (nodeIds.has(edge.target)) connectedNodeIds.add(edge.target);
   });
 
-  try {
-    dagre.layout(g);
+  const connectedNodes = nodes.filter(n => connectedNodeIds.has(n.id));
+  const isolatedNodes = nodes.filter(n => !connectedNodeIds.has(n.id));
 
-    return nodes.map(node => {
-      const position = g.node(node.id);
-      if (!position) return node;
+  console.log(`📊 Dagre Layout: ${connectedNodes.length} connected, ${isolatedNodes.length} isolated nodes`);
 
-      return {
-        ...node,
-        position: {
-          x: position.x - position.width / 2,
-          y: position.y - position.height / 2,
-        },
-      };
+  let layoutedNodes = [];
+
+  // Layout connected nodes with Dagre
+  if (connectedNodes.length > 0) {
+    const g = new dagre.graphlib.Graph();
+
+    g.setGraph({
+      rankdir: direction,
+      nodesep: 80,
+      ranksep: 100,
+      marginx: 50,
+      marginy: 50,
     });
-  } catch (error) {
-    console.error('Dagre layout failed:', error);
-    return fallbackLayout(nodes);
+
+    g.setDefaultEdgeLabel(() => ({}));
+
+    // Add nodes to graph
+    connectedNodes.forEach(node => {
+      g.setNode(node.id, {
+        width: getNodeWidth(node),
+        height: getNodeHeight(node),
+      });
+    });
+
+    // Add edges to graph
+    edges.forEach(edge => {
+      g.setEdge(edge.source, edge.target);
+    });
+
+    try {
+      dagre.layout(g);
+
+      layoutedNodes = connectedNodes.map(node => {
+        const position = g.node(node.id);
+        if (!position) return node;
+
+        return {
+          ...node,
+          position: {
+            x: position.x - position.width / 2,
+            y: position.y - position.height / 2,
+          },
+        };
+      });
+    } catch (error) {
+      console.error('Dagre layout failed:', error);
+      layoutedNodes = connectedNodes;
+    }
   }
+
+  // Layout isolated nodes in a spread-out grid
+  if (isolatedNodes.length > 0) {
+    const cols = Math.min(8, Math.ceil(Math.sqrt(isolatedNodes.length)));
+    const nodeWidth = 200;
+    const nodeHeight = 150;
+    const spacingX = 100; // Increased horizontal spacing
+    const spacingY = 80;  // Increased vertical spacing
+
+    const startX = 50;
+    const startY = (connectedNodes.length > 0 ? 800 : 50);
+
+    const isolatedLayouted = isolatedNodes.map((node, index) => ({
+      ...node,
+      position: {
+        x: startX + (index % cols) * (nodeWidth + spacingX),
+        y: startY + Math.floor(index / cols) * (nodeHeight + spacingY),
+      },
+    }));
+
+    layoutedNodes = [...layoutedNodes, ...isolatedLayouted];
+  }
+
+  return layoutedNodes.length > 0 ? layoutedNodes : fallbackLayout(nodes);
 }
 
 /**
@@ -129,11 +217,11 @@ function layoutWithDagre(nodes, edges, direction = 'LR') {
  */
 function getNodeWidth(node) {
   if (node.data?.isCluster) {
-    return 200;
+    return 220;
   }
 
-  // Standard code node width
-  return 180;
+  // Standard code node width (updated to match CSS)
+  return 200;
 }
 
 /**
@@ -141,11 +229,12 @@ function getNodeWidth(node) {
  */
 function getNodeHeight(node) {
   if (node.data?.isCluster) {
-    return 100;
+    return 120;
   }
 
-  // Standard code node height
-  return 80;
+  // Standard code node height (accounts for title + metrics + health bars)
+  // Base: 32 (title) + 60 (metrics) + 60 (health bars)
+  return 150;
 }
 
 /**

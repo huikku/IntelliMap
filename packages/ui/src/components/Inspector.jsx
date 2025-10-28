@@ -36,18 +36,18 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
     return (
       <aside
         style={{ width: `${width}px` }}
-        className="h-full bg-[#000000] border-l border-[#1a1a1a] flex flex-col overflow-hidden relative"
+        className="h-full bg-navy border-l border-slate flex flex-col overflow-hidden relative"
       >
         {/* Resize handle */}
         <div
           ref={resizeRef}
           onMouseDown={() => setIsResizing(true)}
-          className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-blue-500 transition-colors"
+          className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-teal transition-colors"
           title="Drag to resize"
         />
         <div className="flex-1 p-4 overflow-y-auto">
-          <h2 className="text-sm font-heading font-bold text-[#a0a0a0] mb-4">DETAILS</h2>
-          <p className="text-xs text-gray-500">Select a node or edge to view details</p>
+          <h2 className="text-sm font-heading font-bold text-cream mb-4">DETAILS</h2>
+          <p className="text-xs text-mint">Select a node or edge to view details</p>
         </div>
       </aside>
     );
@@ -120,7 +120,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
         <div
           ref={resizeRef}
           onMouseDown={() => setIsResizing(true)}
-          className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-blue-500 transition-colors"
+          className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-[#5F9B8C] transition-colors"
           title="Drag to resize"
         />
         <div className="flex-shrink-0 p-4 overflow-y-auto max-h-[50vh]">
@@ -143,7 +143,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
             <div>
               <label className="text-xs text-[#6a6a6a] font-condensed">Connection Type</label>
               <span className="block mt-1">
-                <span className="px-2 py-1 bg-purple-900 text-purple-200 rounded text-xs font-mono">
+                <span className="px-2 py-1 bg-[#2F5060] text-[#7BAEA2] rounded text-xs font-mono">
                   {connectionType}
                 </span>
               </span>
@@ -153,7 +153,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
             <div>
               <label className="text-xs text-[#6a6a6a] font-condensed">Edge Type</label>
               <span className="block mt-1">
-                <span className="px-2 py-1 bg-indigo-900 text-indigo-200 rounded text-xs font-mono">
+                <span className="px-2 py-1 bg-[#233C4B] text-[#7BAEA2] rounded text-xs font-mono">
                   {edgeType}
                 </span>
               </span>
@@ -179,7 +179,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
               <div>
                 <label className="text-xs text-[#6a6a6a] font-condensed">Import Type</label>
                 <span className="block mt-1">
-                  <span className="px-2 py-1 bg-green-900 text-green-200 rounded text-xs font-mono">
+                  <span className="px-2 py-1 bg-[#A0C382] text-[#0a0a0a] rounded text-xs font-mono">
                     {selectedNode.type}
                   </span>
                 </span>
@@ -190,7 +190,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
               <div>
                 <label className="text-xs text-[#6a6a6a] font-condensed">Source Language</label>
                 <span className="block mt-1">
-                  <span className="px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs font-mono">
+                  <span className="px-2 py-1 bg-[#5F9B8C] text-[#F6DA80] rounded text-xs font-mono">
                     {fromNode.lang?.toUpperCase()}
                   </span>
                 </span>
@@ -201,7 +201,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
               <div>
                 <label className="text-xs text-[#6a6a6a] font-condensed">Target Language</label>
                 <span className="block mt-1">
-                  <span className="px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs font-mono">
+                  <span className="px-2 py-1 bg-[#5F9B8C] text-[#F6DA80] rounded text-xs font-mono">
                     {toNode.lang?.toUpperCase()}
                   </span>
                 </span>
@@ -221,25 +221,25 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
     <>
       <aside
         style={{ width: `${width}px` }}
-        className="h-full bg-[#000000] border-l border-[#1a1a1a] flex flex-col overflow-hidden relative"
+        className="h-full bg-navy border-l border-slate flex flex-col overflow-hidden relative"
       >
         {/* Resize handle */}
         <div
           ref={resizeRef}
           onMouseDown={() => setIsResizing(true)}
-          className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-blue-500 transition-colors"
+          className="absolute left-0 top-0 bottom-0 w-1 cursor-ew-resize hover:bg-teal transition-colors"
           title="Drag to resize"
         />
 
         {/* Top section - Details (auto-sized) */}
         <div className="flex-shrink-0 p-4 overflow-y-auto max-h-[50vh]">
-          <h2 className="text-sm font-heading font-bold text-[#a0a0a0] mb-4">DETAILS</h2>
+          <h2 className="text-sm font-heading font-bold text-cream mb-4">DETAILS</h2>
 
         <div className="space-y-3 text-sm">
           <div>
-            <label className="text-xs text-[#6a6a6a] font-condensed">Path</label>
+            <label className="text-xs text-mint font-condensed">Path</label>
             <div className="flex items-center gap-2 mt-1">
-              <code className="flex-1 bg-[#0a0a0a] p-2 rounded text-xs break-all font-mono">
+              <code className="flex-1 bg-slate p-2 rounded text-xs break-all font-mono text-cream border border-teal/30">
                 {selectedNode.id}
               </code>
               <button
@@ -248,7 +248,7 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
                   window.location.href = `vscode://file/${fullPath}`;
                   console.log(`🚀 Opening in VS Code: ${fullPath}`);
                 }}
-                className="px-2 py-1.5 bg-blue-800 hover:bg-blue-700 rounded text-xs transition flex-shrink-0"
+                className="px-2 py-1.5 bg-[#5F9B8C] hover:bg-[#7BAEA2] rounded text-xs transition flex-shrink-0"
                 title="Open file in VS Code"
               >
                 📝 VS Code
@@ -257,18 +257,18 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           </div>
 
           <div>
-            <label className="text-xs text-[#6a6a6a]">Language</label>
+            <label className="text-xs text-mint">Language</label>
             <span className="block mt-1">
-              <span className="px-2 py-1 bg-blue-900 text-blue-200 rounded text-xs">
+              <span className="px-2 py-1 bg-teal text-white rounded text-xs font-semibold">
                 {selectedNode.lang?.toUpperCase()}
               </span>
             </span>
           </div>
 
           <div>
-            <label className="text-xs text-[#6a6a6a]">Environment</label>
+            <label className="text-xs text-mint">Environment</label>
             <span className="block mt-1">
-              <span className="px-2 py-1 bg-purple-900 text-purple-200 rounded text-xs">
+              <span className="px-2 py-1 bg-slate text-cream rounded text-xs border border-teal/30">
                 {selectedNode.env}
               </span>
             </span>
@@ -276,56 +276,56 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
 
           <div className="flex gap-4">
             <div>
-              <label className="text-xs text-[#6a6a6a]">Imports</label>
-              <span className="block mt-1 text-lg font-bold">{outgoing.length}</span>
+              <label className="text-xs text-mint">Imports</label>
+              <span className="block mt-1 text-lg font-bold text-cream">{outgoing.length}</span>
             </div>
             <div>
-              <label className="text-xs text-[#6a6a6a]">Imported by</label>
-              <span className="block mt-1 text-lg font-bold">{incoming.length}</span>
+              <label className="text-xs text-mint">Imported by</label>
+              <span className="block mt-1 text-lg font-bold text-cream">{incoming.length}</span>
             </div>
           </div>
 
           {selectedNode.changed && (
-            <div className="p-2 bg-red-900 text-red-200 rounded text-xs">
+            <div className="p-2 bg-orange text-white rounded text-xs font-semibold border border-peach">
               ⚠️ This file has changed
             </div>
           )}
 
           {/* Dependency Navigation Buttons */}
-          <div className="pt-3 border-t border-[#1a1a1a]">
-            <label className="text-xs text-[#6a6a6a] font-condensed mb-2 block">NAVIGATE DEPENDENCIES</label>
+          <div className="pt-3 border-t border-slate">
+            <label className="text-xs text-mint font-condensed mb-2 block">NAVIGATE DEPENDENCIES</label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => onNavigate && onNavigate('upstream')}
-                className="px-2 py-1.5 bg-blue-800 hover:bg-blue-700 rounded text-xs transition flex items-center justify-center gap-1"
+                className="px-2 py-1.5 bg-teal hover:bg-mint rounded text-xs transition flex items-center justify-center gap-1 text-white font-semibold"
                 title="Show all nodes that depend on this file (incoming edges)"
               >
                 ⬆️ Upstream
               </button>
               <button
                 onClick={() => onNavigate && onNavigate('downstream')}
-                className="px-2 py-1.5 bg-green-800 hover:bg-green-700 rounded text-xs transition flex items-center justify-center gap-1"
+                className="px-2 py-1.5 bg-orange hover:bg-peach rounded text-xs transition flex items-center justify-center gap-1 text-white font-semibold"
                 title="Show all nodes this file depends on (outgoing edges)"
               >
                 ⬇️ Downstream
               </button>
               <button
                 onClick={() => onNavigate && onNavigate('parents')}
-                className="px-2 py-1.5 bg-purple-800 hover:bg-purple-700 rounded text-xs transition flex items-center justify-center gap-1"
+                className="px-2 py-1.5 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-xs transition flex items-center justify-center gap-1 text-cream"
                 title="Show direct parents (1 level up)"
               >
                 ↑ Parents
               </button>
               <button
                 onClick={() => onNavigate && onNavigate('children')}
-                className="px-2 py-1.5 bg-indigo-800 hover:bg-indigo-700 rounded text-xs transition flex items-center justify-center gap-1"
+                className="px-2 py-1.5 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-xs transition flex items-center justify-center gap-1 text-cream"
                 title="Show direct children (1 level down)"
               >
                 ↓ Children
               </button>
               <button
                 onClick={() => onNavigate && onNavigate('focus')}
-                className="px-2 py-1.5 bg-yellow-800 hover:bg-yellow-700 rounded text-xs transition flex items-center justify-center gap-1 col-span-2"
+                className="px-2 py-1.5 bg-[#FAC846] hover:bg-[#F6DA80] text-[#0a0a0a] rounded text-xs transition flex items-center justify-center gap-1 col-span-2 font-semibold"
                 title="Focus mode: Show this node and all reachable nodes"
               >
                 🎯 Focus Mode

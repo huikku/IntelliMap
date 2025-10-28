@@ -10,20 +10,29 @@ export default defineConfig({
         target: 'http://localhost:7676',
         changeOrigin: true,
       },
+      '/api': {
+        target: 'http://localhost:7676',
+        changeOrigin: true,
+      },
     },
   },
   build: {
     outDir: 'dist',
     sourcemap: true,
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
   optimizeDeps: {
-    exclude: ['elkjs'],
-  },
-  resolve: {
-    alias: {
-      // Fix ELK worker issue in browser
-      'web-worker': 'elkjs/lib/elk-api.js',
+    esbuildOptions: {
+      define: {
+        global: 'globalThis',
+      },
     },
+  },
+  define: {
+    // Prevent cytoscape-elk from trying to require elkjs dynamically
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
   },
 });
 

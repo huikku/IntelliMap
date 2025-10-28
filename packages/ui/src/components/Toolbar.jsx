@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function Toolbar({ cy, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration, currentRepo }) {
-  const [nodeSpacing, setNodeSpacing] = useState(50);
+  const [nodeSpacing, setNodeSpacing] = useState(80);
   const [autoPack, setAutoPack] = useState(true);
 
   // Apply node sizing whenever cy, sizing, or sizeExaggeration changes
@@ -420,8 +420,11 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   };
 
   const handleLayoutChange = (newLayout) => {
-    if (!cy) return;
+    // Always update layout state (works for both Cytoscape and React Flow)
     setLayout(newLayout);
+
+    // Only run Cytoscape layout if cy instance exists
+    if (!cy) return;
 
     const layoutOptions = {
       elk: {
@@ -430,7 +433,9 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           algorithm: 'layered',
           'elk.direction': 'RIGHT',
           'elk.spacing.nodeNode': nodeSpacing,
-          'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
+          'elk.layered.spacing.nodeNodeBetweenLayers': nodeSpacing * 1.5,
+          'elk.layered.spacing.edgeEdgeBetweenLayers': 30,
+          'elk.padding': '[top=50,left=50,bottom=50,right=50]',
         },
         fit: false, // Don't auto-fit - preserve zoom
       },
@@ -440,7 +445,9 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           algorithm: 'layered',
           'elk.direction': 'DOWN',
           'elk.spacing.nodeNode': nodeSpacing,
-          'elk.layered.spacing.edgeEdgeBetweenLayers': 20,
+          'elk.layered.spacing.nodeNodeBetweenLayers': nodeSpacing * 1.5,
+          'elk.layered.spacing.edgeEdgeBetweenLayers': 30,
+          'elk.padding': '[top=50,left=50,bottom=50,right=50]',
         },
         fit: false,
       },
@@ -449,6 +456,7 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         elk: {
           algorithm: 'mrtree',
           'elk.spacing.nodeNode': nodeSpacing,
+          'elk.padding': '[top=50,left=50,bottom=50,right=50]',
         },
         fit: false,
       },
@@ -574,42 +582,47 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   };
 
   return (
-    <div className="h-10 bg-[#000000] border-b border-[#1a1a1a] flex items-center gap-2 px-4">
-      <button
-        onClick={handleFit}
-        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
-        title="Fit graph to view"
-      >
-        📐 Fit
-      </button>
-      <button
-        onClick={handleCenter}
-        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
-        title="Center view"
-      >
-        ⊙ Center
-      </button>
-      <button
-        onClick={handleExportPNG}
-        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
-        title="Export graph as PNG"
-      >
-        📸 PNG
-      </button>
-      <button
-        onClick={handleExportJSON}
-        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
-        title="Export graph as JSON"
-      >
-        💾 JSON
-      </button>
+    <div className="min-h-10 bg-navy border-b border-slate flex flex-wrap items-center gap-2 px-4 py-2">
+      {/* View Controls */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={handleFit}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap"
+          title="Fit graph to view"
+        >
+          📐 Fit
+        </button>
+        <button
+          onClick={handleCenter}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap"
+          title="Center view"
+        >
+          ⊙ Center
+        </button>
+        <button
+          onClick={handleExportPNG}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap"
+          title="Export graph as PNG"
+        >
+          📸 PNG
+        </button>
+        <button
+          onClick={handleExportJSON}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap"
+          title="Export graph as JSON"
+        >
+          💾 JSON
+        </button>
+      </div>
 
-      <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-[#6a6a6a] font-mono">Layout:</label>
+      {/* Layout Controls */}
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-mint font-mono">Layout:</label>
         <select
           value={layout}
           onChange={e => handleLayoutChange(e.target.value)}
-          className="px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm hover:bg-[#1a1a1a] transition font-mono"
+          className="px-2 py-1 bg-navy border border-teal/30 rounded text-sm hover:bg-teal/20 hover:border-teal transition font-mono text-cream"
+          style={{ colorScheme: 'dark' }}
         >
           <optgroup label="ELK (Hierarchical)">
             <option value="elk">📊 ELK Right</option>
@@ -633,22 +646,24 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
 
       <button
         onClick={() => setClustering(!clustering)}
-        className={`px-3 py-1 rounded text-sm transition ${
+        className={`px-3 py-1 rounded text-sm transition border whitespace-nowrap ${
           clustering
-            ? 'bg-blue-600 hover:bg-blue-700 text-white'
-            : 'bg-[#0a0a0a] hover:bg-[#1a1a1a] text-[#a0a0a0]'
+            ? 'bg-teal hover:bg-teal/80 text-white border-teal'
+            : 'bg-slate hover:bg-teal/20 text-cream border-teal/30 hover:border-teal'
         }`}
         title="Toggle folder clustering"
       >
         📦 Cluster
       </button>
 
-      <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-[#6a6a6a] font-mono">Size:</label>
+      {/* Node Size Controls */}
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-mint font-mono whitespace-nowrap">Size:</label>
         <select
           value={sizing}
           onChange={e => handleSizingChange(e.target.value)}
-          className="px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm hover:bg-[#1a1a1a] transition font-mono"
+          className="px-2 py-1 bg-navy border border-teal/30 rounded text-sm hover:bg-teal/20 hover:border-teal transition font-mono text-cream"
+          style={{ colorScheme: 'dark' }}
         >
           <option value="uniform">📏 Uniform</option>
           <option value="degree">🔗 By Degree</option>
@@ -663,14 +678,15 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           step="0.1"
           value={sizeExaggeration}
           onChange={e => handleSizeExaggeration(parseFloat(e.target.value))}
-          className="w-24 h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1 bg-slate rounded-lg appearance-none cursor-pointer"
           title={`Size exaggeration: ${sizeExaggeration.toFixed(1)}x`}
         />
-        <span className="text-xs text-[#6a6a6a] font-mono w-8">{sizeExaggeration.toFixed(1)}x</span>
+        <span className="text-xs text-mint font-mono w-8">{sizeExaggeration.toFixed(1)}x</span>
       </div>
 
-      <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-[#6a6a6a] font-mono">Spacing:</label>
+      {/* Spacing Controls */}
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-mint font-mono whitespace-nowrap">Spacing:</label>
         <input
           type="range"
           min="20"
@@ -678,14 +694,15 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           step="10"
           value={nodeSpacing}
           onChange={e => handleNodeSpacing(parseInt(e.target.value))}
-          className="w-24 h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1 bg-slate rounded-lg appearance-none cursor-pointer"
           title={`Node spacing: ${nodeSpacing}px`}
         />
-        <span className="text-xs text-[#6a6a6a] font-mono w-10">{nodeSpacing}px</span>
+        <span className="text-xs text-mint font-mono w-10">{nodeSpacing}px</span>
       </div>
 
-      <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-[#6a6a6a] font-mono">Edges:</label>
+      {/* Edge Controls */}
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-mint font-mono whitespace-nowrap">Edges:</label>
         <input
           type="range"
           min="0.1"
@@ -693,18 +710,20 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           step="0.1"
           value={edgeOpacity}
           onChange={e => handleEdgeOpacity(parseFloat(e.target.value))}
-          className="w-24 h-1 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1 bg-slate rounded-lg appearance-none cursor-pointer"
           title={`Edge opacity: ${(edgeOpacity * 100).toFixed(0)}%`}
         />
-        <span className="text-xs text-[#6a6a6a] font-mono w-10">{(edgeOpacity * 100).toFixed(0)}%</span>
+        <span className="text-xs text-mint font-mono w-10">{(edgeOpacity * 100).toFixed(0)}%</span>
       </div>
 
-      <div className="ml-2 flex items-center gap-2">
-        <label className="text-xs text-[#6a6a6a] font-mono">Curve:</label>
+      {/* Curve Style Controls */}
+      <div className="flex items-center gap-2">
+        <label className="text-xs text-mint font-mono whitespace-nowrap">Curve:</label>
         <select
           value={curveStyle}
           onChange={e => handleCurveStyle(e.target.value)}
-          className="px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm hover:bg-[#1a1a1a] transition font-mono"
+          className="px-2 py-1 bg-navy border border-teal/30 rounded text-sm hover:bg-teal/20 hover:border-teal transition font-mono text-cream"
+          style={{ colorScheme: 'dark' }}
         >
           <option value="straight">━ Straight</option>
           <option value="taxi">⌐ Right Angles (Auto)</option>
@@ -714,28 +733,32 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
         </select>
       </div>
 
-      <button
-        onClick={() => removeOverlaps(cy)}
-        className="px-3 py-1 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
-        title="Remove overlaps by repacking nodes"
-        disabled={!cy}
-      >
-        📦 Pack
-      </button>
+      {/* Packing Controls */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => removeOverlaps(cy)}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap"
+          title="Remove overlaps by repacking nodes"
+          disabled={!cy}
+        >
+          📦 Pack
+        </button>
 
-      <button
-        onClick={() => setAutoPack(!autoPack)}
-        className={`px-3 py-1 rounded text-sm transition ${
-          autoPack
-            ? 'bg-blue-600 hover:bg-blue-700'
-            : 'bg-[#0a0a0a] hover:bg-[#1a1a1a]'
-        }`}
-        title={`Auto-pack: ${autoPack ? 'ON' : 'OFF'} - Automatically remove overlaps when changing node sizes`}
-      >
-        {autoPack ? '✓' : '○'} Auto
-      </button>
+        <button
+          onClick={() => setAutoPack(!autoPack)}
+          className={`px-3 py-1 rounded text-sm transition border whitespace-nowrap ${
+            autoPack
+              ? 'bg-teal hover:bg-teal/80 text-white border-teal'
+              : 'bg-slate hover:bg-teal/20 text-cream border-teal/30 hover:border-teal'
+          }`}
+          title={`Auto-pack: ${autoPack ? 'ON' : 'OFF'} - Automatically remove overlaps when changing node sizes`}
+        >
+          {autoPack ? '✓' : '○'} Auto
+        </button>
+      </div>
 
-      <div className="ml-auto text-xs text-gray-500">
+      {/* Status */}
+      <div className="ml-auto text-xs text-mint whitespace-nowrap">
         ✓ Ready
       </div>
     </div>

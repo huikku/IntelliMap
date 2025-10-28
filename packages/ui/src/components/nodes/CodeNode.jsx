@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
+import HealthBars from './HealthBars';
 import './CodeNode.css';
 
 /**
@@ -7,22 +8,78 @@ import './CodeNode.css';
  * Displays title bar, metrics, and connection handles
  */
 const CodeNode = memo(({ data, selected }) => {
-  // Get title color based on language and environment
+  // Get title color based on file extension - using original muted palette
   const getTitleColor = () => {
-    const key = `${data.lang || 'unknown'}-${data.env || 'unknown'}`;
+    const lang = data.lang || 'unknown';
+
+    // Original muted color palette
     const colors = {
-      'ts-frontend': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      'ts-backend': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      'js-frontend': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-      'js-backend': 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-      'py-backend': 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-      'py-frontend': 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)',
-      'jsx-frontend': 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-      'tsx-frontend': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      'css-frontend': 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
-      'unknown': 'linear-gradient(135deg, #555 0%, #777 100%)',
+      navy: '#233C4B',
+      slate: '#2F5060',
+      orange: '#FF7D2D',
+      peach: '#FF9A4A',
+      gold: '#FAC846',
+      cream: '#F6DA80',
+      sage: '#A0C382',
+      olive: '#8AB572',
+      teal: '#5F9B8C',
+      mint: '#7BAEA2',
+      rust: '#C25C4A',
+      // Darker greens for .cjs and other bright files
+      darkOlive: '#6B8A5A', // Darker, less bright olive
+      darkSage: '#7FA068',  // Darker, less bright sage
     };
-    return colors[key] || colors.unknown;
+
+    // Language-based colors using original palette
+    const languageColors = {
+      // TypeScript - Navy/Slate blues
+      'ts': colors.navy,
+      'tsx': colors.slate,
+
+      // JavaScript - Olive/Sage (darker greens instead of bright yellows)
+      'js': colors.olive,
+      'jsx': colors.sage,
+      'cjs': colors.darkOlive,  // CommonJS - darker olive (less bright)
+      'mjs': colors.darkSage,   // ES Modules - darker sage (less bright)
+
+      // Python - Teal/Mint
+      'py': colors.teal,
+
+      // Java - Orange/Rust
+      'java': colors.orange,
+
+      // Go - Mint
+      'go': colors.mint,
+
+      // Rust - Rust/Orange
+      'rust': colors.rust,
+
+      // CSS/SCSS - Slate/Navy
+      'css': colors.slate,
+      'scss': colors.navy,
+
+      // HTML - Peach
+      'html': colors.peach,
+
+      // JSON/Config - Slate
+      'json': colors.slate,
+      'yaml': colors.slate,
+      'yml': colors.slate,
+
+      // Markdown - Navy
+      'md': colors.navy,
+
+      // Vue - Sage/Olive greens
+      'vue': colors.sage,
+
+      // Svelte - Orange
+      'svelte': colors.orange,
+
+      // Unknown - Slate
+      'unknown': colors.slate,
+    };
+
+    return languageColors[lang] || languageColors.unknown;
   };
 
   // Get icon based on environment/type
@@ -38,12 +95,46 @@ const CodeNode = memo(({ data, selected }) => {
   // Determine if node is a hotspot
   const isHotspot = data.metrics?.complexity > 75 || data.changed;
 
+  // Determine handle positions based on layout direction
+  const getHandlePositions = () => {
+    const layoutDirection = data.layoutDirection || 'RIGHT';
+
+    // For vertical layouts (DOWN/UP), use top/bottom handles
+    if (layoutDirection === 'DOWN' || layoutDirection === 'TB') {
+      return {
+        source: Position.Bottom,
+        target: Position.Top,
+      };
+    }
+    // For UP layout
+    if (layoutDirection === 'UP' || layoutDirection === 'BT') {
+      return {
+        source: Position.Top,
+        target: Position.Bottom,
+      };
+    }
+    // For LEFT layout
+    if (layoutDirection === 'LEFT' || layoutDirection === 'RL') {
+      return {
+        source: Position.Left,
+        target: Position.Right,
+      };
+    }
+    // Default: horizontal layout (RIGHT/LR)
+    return {
+      source: Position.Right,
+      target: Position.Left,
+    };
+  };
+
+  const handlePositions = getHandlePositions();
+
   return (
     <div className={`code-node ${selected ? 'selected' : ''}`}>
       {/* Connection handles */}
       <Handle
         type="target"
-        position={Position.Left}
+        position={handlePositions.target}
         className="code-node-handle"
       />
 
@@ -86,10 +177,13 @@ const CodeNode = memo(({ data, selected }) => {
         )}
       </div>
 
+      {/* Health/Wellness bars */}
+      <HealthBars metrics={data.metrics} timeseries={data.timeseries} />
+
       {/* Output handle */}
       <Handle
         type="source"
-        position={Position.Right}
+        position={handlePositions.source}
         className="code-node-handle"
       />
     </div>

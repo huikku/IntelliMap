@@ -5,38 +5,49 @@
 @tailwind utilities;
 
 :root {
-  /* Nostromo Cockpit Theme - Monochrome CRT Aesthetic */
-  --primary: #d4d4d4;           /* Muted white/gray */
-  --primary-dark: #a0a0a0;      /* Darker gray */
-  --primary-light: #e8e8e8;     /* Light gray */
+  /* Muted Professional Color Palette */
+  --navy: #233C4B;              /* Dark navy blue - primary dark */
+  --slate: #2F5060;             /* Slate blue - secondary dark */
+  --orange: #FF7D2D;            /* Muted orange - primary accent */
+  --peach: #FF9A4A;             /* Peach - secondary accent */
+  --gold: #FAC846;              /* Gold - tertiary accent */
+  --cream: #F6DA80;             /* Cream - light accent */
+  --sage: #A0C382;              /* Sage green - success */
+  --olive: #8AB572;             /* Olive green - success alt */
+  --teal: #5F9B8C;              /* Teal - info */
+  --mint: #7BAEA2;              /* Mint - info alt */
+  --rust: #C25C4A;              /* Rust - error */
 
-  --dark: #0a0a0a;              /* Deep black */
-  --darker: #000000;            /* Pure black */
-  --darkest: #050505;           /* Almost black */
+  /* Derived theme colors */
+  --primary: var(--teal);
+  --primary-dark: var(--navy);
+  --primary-light: var(--mint);
 
-  --light: #b8b8b8;             /* Muted light gray */
-  --gray: #6a6a6a;              /* Medium gray */
-  --gray-dark: #3a3a3a;         /* Dark gray */
+  --dark: #1a1a1a;              /* Deep black */
+  --darker: #0d0d0d;            /* Darker */
+  --darkest: #000000;           /* Pure black */
 
-  /* CRT Accent Colors - Very Muted */
-  --amber: #8b7355;             /* Muted amber/brown */
-  --amber-dim: #5a4a3a;         /* Dimmer amber */
-  --green: #4a5a4a;             /* Muted green */
-  --green-dim: #2a3a2a;         /* Dimmer green */
-  --blue: #3a4a5a;              /* Muted blue */
-  --blue-dim: #2a3a4a;          /* Dimmer blue */
+  --light: var(--cream);
+  --gray: #888;
+  --gray-dark: var(--slate);
 
   /* UI Element Colors */
-  --border: rgba(180, 180, 180, 0.15);  /* Very subtle borders */
-  --border-bright: rgba(200, 200, 200, 0.25);
-  --bg-panel: rgba(20, 20, 20, 0.8);
-  --bg-hover: rgba(100, 100, 100, 0.1);
+  --border: rgba(47, 80, 96, 0.3);  /* Slate with transparency */
+  --border-bright: rgba(95, 155, 140, 0.5); /* Teal with transparency */
+  --bg-panel: rgba(35, 60, 75, 0.8); /* Navy with transparency */
+  --bg-hover: rgba(95, 155, 140, 0.1); /* Teal hover */
+
+  --accent: var(--orange);
+  --accent-light: var(--peach);
+  --success: var(--sage);
+  --info: var(--teal);
+  --warning: var(--gold);
 
   --transition: all 0.3s ease;
 
-  /* CRT Glow Effect */
-  --glow: 0 0 2px rgba(180, 180, 180, 0.3);
-  --glow-strong: 0 0 4px rgba(200, 200, 200, 0.4);
+  /* Subtle glow effects */
+  --glow: 0 0 4px rgba(95, 155, 140, 0.3);
+  --glow-strong: 0 0 8px rgba(95, 155, 140, 0.5);
 }
 
 * {
@@ -113,17 +124,23 @@ button:active {
   transform: translateY(1px);
 }
 
-/* Muted accent classes */
-.text-amber { color: var(--amber) !important; }
-.text-green { color: var(--green) !important; }
-.text-blue { color: var(--blue) !important; }
-.bg-amber { background-color: var(--amber-dim) !important; }
-.bg-green { background-color: var(--green-dim) !important; }
-.bg-blue { background-color: var(--blue-dim) !important; }
+/* Utility classes with muted palette */
+.text-primary { color: var(--teal) !important; }
+.text-accent { color: var(--orange) !important; }
+.text-success { color: var(--sage) !important; }
+.text-warning { color: var(--gold) !important; }
+.text-info { color: var(--teal) !important; }
 
-.border-amber { border-color: var(--amber) !important; }
-.border-green { border-color: var(--green) !important; }
-.border-blue { border-color: var(--blue) !important; }
+.bg-primary { background-color: var(--teal) !important; }
+.bg-accent { background-color: var(--orange) !important; }
+.bg-success { background-color: var(--sage) !important; }
+.bg-warning { background-color: var(--gold) !important; }
+.bg-panel { background-color: var(--bg-panel) !important; }
+
+.border-primary { border-color: var(--teal) !important; }
+.border-accent { border-color: var(--orange) !important; }
+.border-success { border-color: var(--sage) !important; }
+.border-warning { border-color: var(--gold) !important; }
 
 /* Subheadings */
 .subheading {

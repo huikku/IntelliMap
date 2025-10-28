@@ -89,10 +89,10 @@ export default function MOTHPanel({ onClose }) {
   if (loading) {
     return (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div className="bg-[#000000] border border-purple-700 rounded-lg p-8 max-w-md">
+        <div className="bg-navy border-2 border-teal rounded-lg p-8 max-w-md">
           <div className="text-center">
-            <div className="text-6xl mb-4">🦋</div>
-            <div className="text-xl font-bold text-purple-300">Loading MOTH data...</div>
+            <img src="/logo-mono.png" alt="MOTH" className="w-16 h-16 mx-auto mb-4 opacity-60" />
+            <div className="text-xl font-bold text-cream">Loading MOTH data...</div>
           </div>
         </div>
       </div>
@@ -101,31 +101,31 @@ export default function MOTHPanel({ onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#000000] border border-purple-700 rounded-lg w-full max-w-6xl h-[90vh] flex flex-col">
+      <div className="bg-navy border-2 border-teal rounded-lg w-full max-w-6xl h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-purple-700">
+        <div className="flex items-center justify-between p-4 border-b-2 border-slate">
           <div className="flex items-center gap-3">
-            <span className="text-4xl">🦋</span>
+            <img src="/logo-mono.png" alt="MOTH" className="w-10 h-10 opacity-80" />
             <div>
-              <h2 className="text-2xl font-bold text-purple-300">MOTH Manifest</h2>
-              <p className="text-xs text-[#6a6a6a]">Machine-Optimized Text Hierarchy</p>
+              <h2 className="text-2xl font-bold text-cream">MOTH Manifest</h2>
+              <p className="text-xs text-mint">Machine-Optimized Text Hierarchy</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-[#0a0a0a] hover:bg-[#1a1a1a] rounded text-sm transition"
+            className="px-4 py-2 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-cream text-sm transition"
           >
             ✕ Close
           </button>
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between p-4 border-b border-[#1a1a1a]">
+        <div className="flex items-center justify-between p-4 border-b-2 border-slate">
           <div className="flex gap-2">
             <button
               onClick={() => setView('summary')}
               className={`px-3 py-1 rounded text-xs font-semibold transition ${
-                view === 'summary' ? 'bg-purple-700' : 'bg-[#0a0a0a] hover:bg-[#1a1a1a]'
+                view === 'summary' ? 'bg-teal text-white' : 'bg-slate hover:bg-teal/20 text-cream'
               }`}
             >
               📊 Summary
@@ -133,7 +133,7 @@ export default function MOTHPanel({ onClose }) {
             <button
               onClick={() => setView('files')}
               className={`px-3 py-1 rounded text-xs font-semibold transition ${
-                view === 'files' ? 'bg-purple-700' : 'bg-[#0a0a0a] hover:bg-[#1a1a1a]'
+                view === 'files' ? 'bg-teal text-white' : 'bg-slate hover:bg-teal/20 text-cream'
               }`}
             >
               📁 Files
@@ -141,7 +141,7 @@ export default function MOTHPanel({ onClose }) {
             <button
               onClick={() => setView('metrics')}
               className={`px-3 py-1 rounded text-xs font-semibold transition ${
-                view === 'metrics' ? 'bg-purple-700' : 'bg-[#0a0a0a] hover:bg-[#1a1a1a]'
+                view === 'metrics' ? 'bg-teal text-white' : 'bg-slate hover:bg-teal/20 text-cream'
               }`}
             >
               📈 Metrics
@@ -149,7 +149,7 @@ export default function MOTHPanel({ onClose }) {
             <button
               onClick={() => setView('manifest')}
               className={`px-3 py-1 rounded text-xs font-semibold transition ${
-                view === 'manifest' ? 'bg-purple-700' : 'bg-[#0a0a0a] hover:bg-[#1a1a1a]'
+                view === 'manifest' ? 'bg-teal text-white' : 'bg-slate hover:bg-teal/20 text-cream'
               }`}
             >
               📄 Raw Manifest
@@ -160,21 +160,21 @@ export default function MOTHPanel({ onClose }) {
             <button
               onClick={generateMOTH}
               disabled={generating}
-              className="px-3 py-1 bg-green-700 hover:bg-green-600 disabled:bg-[#1a1a1a] disabled:cursor-not-allowed rounded text-xs font-semibold transition"
+              className="px-3 py-1 bg-sage hover:bg-olive disabled:bg-slate disabled:text-mint disabled:cursor-not-allowed rounded text-white text-xs font-semibold transition"
             >
               {generating ? '⏳ Generating...' : '🔄 Regenerate'}
             </button>
             <button
               onClick={downloadManifest}
               disabled={!mothData}
-              className="px-3 py-1 bg-blue-700 hover:bg-blue-600 disabled:bg-[#1a1a1a] disabled:cursor-not-allowed rounded text-xs font-semibold transition"
+              className="px-3 py-1 bg-teal hover:bg-teal/80 disabled:bg-slate disabled:text-mint disabled:cursor-not-allowed rounded text-white text-xs font-semibold transition"
             >
               ⬇️ Download .moth
             </button>
             <button
               onClick={downloadIndex}
               disabled={!mothData}
-              className="px-3 py-1 bg-blue-700 hover:bg-blue-600 disabled:bg-[#1a1a1a] disabled:cursor-not-allowed rounded text-xs font-semibold transition"
+              className="px-3 py-1 bg-teal hover:bg-teal/80 disabled:bg-slate disabled:text-mint disabled:cursor-not-allowed rounded text-white text-xs font-semibold transition"
             >
               ⬇️ Download .json
             </button>
@@ -184,12 +184,12 @@ export default function MOTHPanel({ onClose }) {
         {/* Content */}
         <div className="flex-1 overflow-auto p-4">
           {error && (
-            <div className="bg-red-900/50 border border-red-700 rounded p-4 mb-4">
-              <div className="font-bold text-red-300 mb-2">❌ Error</div>
-              <div className="text-sm text-red-200">{error}</div>
+            <div className="bg-rust/20 border-2 border-rust rounded p-4 mb-4">
+              <div className="font-bold text-cream mb-2">❌ Error</div>
+              <div className="text-sm text-mint">{error}</div>
               <button
                 onClick={generateMOTH}
-                className="mt-3 px-3 py-1 bg-red-700 hover:bg-red-600 rounded text-xs font-semibold transition"
+                className="mt-3 px-3 py-1 bg-rust hover:bg-rust/80 rounded text-white text-xs font-semibold transition"
               >
                 Generate MOTH Manifest
               </button>
@@ -237,15 +237,15 @@ function SummaryView({ validation, mothData }) {
           <div className="text-xs text-[#6a6a6a] mb-1">Complexity</div>
           <div className="text-2xl font-bold text-yellow-400">{validation.summary.totalComplexity.toLocaleString()}</div>
         </div>
-        <div className="bg-[#0a0a0a] rounded p-4">
-          <div className="text-xs text-[#6a6a6a] mb-1">Avg Depth</div>
-          <div className="text-2xl font-bold text-purple-400">{validation.summary.averageDepth.toFixed(2)}</div>
+        <div className="bg-slate rounded p-4 border border-teal/30">
+          <div className="text-xs text-mint mb-1">Avg Depth</div>
+          <div className="text-2xl font-bold text-cream">{validation.summary.averageDepth.toFixed(2)}</div>
         </div>
       </div>
 
-      <div className="bg-[#0a0a0a] rounded p-4">
-        <div className="text-sm font-bold text-purple-300 mb-3">Validation Status</div>
-        <div className="grid grid-cols-2 gap-2 text-sm">
+      <div className="bg-slate rounded p-4 border border-teal/30">
+        <div className="text-sm font-bold text-cream mb-3">Validation Status</div>
+        <div className="grid grid-cols-2 gap-2 text-sm text-cream">
           <div className="flex items-center gap-2">
             <span>{validation.validation.schemaValid ? '✅' : '❌'}</span>
             <span>Schema Valid</span>
@@ -265,9 +265,9 @@ function SummaryView({ validation, mothData }) {
         </div>
       </div>
 
-      <div className="bg-[#0a0a0a] rounded p-4">
-        <div className="text-xs text-[#6a6a6a] mb-1">Manifest Hash</div>
-        <div className="font-mono text-xs text-purple-300 break-all">{validation.validation.manifestHash}</div>
+      <div className="bg-slate rounded p-4 border border-teal/30">
+        <div className="text-xs text-mint mb-1">Manifest Hash</div>
+        <div className="font-mono text-xs text-cream break-all">{validation.validation.manifestHash}</div>
       </div>
     </div>
   );
@@ -307,12 +307,12 @@ function FilesView({ mothData }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search files..."
-          className="flex-1 px-3 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm"
+          className="flex-1 px-3 py-2 bg-slate border border-teal/30 rounded text-sm text-cream placeholder-mint"
         />
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-3 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm"
+          className="px-3 py-2 bg-slate border border-teal/30 rounded text-sm text-cream"
         >
           <option value="path">Sort by Path</option>
           <option value="loc">Sort by Lines</option>
@@ -321,32 +321,32 @@ function FilesView({ mothData }) {
         </select>
       </div>
 
-      <div className="text-xs text-[#6a6a6a]">
+      <div className="text-xs text-mint">
         Showing {sorted.length} of {files.length} files
       </div>
 
       <div className="space-y-2">
         {sorted.map(([path, data]) => (
-          <div key={path} className="bg-[#0a0a0a] rounded p-3 hover:bg-gray-750 transition">
-            <div className="font-mono text-sm text-purple-300 mb-2">{path}</div>
-            <div className="grid grid-cols-6 gap-2 text-xs">
+          <div key={path} className="bg-slate rounded p-3 hover:bg-teal/10 border border-teal/20 transition">
+            <div className="font-mono text-sm text-cream mb-2">{path}</div>
+            <div className="grid grid-cols-6 gap-2 text-xs text-cream">
               <div>
-                <span className="text-[#6a6a6a]">LOC:</span> {data.metrics.loc}
+                <span className="text-mint">LOC:</span> {data.metrics.loc}
               </div>
               <div>
-                <span className="text-[#6a6a6a]">Complexity:</span> {data.metrics.complexity}
+                <span className="text-mint">Complexity:</span> {data.metrics.complexity}
               </div>
               <div>
-                <span className="text-[#6a6a6a]">Churn:</span> {data.metrics.churn}
+                <span className="text-mint">Churn:</span> {data.metrics.churn}
               </div>
               <div>
-                <span className="text-[#6a6a6a]">Fanin:</span> {data.metrics.fanin}
+                <span className="text-mint">Fanin:</span> {data.metrics.fanin}
               </div>
               <div>
-                <span className="text-[#6a6a6a]">Fanout:</span> {data.metrics.fanout}
+                <span className="text-mint">Fanout:</span> {data.metrics.fanout}
               </div>
               <div>
-                <span className="text-[#6a6a6a]">Depth:</span> {data.metrics.depth}
+                <span className="text-mint">Depth:</span> {data.metrics.depth}
               </div>
             </div>
             {data.symbols && data.symbols.length > 0 && (

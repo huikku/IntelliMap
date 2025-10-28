@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useState, useMemo } from 'react';
+import { useCallback, useEffect, useState, useMemo, useRef } from 'react';
 import {
   ReactFlow,
+  ReactFlowProvider,
   Background,
   Controls,
   MiniMap,
   useNodesState,
   useEdgesState,
   addEdge,
+  useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -22,16 +24,29 @@ const nodeTypes = {
 };
 
 /**
- * ReactFlowGraph - Main graph visualization component using React Flow
+ * Inner component that has access to useReactFlow hook
  */
-export function ReactFlowGraph({
+function ReactFlowInner({
   graphData,
   selectedNode,
   onNodeSelect,
-  layoutAlgorithm = 'elk',
-  layoutDirection = 'RIGHT',
+  layoutAlgorithm,
+  layoutDirection,
+  edgeOpacity,
+  curveStyle,
+  reactFlowInstanceRef,
 }) {
+  const reactFlowInstance = useReactFlow(); // Get React Flow instance
   const [isLayouting, setIsLayouting] = useState(true);
+  const [hasLayouted, setHasLayouted] = useState(false);
+  const lastLayoutRef = useRef({ algorithm: layoutAlgorithm, direction: layoutDirection });
+
+  // Expose React Flow instance to parent via ref
+  useEffect(() => {
+    if (reactFlowInstanceRef) {
+      reactFlowInstanceRef.current = reactFlowInstance;
+    }
+  }, [reactFlowInstance, reactFlowInstanceRef]);
 
   // Convert IntelliMap data to React Flow format
   const { initialNodes, initialEdges } = useMemo(() => {
@@ -49,37 +64,110 @@ export function ReactFlowGraph({
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  // Apply layout when data changes
+  // Check if layout algorithm or direction changed
+  const layoutChanged = useMemo(() => {
+    return lastLayoutRef.current.algorithm !== layoutAlgorithm ||
+           lastLayoutRef.current.direction !== layoutDirection;
+  }, [layoutAlgorithm, layoutDirection]);
+
+  // Apply layout only when data changes or layout settings change
   useEffect(() => {
     async function applyLayout() {
-      if (initialNodes.length === 0) {
-        setIsLayouting(false);
-        return;
-      }
+      // Only re-layout if:
+      // 1. Never layouted before, OR
+      // 2. Layout algorithm/direction changed, OR
+      // 3. Graph data changed (initialNodes changed)
+      if (!hasLayouted || layoutChanged) {
+        if (initialNodes.length === 0) {
+          setIsLayouting(false);
+          return;
+        }
 
-      setIsLayouting(true);
+        setIsLayouting(true);
+        console.log('🎨 Applying layout:', layoutAlgorithm, layoutDirection);
 
-      try {
-        const layoutedNodes = await layoutGraph(
-          initialNodes,
-          initialEdges,
-          layoutAlgorithm,
-          layoutDirection
-        );
+        try {
+          const layoutedNodes = await layoutGraph(
+            initialNodes,
+            initialEdges,
+            layoutAlgorithm,
+            layoutDirection
+          );
 
-        setNodes(layoutedNodes);
-        setEdges(initialEdges);
-      } catch (error) {
-        console.error('Layout failed:', error);
-        setNodes(initialNodes);
-        setEdges(initialEdges);
-      } finally {
-        setIsLayouting(false);
+          // Apply edge styling with proper type mapping
+          const getCurveType = (style) => {
+            // Map Cytoscape curve styles to React Flow edge types
+            const typeMap = {
+              'straight': 'straight',
+              'bezier': 'default',
+              'bezier-tight': 'default',
+              'smoothstep': 'smoothstep',
+              'step': 'step',
+            };
+            return typeMap[style] || 'smoothstep';
+          };
+
+          const styledEdges = initialEdges.map(edge => ({
+            ...edge,
+            type: getCurveType(curveStyle),
+            style: {
+              ...edge.style,
+              opacity: edgeOpacity,
+              strokeWidth: edge.style?.strokeWidth || 2,
+            },
+          }));
+
+          // Add layout direction to node data so CodeNode can position handles correctly
+          const nodesWithLayoutInfo = layoutedNodes.map(node => ({
+            ...node,
+            data: {
+              ...node.data,
+              layoutDirection,
+            },
+          }));
+
+          setNodes(nodesWithLayoutInfo);
+          setEdges(styledEdges);
+          setHasLayouted(true);
+          lastLayoutRef.current = { algorithm: layoutAlgorithm, direction: layoutDirection };
+        } catch (error) {
+          console.error('Layout failed:', error);
+          setNodes(initialNodes);
+          setEdges(initialEdges);
+        } finally {
+          setIsLayouting(false);
+        }
       }
     }
 
     applyLayout();
-  }, [initialNodes, initialEdges, layoutAlgorithm, layoutDirection, setNodes, setEdges]);
+  }, [initialNodes, initialEdges, layoutAlgorithm, layoutDirection, hasLayouted, layoutChanged, edgeOpacity, curveStyle, setNodes, setEdges]);
+
+  // Update edge styles independently without triggering layout
+  useEffect(() => {
+    if (hasLayouted && !layoutChanged) {
+      const getCurveType = (style) => {
+        const typeMap = {
+          'straight': 'straight',
+          'bezier': 'default',
+          'bezier-tight': 'default',
+          'smoothstep': 'smoothstep',
+          'step': 'step',
+        };
+        return typeMap[style] || 'smoothstep';
+      };
+
+      setEdges(edges => edges.map(edge => ({
+        ...edge,
+        type: getCurveType(curveStyle),
+        style: {
+          ...edge.style,
+          opacity: edgeOpacity,
+          strokeWidth: edge.style?.strokeWidth || 2,
+        },
+      })));
+    }
+  }, [edgeOpacity, curveStyle, hasLayouted, layoutChanged, setEdges]);
 
   // Handle node click
   const onNodeClick = useCallback(
@@ -97,12 +185,12 @@ export function ReactFlowGraph({
     [setEdges]
   );
 
-  // Get minimap node color
+  // Get minimap node color using muted palette
   const getMinimapNodeColor = useCallback((node) => {
-    if (node.selected) return '#667eea';
-    if (node.data?.changed) return '#f5576c';
-    if (node.data?.metrics?.complexity > 75) return '#f093fb';
-    return '#444';
+    if (node.selected) return '#5F9B8C'; // Teal
+    if (node.data?.changed) return '#FF7D2D'; // Orange
+    if (node.data?.metrics?.complexity > 75) return '#FF9A4A'; // Peach
+    return '#2F5060'; // Slate
   }, []);
 
   // Detect port direction for edge styling
@@ -141,10 +229,14 @@ export function ReactFlowGraph({
         elementsSelectable={true}
         // Only render visible elements for performance
         onlyRenderVisibleElements={true}
+        // Allow panning even when hovering over edges/handles
+        panOnDrag={true}
+        panOnScroll={true}
+        selectionOnDrag={false}
       >
         {/* Graph background pattern */}
         <Background
-          color="#333"
+          color="#2F5060"
           gap={16}
           size={1}
           variant="dots"
@@ -154,8 +246,8 @@ export function ReactFlowGraph({
         <Controls
           showInteractive={false}
           style={{
-            background: 'rgba(30, 30, 30, 0.9)',
-            border: '1px solid #444',
+            background: 'rgba(35, 60, 75, 0.9)',
+            border: '1px solid #2F5060',
             borderRadius: '8px',
           }}
         />
@@ -167,12 +259,41 @@ export function ReactFlowGraph({
           nodeBorderRadius={4}
           maskColor="rgba(0, 0, 0, 0.7)"
           style={{
-            background: 'rgba(30, 30, 30, 0.9)',
-            border: '1px solid #444',
+            background: 'rgba(35, 60, 75, 0.9)',
+            border: '1px solid #2F5060',
             borderRadius: '8px',
           }}
         />
       </ReactFlow>
     </div>
+  );
+}
+
+/**
+ * ReactFlowGraph - Wrapper component with ReactFlowProvider
+ */
+export function ReactFlowGraph({
+  graphData,
+  selectedNode,
+  onNodeSelect,
+  layoutAlgorithm = 'elk',
+  layoutDirection = 'RIGHT',
+  edgeOpacity = 1.0,
+  curveStyle = 'smoothstep',
+  reactFlowInstanceRef = null,
+}) {
+  return (
+    <ReactFlowProvider>
+      <ReactFlowInner
+        graphData={graphData}
+        selectedNode={selectedNode}
+        onNodeSelect={onNodeSelect}
+        layoutAlgorithm={layoutAlgorithm}
+        layoutDirection={layoutDirection}
+        edgeOpacity={edgeOpacity}
+        curveStyle={curveStyle}
+        reactFlowInstanceRef={reactFlowInstanceRef}
+      />
+    </ReactFlowProvider>
   );
 }

@@ -44,7 +44,7 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
 
   if (!filePath) {
     return (
-      <div className="text-xs text-gray-500 p-2">
+      <div className="text-xs text-[#7BAEA2] p-2">
         Select a file to preview
       </div>
     );
@@ -52,7 +52,7 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
 
   if (loading) {
     return (
-      <div className="text-xs text-[#6a6a6a] p-2">
+      <div className="text-xs text-[#7BAEA2] p-2">
         Loading file...
       </div>
     );
@@ -60,11 +60,11 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
 
   if (error) {
     return (
-      <div className="p-3 bg-[#000000] border border-red-900">
-        <div className="text-sm text-red-400 font-semibold mb-2">
+      <div className="p-3 bg-[#2F5060] border border-[#C25C4A]">
+        <div className="text-sm text-[#F6DA80] font-semibold mb-2">
           ⚠️ Cannot Preview File
         </div>
-        <div className="text-xs text-[#a0a0a0] leading-relaxed">
+        <div className="text-xs text-[#7BAEA2] leading-relaxed">
           {error}
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
 
   if (!content) {
     return (
-      <div className="text-xs text-gray-500 p-2">
+      <div className="text-xs text-[#7BAEA2] p-2">
         Unable to preview file
       </div>
     );
@@ -87,35 +87,35 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {/* File info header */}
-      <div className="px-2 py-1 bg-[#0a0a0a] border-b border-[#2a2a2a] text-xs text-[#6a6a6a]">
+      <div className="px-2 py-1 bg-slate border-b border-teal/30 text-xs text-mint">
         <div className="truncate font-mono text-xs">{filePath}</div>
-        <div className="text-xs text-gray-500 font-condensed">{lineCount} lines</div>
+        <div className="text-xs text-teal font-condensed">{lineCount} lines</div>
       </div>
 
       {/* Warning for minified/bundled files */}
       {warning && (
-        <div className="px-3 py-2 bg-yellow-900 border-b border-yellow-800 text-xs text-yellow-200">
+        <div className="px-3 py-2 bg-gold/20 border-b border-gold text-xs text-cream">
           <div className="font-semibold mb-1">⚠️ Build Artifact</div>
           <div className="leading-relaxed">{warning}</div>
         </div>
       )}
 
       {/* Code preview */}
-      <div className="flex-1 overflow-y-auto font-mono text-xs bg-gray-950">
+      <div className="flex-1 overflow-y-auto font-mono text-xs bg-[#233C4B]">
         <div className="p-2">
           {displayLines.map((line, idx) => (
             <div key={idx} className="flex">
-              <span className="text-gray-600 w-8 text-right pr-2 select-none">
+              <span className="text-[#5F9B8C] w-8 text-right pr-2 select-none">
                 {idx + 1}
               </span>
-              <span className="text-[#a0a0a0] flex-1 whitespace-pre-wrap break-words">
+              <span className="text-[#F6DA80] flex-1 whitespace-pre-wrap break-words">
                 {line || ' '}
               </span>
             </div>
           ))}
-          
+
           {isTruncated && (
-            <div className="text-gray-500 mt-2 text-center">
+            <div className="text-[#7BAEA2] mt-2 text-center">
               ... ({lines.length - maxLines} more lines)
             </div>
           )}
