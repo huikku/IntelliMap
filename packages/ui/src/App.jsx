@@ -8,11 +8,23 @@ import RepoLoader from './components/RepoLoader';
 import SearchBox from './components/SearchBox';
 
 export default function App() {
+  console.log('🚀 IntelliMap App loaded - React Flow ONLY (no Cytoscape)');
+
   // Load persisted settings from localStorage
   const loadPersistedSettings = () => {
     try {
       const saved = localStorage.getItem('intellimap-settings');
-      return saved ? JSON.parse(saved) : {};
+      if (saved) {
+        const settings = JSON.parse(saved);
+        // Remove deprecated 'renderer' setting (we only use React Flow now)
+        if ('renderer' in settings) {
+          console.log('🧹 Removing deprecated renderer setting from localStorage');
+          delete settings.renderer;
+          localStorage.setItem('intellimap-settings', JSON.stringify(settings));
+        }
+        return settings;
+      }
+      return {};
     } catch (e) {
       console.error('Failed to load settings:', e);
       return {};
@@ -75,64 +87,6 @@ export default function App() {
       console.error('Failed to save settings:', e);
     }
   }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration]);
-
-  // Persist zoom and pan when cy instance changes
-  useEffect(() => {
-    if (!cyInstance) return;
-
-    const saveViewport = () => {
-      try {
-        const viewport = {
-          zoom: cyInstance.zoom(),
-          pan: cyInstance.pan(),
-        };
-        localStorage.setItem('intellimap-viewport', JSON.stringify(viewport));
-      } catch (e) {
-        console.error('Failed to save viewport:', e);
-      }
-    };
-
-    // Save viewport on zoom/pan changes (debounced)
-    let timeout;
-    const handleViewportChange = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(saveViewport, 500);
-    };
-
-    cyInstance.on('zoom pan', handleViewportChange);
-
-    // Restore viewport on mount, but only if graph hasn't changed
-    try {
-      const saved = localStorage.getItem('intellimap-viewport');
-      const savedGraphId = localStorage.getItem('intellimap-graph-id');
-      const currentGraphId = graph ? `${graph.nodes?.length || 0}-${graph.edges?.length || 0}` : null;
-
-      if (saved && savedGraphId === currentGraphId) {
-        const viewport = JSON.parse(saved);
-        cyInstance.zoom(viewport.zoom);
-        cyInstance.pan(viewport.pan);
-        console.log('📍 Viewport restored from localStorage');
-      } else {
-        // New graph or first load - fit to view
-        cyInstance.fit(undefined, 50);
-        console.log('📍 Fitting to new graph');
-
-        // Save the new graph ID
-        if (currentGraphId) {
-          localStorage.setItem('intellimap-graph-id', currentGraphId);
-        }
-      }
-    } catch (e) {
-      console.error('Failed to restore viewport:', e);
-      // Fallback to fit
-      cyInstance.fit(undefined, 50);
-    }
-
-    return () => {
-      cyInstance.off('zoom pan', handleViewportChange);
-      clearTimeout(timeout);
-    };
-  }, [cyInstance]);
 
   // Handle dependency navigation
   const handleNavigate = (mode) => {
@@ -343,18 +297,6 @@ export default function App() {
             title={currentRepo ? `Reload ${currentRepo.split('/').pop()}` : 'Reload current graph'}
           >
             RELOAD
-          </button>
-          <button
-            onClick={() => setRenderer(renderer === 'cytoscape' ? 'react-flow' : 'cytoscape')}
-            className={`px-3 py-1.5 border rounded transition text-xs ${
-              renderer === 'react-flow'
-                ? 'bg-teal text-white border-teal'
-                : 'bg-slate text-cream border-teal/30 hover:border-teal hover:bg-teal/20'
-            }`}
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
-            title={`Switch to ${renderer === 'cytoscape' ? 'React Flow' : 'Cytoscape'} renderer`}
-          >
-            {renderer === 'cytoscape' ? 'CYTOSCAPE' : 'REACT FLOW'}
           </button>
           <PlaneSwitcher plane={plane} setPlane={setPlane} />
         </div>
