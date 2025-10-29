@@ -89,17 +89,26 @@ async function layoutWithELK(nodes, edges, direction = 'RIGHT') {
       });
     }
 
-    // Layout isolated nodes in a spread-out grid at the bottom-right
+    // Layout isolated nodes in a grid to the right of the main graph
     if (isolatedNodes.length > 0) {
       const cols = Math.min(8, Math.ceil(Math.sqrt(isolatedNodes.length)));
       const nodeWidth = 200;
       const nodeHeight = 150;
-      const spacingX = 100; // Increased horizontal spacing
-      const spacingY = 80;  // Increased vertical spacing
+      const spacingX = 100;
+      const spacingY = 80;
 
-      // Position isolated nodes in bottom-right corner
-      const startX = 50;
-      const startY = (connectedNodes.length > 0 ? 800 : 50); // Below main graph or at top if no connected nodes
+      // Calculate bounds of connected graph to position isolated nodes to the right
+      let maxX = 0;
+      let minY = 0;
+
+      if (layoutedNodes.length > 0) {
+        maxX = Math.max(...layoutedNodes.map(n => n.position.x + getNodeWidth(n)));
+        minY = Math.min(...layoutedNodes.map(n => n.position.y));
+      }
+
+      // Position isolated nodes to the right of the main graph with padding
+      const startX = maxX + 200; // 200px padding from main graph
+      const startY = minY || 50;
 
       const isolatedLayouted = isolatedNodes.map((node, index) => ({
         ...node,
@@ -187,16 +196,26 @@ function layoutWithDagre(nodes, edges, direction = 'LR') {
     }
   }
 
-  // Layout isolated nodes in a spread-out grid
+  // Layout isolated nodes in a grid to the right of the main graph
   if (isolatedNodes.length > 0) {
     const cols = Math.min(8, Math.ceil(Math.sqrt(isolatedNodes.length)));
     const nodeWidth = 200;
     const nodeHeight = 150;
-    const spacingX = 100; // Increased horizontal spacing
-    const spacingY = 80;  // Increased vertical spacing
+    const spacingX = 100;
+    const spacingY = 80;
 
-    const startX = 50;
-    const startY = (connectedNodes.length > 0 ? 800 : 50);
+    // Calculate bounds of connected graph to position isolated nodes to the right
+    let maxX = 0;
+    let minY = 0;
+
+    if (layoutedNodes.length > 0) {
+      maxX = Math.max(...layoutedNodes.map(n => n.position.x + getNodeWidth(n)));
+      minY = Math.min(...layoutedNodes.map(n => n.position.y));
+    }
+
+    // Position isolated nodes to the right of the main graph with padding
+    const startX = maxX + 200; // 200px padding from main graph
+    const startY = minY || 50;
 
     const isolatedLayouted = isolatedNodes.map((node, index) => ({
       ...node,
