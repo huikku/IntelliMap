@@ -8,8 +8,16 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
   const [lineCount, setLineCount] = useState(0);
 
   useEffect(() => {
-    if (!filePath || !currentRepo) {
+    if (!filePath) {
       setContent(null);
+      setError(null);
+      return;
+    }
+
+    if (!currentRepo) {
+      setContent(null);
+      setError('Repository path not available. Try reloading the graph.');
+      console.error('❌ FilePreview: currentRepo is null/undefined');
       return;
     }
 
@@ -17,21 +25,26 @@ export default function FilePreview({ filePath, currentRepo, maxLines = 500 }) {
       setLoading(true);
       setError(null);
       setWarning(null);
+
+      const url = `/api/file-content?repo=${encodeURIComponent(currentRepo)}&file=${encodeURIComponent(filePath)}`;
+      console.log('📄 Fetching file content:', { currentRepo, filePath, url });
+
       try {
-        const response = await fetch(
-          `/api/file-content?repo=${encodeURIComponent(currentRepo)}&file=${encodeURIComponent(filePath)}`
-        );
+        const response = await fetch(url);
 
         if (!response.ok) {
           const data = await response.json();
+          console.error('❌ File content fetch failed:', data);
           throw new Error(data.message || data.error || 'Failed to load file');
         }
 
         const data = await response.json();
+        console.log('✅ File content loaded:', { path: data.path, size: data.size, lines: data.content.split('\n').length });
         setContent(data.content);
         setWarning(data.warning || null);
         setLineCount(data.content.split('\n').length);
       } catch (err) {
+        console.error('❌ Error loading file:', err);
         setError(err.message);
         setContent(null);
       } finally {

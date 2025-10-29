@@ -36,9 +36,7 @@ export default function App() {
     showChanged: false,
     collapseByFolder: true,
   });
-  const cyRef = useRef(null);
   const selectedNodeRef = useRef(null);
-  const [cyInstance, setCyInstance] = useState(null);
   const reactFlowInstanceRef = useRef(null); // Ref for React Flow instance
 
   // Edge and curve settings that should persist across view changes
@@ -51,9 +49,6 @@ export default function App() {
 
   // Dependency navigation state
   const [navigationMode, setNavigationMode] = useState(null); // 'upstream', 'downstream', 'parents', 'children', or null
-
-  // Renderer selection: 'cytoscape' or 'react-flow'
-  const [renderer, setRenderer] = useState(persistedSettings.renderer || 'react-flow');
 
   // Keep selectedNodeRef in sync with selectedNode
   useEffect(() => {
@@ -71,7 +66,6 @@ export default function App() {
       curveStyle,
       sizing,
       sizeExaggeration,
-      renderer,
     };
 
     try {
@@ -80,7 +74,7 @@ export default function App() {
     } catch (e) {
       console.error('Failed to save settings:', e);
     }
-  }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration, renderer]);
+  }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration]);
 
   // Persist zoom and pan when cy instance changes
   useEffect(() => {
@@ -159,64 +153,21 @@ export default function App() {
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Press 'f' to focus/fit all visible nodes (or selected node if none are highlighted)
+      // Press 'f' to focus/fit view
       if (e.key === 'f') {
         e.preventDefault();
 
-        // React Flow renderer
-        if (renderer === 'react-flow' && reactFlowInstanceRef.current) {
+        if (reactFlowInstanceRef.current) {
           const instance = reactFlowInstanceRef.current;
           instance.fitView({ padding: 0.2, duration: 500 });
-          console.log(`🔍 React Flow: Fitted view`);
-        }
-        // Cytoscape renderer
-        else if (renderer === 'cytoscape' && cyRef.current) {
-          const cy = cyRef.current;
-
-          // Get all visible nodes (opacity > 0.5 means highlighted, not faded)
-          // This works with both class-based fading and opacity-based highlighting
-          const visibleNodes = cy.nodes().filter(node => {
-            const opacity = node.style('opacity');
-            return opacity > 0.5; // Highlighted nodes have opacity 1, faded have 0.15
-          });
-
-          if (visibleNodes.length > 0 && visibleNodes.length < cy.nodes().length) {
-            // Fit to highlighted nodes (not all nodes)
-            cy.animate({
-              fit: {
-                eles: visibleNodes,
-                padding: 50,
-              },
-            }, {
-              duration: 500,
-            });
-            console.log(`🔍 Fitted to ${visibleNodes.length} highlighted nodes`);
-          } else if (selectedNodeRef.current) {
-            // Fallback: if no filtering active, zoom to selected node
-            const nodeElement = cy.getElementById(selectedNodeRef.current.id);
-            if (nodeElement.length > 0) {
-              cy.animate({
-                fit: {
-                  eles: nodeElement,
-                  padding: 100,
-                },
-              }, {
-                duration: 500,
-              });
-              console.log(`🔍 Fitted to selected node: ${selectedNodeRef.current.id}`);
-            }
-          } else {
-            // No selection, fit all nodes
-            cy.fit(cy.nodes(), 50);
-            console.log(`🔍 Fitted to all nodes`);
-          }
+          console.log(`🔍 Fitted view`);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [renderer]);
+  }, []);
 
   useEffect(() => {
     fetchGraph();
@@ -254,7 +205,14 @@ export default function App() {
       const response = await fetch('/graph');
       if (!response.ok) throw new Error('Failed to load graph');
       const data = await response.json();
-      setGraph(data);
+
+      // Extract repo path if provided
+      const { repoPath, ...graphData } = data;
+      setGraph(graphData);
+      if (repoPath) {
+        setCurrentRepo(repoPath);
+        console.log('📁 Repository path:', repoPath);
+      }
       setError(null);
     } catch (err) {
       setError(err.message);
@@ -363,7 +321,7 @@ export default function App() {
             </p>
           </div>
         </div>
-        <SearchBox graph={graph} cyRef={cyRef} onSearch={setSelectedNode} />
+        <SearchBox graph={graph} onSearch={setSelectedNode} />
         <div className="flex items-center gap-3">
           {currentRepo && (
             <div className="text-xs text-mint font-mono max-w-xs truncate">
@@ -412,13 +370,13 @@ export default function App() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar - Fixed width */}
         <div className="flex-shrink-0">
-          <Sidebar filters={filters} setFilters={setFilters} graph={graph} cy={cyInstance} />
+          <Sidebar filters={filters} setFilters={setFilters} graph={graph} />
         </div>
 
         {/* Main Content - Fills remaining space */}
         <main className="flex-1 flex flex-col min-w-0">
           <Toolbar
-            cy={cyInstance}
+            reactFlowInstance={reactFlowInstanceRef}
             layout={layout}
             setLayout={setLayout}
             clustering={clustering}
@@ -439,13 +397,10 @@ export default function App() {
             filters={filters}
             selectedNode={selectedNode}
             setSelectedNode={setSelectedNode}
-            cyRef={cyRef}
             clustering={clustering}
-            setCyInstance={setCyInstance}
             edgeOpacity={edgeOpacity}
             curveStyle={curveStyle}
             navigationMode={navigationMode}
-            renderer={renderer}
             layout={layout}
             reactFlowInstanceRef={reactFlowInstanceRef}
           />

@@ -186,6 +186,10 @@ export function CytoscapeGraph({
       minZoom: 0.1,
       maxZoom: 3,
       wheelSensitivity: 0.2,
+      // Enable user interaction
+      userZoomingEnabled: true,
+      userPanningEnabled: true,
+      boxSelectionEnabled: false,
     });
 
     // Store instance in ref
@@ -194,15 +198,59 @@ export function CytoscapeGraph({
       setCyInstance(cyInstance);
     }
 
-    // Add navigator
+    // Add navigator with visible container
+    const navContainer = document.createElement('div');
+    navContainer.id = 'cy-navigator';
+    navContainer.style.position = 'absolute';
+    navContainer.style.bottom = '20px';
+    navContainer.style.right = '20px';
+    navContainer.style.width = '200px';
+    navContainer.style.height = '200px';
+    navContainer.style.border = '2px solid #2F5060';
+    navContainer.style.borderRadius = '8px';
+    navContainer.style.overflow = 'hidden';
+    navContainer.style.backgroundColor = 'rgba(35, 60, 75, 0.9)';
+    navContainer.style.zIndex = '1000';
+    containerRef.current.appendChild(navContainer);
+
     cyInstance.navigator({
-      container: false,
-      viewLiveFramerate: 0,
+      container: navContainer,
+      viewLiveFramerate: 30,
       thumbnailEventFramerate: 30,
-      thumbnailLiveFramerate: false,
+      thumbnailLiveFramerate: 30,
       dblClickDelay: 200,
-      removeCustomContainer: true,
+      removeCustomContainer: false,
       rerenderDelay: 100,
+    });
+
+    // Add zoom event handler to update node rendering
+    let zoomTimeout;
+    cyInstance.on('zoom', () => {
+      // Debounce zoom updates to avoid excessive re-rendering
+      clearTimeout(zoomTimeout);
+      zoomTimeout = setTimeout(() => {
+        const zoom = cyInstance.zoom();
+        const zoomKey = Math.round(zoom * 4) / 4; // Update every 0.25 zoom change
+
+        if (cyInstance._lastZoomKey === zoomKey) return;
+        cyInstance._lastZoomKey = zoomKey;
+
+        console.log(`🔍 Zoom changed to ${zoom.toFixed(2)}, updating node rendering...`);
+
+        // Batch update all nodes
+        cyInstance.batch(() => {
+          cyInstance.nodes().forEach(node => {
+            if (node.data('isCluster')) return;
+
+            const enhancedData = node.data();
+            if (!enhancedData) return;
+
+            // Re-render with new zoom level
+            const newImage = nodeRenderer.render(enhancedData, zoom);
+            node.style('background-image', newImage);
+          });
+        });
+      }, 150); // Wait 150ms after last zoom event
     });
 
     // Node selection handler
@@ -213,8 +261,12 @@ export function CytoscapeGraph({
 
     // Cleanup
     return () => {
+      clearTimeout(zoomTimeout);
       if (cyInstance) {
         cyInstance.destroy();
+      }
+      if (navContainer && navContainer.parentNode) {
+        navContainer.parentNode.removeChild(navContainer);
       }
       cyRef.current = null;
     };

@@ -139,7 +139,7 @@ export default function RepoLoader({ onRepoLoaded, onClose }) {
                 }
               }}
               placeholder="Type path and press Enter..."
-              className="flex-1 px-3 py-2 bg-navy border border-teal/30 rounded text-sm font-mono text-cream focus:border-teal focus:outline-none"
+              className="flex-1 px-3 py-2 bg-navy border border-teal/30 rounded text-sm font-mono text-cream placeholder-mint/60 focus:border-teal focus:outline-none"
               style={{ colorScheme: 'dark' }}
             />
             <button

@@ -41,7 +41,11 @@ app.get('/graph', (req, res) => {
   try {
     const graphPath = resolve(currentRepoPath, '.intellimap/graph.json');
     const graph = JSON.parse(fs.readFileSync(graphPath, 'utf-8'));
-    res.json(graph);
+    // Include the repo path so the UI knows where files are located
+    res.json({
+      ...graph,
+      repoPath: currentRepoPath,
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load graph', message: error.message });
   }

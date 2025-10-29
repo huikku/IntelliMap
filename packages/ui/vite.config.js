@@ -14,6 +14,11 @@ export default defineConfig({
         target: 'http://localhost:7676',
         changeOrigin: true,
       },
+      '/events': {
+        target: 'http://localhost:7676',
+        changeOrigin: true,
+        ws: true, // Enable WebSocket proxying for SSE
+      },
     },
   },
   build: {

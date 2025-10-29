@@ -1,4 +1,5 @@
 import fs from 'fs-extra';
+import { enrichNodesWithGitMetrics, enrichNodesWithHotspots } from './gitMetrics.js';
 
 /**
  * Compute LOC (lines of code) for a file
@@ -70,25 +71,31 @@ export function computeQuantiles(nodes) {
  */
 export function enrichNodesWithMetrics(nodes) {
   console.log('📊 Computing LOC and complexity metrics...');
-  
+
   // Compute LOC and complexity for each node
   const enrichedNodes = nodes.map(node => {
     const loc = computeLOC(node.id);
     const complexity = computeComplexity(node.id);
-    
+
     return {
       ...node,
       loc,
       complexity,
     };
   });
-  
+
   // Compute quantiles
   const nodesWithQuantiles = computeQuantiles(enrichedNodes);
-  
+
   console.log(`✅ Enriched ${nodesWithQuantiles.length} nodes with metrics`);
-  
-  return nodesWithQuantiles;
+
+  // Add git-based behavioral metrics
+  const nodesWithGit = enrichNodesWithGitMetrics(nodesWithQuantiles);
+
+  // Add hotspot scores
+  const nodesWithHotspots = enrichNodesWithHotspots(nodesWithGit);
+
+  return nodesWithHotspots;
 }
 
 /**

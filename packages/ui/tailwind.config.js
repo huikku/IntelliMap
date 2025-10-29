@@ -13,9 +13,9 @@ export default {
         logo: ['Doto', 'sans-serif'],
       },
       colors: {
-        // Muted professional color palette
-        navy: '#233C4B',
-        slate: '#2F5060',
+        // Muted professional color palette - darker blues
+        navy: '#0f1c24',
+        slate: '#1a2830',
         orange: '#FF7D2D',
         peach: '#FF9A4A',
         gold: '#FAC846',

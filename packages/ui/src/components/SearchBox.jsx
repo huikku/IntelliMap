@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import Fuse from 'fuse.js';
 
-export default function SearchBox({ graph, cyRef, onSearch }) {
+export default function SearchBox({ graph, onSearch }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -33,43 +33,10 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
   }, [searchTerm, fuse]);
 
   const handleSelectResult = (node) => {
-    if (!cyRef.current) return;
+    // Call onSearch callback to select the node
+    onSearch?.(node);
 
-    const cy = cyRef.current;
-    const nodeElement = cy.getElementById(node.id);
-
-    if (nodeElement.length > 0) {
-      // Select the node
-      cy.elements().unselect();
-      nodeElement.select();
-
-      // Highlight the node with a temporary glow effect
-      nodeElement.addClass('search-highlight');
-      setTimeout(() => {
-        nodeElement.removeClass('search-highlight');
-      }, 2000);
-
-      // Animate to node position with smooth zoom
-      const pos = nodeElement.position();
-      const w = cy.width();
-      const h = cy.height();
-      const targetZoom = 2.5;
-      const pan = {
-        x: w / 2 - pos.x * targetZoom,
-        y: h / 2 - pos.y * targetZoom,
-      };
-
-      cy.animate({
-        pan: pan,
-        zoom: targetZoom,
-      }, {
-        duration: 600,
-        easing: 'ease-in-out-cubic',
-      });
-
-      onSearch?.(node);
-    }
-
+    // Clear search
     setSearchTerm('');
     setResults([]);
   };
@@ -101,7 +68,7 @@ export default function SearchBox({ graph, cyRef, onSearch }) {
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full px-3 py-2 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+          className="w-full px-3 py-2 bg-slate border border-teal/30 rounded text-sm text-cream placeholder-mint/60 focus:outline-none focus:border-teal"
         />
         {searchTerm && (
           <button

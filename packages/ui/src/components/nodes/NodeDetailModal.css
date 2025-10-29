@@ -1,0 +1,473 @@
+/* Modal overlay - fills graph container */
+.node-detail-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.98);
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  z-index: 10000;
+  backdrop-filter: blur(8px);
+  padding: 0;
+}
+
+/* Modal container - fills graph container */
+.node-detail-modal {
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+  border: none;
+  border-radius: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* Header */
+.node-detail-modal-header {
+  background: #0f1c24;
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1a2830;
+  flex-shrink: 0;
+}
+
+.node-detail-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  font-family: 'Barlow', sans-serif;
+}
+
+.node-detail-modal-icon {
+  font-size: 24px;
+}
+
+.node-detail-modal-close {
+  background: transparent;
+  border: none;
+  color: #aaa;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.node-detail-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Content area */
+.node-detail-modal-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Left panel - Metrics */
+.node-detail-modal-left {
+  width: 40%;
+  border-right: 1px solid #1a2830;
+  background: #0f1c24;
+  display: flex;
+  flex-direction: column;
+}
+
+.node-detail-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* Custom scrollbar for left panel */
+.node-detail-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.node-detail-scrollable::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.node-detail-scrollable::-webkit-scrollbar-thumb {
+  background: #5F9B8C;
+  border-radius: 4px;
+}
+
+.node-detail-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #7BAEA2;
+}
+
+/* Right panel - Code */
+.node-detail-modal-right {
+  width: 60%;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+}
+
+.node-detail-code-header {
+  padding: 16px 20px;
+  background: #1a2830;
+  border-bottom: 1px solid #0f1c24;
+  font-weight: 600;
+  color: #F6DA80;
+  font-size: 14px;
+  font-family: 'Barlow', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.node-detail-code-viewer {
+  flex: 1;
+  overflow: hidden;
+  padding: 0;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  color: #ddd;
+  background: #0d0d0d;
+  font-size: 13px;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom scrollbar for code content */
+.code-content::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.code-content::-webkit-scrollbar-track {
+  background: #0f0f0f;
+}
+
+.code-content::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 5px;
+}
+
+.code-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Bento Box Grid Layout */
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bento-card {
+  background: #1a2830;
+  border: 1px solid #2a3840;
+  border-radius: 8px;
+  padding: 12px 14px;
+  transition: all 0.2s;
+}
+
+.bento-card:hover {
+  border-color: #5F9B8C;
+  background: #1f2d36;
+}
+
+.bento-card-label {
+  font-size: 11px;
+  color: #7BAEA2;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-family: 'Barlow', sans-serif;
+}
+
+.bento-card-value {
+  font-size: 20px;
+  color: #F6DA80;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.bento-card-small {
+  font-size: 16px;
+}
+
+/* Full width bento cards */
+.bento-card-full {
+  grid-column: 1 / -1;
+}
+
+/* Section headers */
+.bento-section-header {
+  font-weight: 700;
+  color: #F6DA80;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'Barlow', sans-serif;
+  border-bottom: 2px solid #5F9B8C;
+  padding-bottom: 8px;
+}
+
+/* Trend bars in bento cards */
+.bento-trend-container {
+  margin-top: 8px;
+}
+
+.bento-trend-label {
+  font-size: 10px;
+  color: #7BAEA2;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* List items in bento cards */
+.bento-list {
+  margin-top: 8px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.bento-list-item {
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 4px;
+  padding: 4px 8px;
+  background: #0f1c24;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Old detail sections - keep for compatibility */
+.node-detail-modal .detail-section {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #1a2830;
+}
+
+.node-detail-modal .detail-section:last-child {
+  border-bottom: none;
+}
+
+.node-detail-modal .detail-header {
+  font-weight: 600;
+  color: #5F9B8C;
+  margin-bottom: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: 'Barlow', sans-serif;
+}
+
+.node-detail-modal .detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.node-detail-modal .detail-label {
+  color: #888;
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.node-detail-modal .detail-value {
+  color: #F6DA80;
+  font-weight: 600;
+  text-align: right;
+  font-size: 14px;
+}
+
+/* Code syntax highlighting */
+.code-content {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+  height: 100%;
+}
+
+.code-line {
+  display: flex;
+  padding: 2px 0;
+  min-height: 21px;
+  width: fit-content;
+  min-width: 100%;
+}
+
+.code-line:hover {
+  background: rgba(95, 155, 140, 0.05);
+}
+
+.line-number {
+  display: inline-block;
+  width: 50px;
+  padding-right: 16px;
+  padding-left: 16px;
+  text-align: right;
+  color: #555;
+  user-select: none;
+  flex-shrink: 0;
+  border-right: 1px solid #1a2830;
+  position: sticky;
+  left: 0;
+  background: #0d0d0d;
+  z-index: 1;
+}
+
+.line-content {
+  padding-left: 16px;
+  padding-right: 16px;
+  flex: 1;
+  white-space: pre;
+  overflow: visible;
+}
+
+/* Syntax colors */
+.code-comment {
+  color: #6A9955 !important;
+  font-style: italic;
+  opacity: 0.6 !important;
+}
+
+.code-string {
+  color: #ce9178;
+}
+
+.code-keyword {
+  color: #569cd6;
+  font-weight: 600;
+}
+
+.code-number {
+  color: #b5cea8;
+}
+
+.code-function {
+  color: #dcdcaa;
+}
+
+/* Search highlighting */
+.search-match {
+  background: rgba(255, 165, 0, 0.3);
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+.search-match-current {
+  background: rgba(255, 165, 0, 0.6);
+  border: 1px solid #ff8c00;
+  border-radius: 2px;
+  padding: 0 2px;
+}
+
+/* Search bar */
+.code-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #1a2830;
+  border-bottom: 1px solid #0f1c24;
+}
+
+.code-search-input {
+  flex: 1;
+  padding: 6px 10px;
+  background: #0f1c24;
+  border: 1px solid #5F9B8C;
+  border-radius: 4px;
+  color: #F6DA80;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  outline: none;
+}
+
+.code-search-input:focus {
+  border-color: #7BAEA2;
+  box-shadow: 0 0 0 2px rgba(95, 155, 140, 0.2);
+}
+
+.code-search-count {
+  font-size: 11px;
+  color: #888;
+  font-family: 'JetBrains Mono', monospace;
+  min-width: 80px;
+  text-align: center;
+}
+
+.code-search-btn {
+  padding: 4px 10px;
+  background: #0f1c24;
+  border: 1px solid #5F9B8C;
+  border-radius: 4px;
+  color: #F6DA80;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.code-search-btn:hover:not(:disabled) {
+  background: #5F9B8C;
+  border-color: #7BAEA2;
+}
+
+.code-search-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .node-detail-modal {
+    width: 95vw;
+    height: 90vh;
+  }
+  
+  .node-detail-modal-left {
+    width: 45%;
+  }
+  
+  .node-detail-modal-right {
+    width: 55%;
+  }
+}
+
+@media (max-width: 768px) {
+  .node-detail-modal-content {
+    flex-direction: column;
+  }
+  
+  .node-detail-modal-left,
+  .node-detail-modal-right {
+    width: 100%;
+    border-right: none;
+  }
+  
+  .node-detail-modal-left {
+    max-height: 40%;
+    border-bottom: 1px solid #333;
+  }
+  
+  .node-detail-modal-right {
+    flex: 1;
+  }
+}
+

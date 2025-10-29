@@ -5,9 +5,9 @@
 @tailwind utilities;
 
 :root {
-  /* Muted Professional Color Palette */
-  --navy: #233C4B;              /* Dark navy blue - primary dark */
-  --slate: #2F5060;             /* Slate blue - secondary dark */
+  /* Muted Professional Color Palette - Darker Blues */
+  --navy: #0f1c24;              /* Much darker navy blue - primary dark */
+  --slate: #1a2830;             /* Much darker slate blue - secondary dark */
   --orange: #FF7D2D;            /* Muted orange - primary accent */
   --peach: #FF9A4A;             /* Peach - secondary accent */
   --gold: #FAC846;              /* Gold - tertiary accent */
@@ -32,9 +32,9 @@
   --gray-dark: var(--slate);
 
   /* UI Element Colors */
-  --border: rgba(47, 80, 96, 0.3);  /* Slate with transparency */
+  --border: rgba(26, 40, 48, 0.5);  /* Darker slate with transparency */
   --border-bright: rgba(95, 155, 140, 0.5); /* Teal with transparency */
-  --bg-panel: rgba(35, 60, 75, 0.8); /* Navy with transparency */
+  --bg-panel: rgba(15, 28, 36, 0.9); /* Much darker navy with transparency */
   --bg-hover: rgba(95, 155, 140, 0.1); /* Teal hover */
 
   --accent: var(--orange);
@@ -158,6 +158,43 @@ button:active {
 .cytoscape-container {
   width: 100%;
   height: 100%;
+}
+
+/* Input and Select styling - dark theme by default */
+input[type="text"],
+input[type="search"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+select,
+textarea {
+  background-color: var(--slate);
+  color: var(--cream);
+  border-color: rgba(95, 155, 140, 0.3);
+  color-scheme: dark;
+}
+
+input[type="text"]::placeholder,
+input[type="search"]::placeholder,
+input[type="number"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="url"]::placeholder,
+textarea::placeholder {
+  color: rgba(123, 174, 162, 0.6);
+}
+
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="url"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--teal);
+  outline: none;
 }
 
 /* Scrollbar styling */

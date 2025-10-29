@@ -70,17 +70,17 @@
 
 /* Controls styling with muted palette */
 .react-flow__controls {
-  box-shadow: 0 4px 12px rgba(35, 60, 75, 0.4);
+  box-shadow: 0 4px 12px rgba(15, 28, 36, 0.6);
 }
 
 .react-flow__controls-button {
-  background: #233C4B;
-  border-color: #2F5060;
+  background: #0f1c24;
+  border-color: #1a2830;
   color: #F6DA80;
 }
 
 .react-flow__controls-button:hover {
-  background: #2F5060;
+  background: #1a2830;
   border-color: #5F9B8C;
 }
 

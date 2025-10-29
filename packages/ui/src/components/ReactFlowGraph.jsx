@@ -190,7 +190,7 @@ function ReactFlowInner({
     if (node.selected) return '#5F9B8C'; // Teal
     if (node.data?.changed) return '#FF7D2D'; // Orange
     if (node.data?.metrics?.complexity > 75) return '#FF9A4A'; // Peach
-    return '#2F5060'; // Slate
+    return '#1a2830'; // Darker slate
   }, []);
 
   // Detect port direction for edge styling
@@ -200,7 +200,7 @@ function ReactFlowInner({
   );
 
   return (
-    <div className="react-flow-wrapper">
+    <div id="react-flow-container" className="react-flow-wrapper">
       {isLayouting && (
         <div className="react-flow-loading">
           <div className="loading-spinner"></div>
@@ -229,14 +229,17 @@ function ReactFlowInner({
         elementsSelectable={true}
         // Only render visible elements for performance
         onlyRenderVisibleElements={true}
-        // Allow panning even when hovering over edges/handles
+        // Zoom and pan controls
         panOnDrag={true}
-        panOnScroll={true}
+        panOnScroll={false} // Disable pan on scroll so mouse wheel zooms instead
+        zoomOnScroll={true} // Enable zoom on scroll (mouse wheel)
+        zoomOnPinch={true} // Enable pinch-to-zoom on trackpad
+        zoomOnDoubleClick={false} // Disable double-click zoom (can be annoying)
         selectionOnDrag={false}
       >
         {/* Graph background pattern */}
         <Background
-          color="#2F5060"
+          color="#1a2830"
           gap={16}
           size={1}
           variant="dots"
@@ -246,8 +249,8 @@ function ReactFlowInner({
         <Controls
           showInteractive={false}
           style={{
-            background: 'rgba(35, 60, 75, 0.9)',
-            border: '1px solid #2F5060',
+            background: 'rgba(15, 28, 36, 0.95)',
+            border: '1px solid #1a2830',
             borderRadius: '8px',
           }}
         />
@@ -259,8 +262,8 @@ function ReactFlowInner({
           nodeBorderRadius={4}
           maskColor="rgba(0, 0, 0, 0.7)"
           style={{
-            background: 'rgba(35, 60, 75, 0.9)',
-            border: '1px solid #2F5060',
+            background: 'rgba(15, 28, 36, 0.95)',
+            border: '1px solid #1a2830',
             borderRadius: '8px',
           }}
         />

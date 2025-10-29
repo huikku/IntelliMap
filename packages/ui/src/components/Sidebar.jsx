@@ -764,7 +764,8 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
                     value={captureCommand}
                     onChange={(e) => setCaptureCommand(e.target.value)}
                     placeholder="npm start"
-                    className="w-full px-2 py-1 bg-[#0a0a0a] border border-[#2a2a2a] rounded text-xs font-mono"
+                    className="w-full px-2 py-1 bg-slate border border-teal/30 rounded text-xs font-mono text-cream placeholder-mint/60"
+                    style={{ colorScheme: 'dark' }}
                   />
                   <button
                     onClick={startRuntimeCapture}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export default function Toolbar({ cy, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration, currentRepo }) {
+export default function Toolbar({ reactFlowInstance, layout, setLayout, clustering, setClustering, edgeOpacity, setEdgeOpacity, curveStyle, setCurveStyle, sizing, setSizing, sizeExaggeration, setSizeExaggeration, currentRepo }) {
   const [nodeSpacing, setNodeSpacing] = useState(80);
   const [autoPack, setAutoPack] = useState(true);
 
@@ -26,11 +26,45 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
   }, [cy, sizing, sizeExaggeration, autoPack]);
 
   const handleFit = () => {
-    if (cy) cy.fit();
+    if (renderer === 'react-flow' && reactFlowInstance?.current) {
+      reactFlowInstance.current.fitView({ padding: 0.2, duration: 500 });
+    } else if (cy) {
+      cy.fit();
+    }
   };
 
   const handleCenter = () => {
-    if (cy) cy.center();
+    if (renderer === 'react-flow' && reactFlowInstance?.current) {
+      reactFlowInstance.current.fitView({ padding: 0.2, duration: 500 });
+    } else if (cy) {
+      cy.center();
+    }
+  };
+
+  const handleZoomIn = () => {
+    if (renderer === 'react-flow' && reactFlowInstance?.current) {
+      const instance = reactFlowInstance.current;
+      instance.zoomIn({ duration: 200 });
+    } else if (cy) {
+      const currentZoom = cy.zoom();
+      cy.zoom({
+        level: currentZoom * 1.2,
+        renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 }
+      });
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (renderer === 'react-flow' && reactFlowInstance?.current) {
+      const instance = reactFlowInstance.current;
+      instance.zoomOut({ duration: 200 });
+    } else if (cy) {
+      const currentZoom = cy.zoom();
+      cy.zoom({
+        level: currentZoom / 1.2,
+        renderedPosition: { x: cy.width() / 2, y: cy.height() / 2 }
+      });
+    }
   };
 
   const handleSizingChange = (newSizing) => {
@@ -598,6 +632,22 @@ export default function Toolbar({ cy, layout, setLayout, clustering, setClusteri
           title="Center view"
         >
           ⊙ Center
+        </button>
+        <button
+          onClick={handleZoomIn}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Zoom in"
+          disabled={renderer === 'react-flow' ? !reactFlowInstance?.current : !cy}
+        >
+          ➕
+        </button>
+        <button
+          onClick={handleZoomOut}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+          title="Zoom out"
+          disabled={renderer === 'react-flow' ? !reactFlowInstance?.current : !cy}
+        >
+          ➖
         </button>
         <button
           onClick={handleExportPNG}
