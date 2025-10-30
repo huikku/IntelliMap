@@ -345,6 +345,7 @@ export default function App() {
             navigationMode={navigationMode}
             layout={layout}
             reactFlowInstanceRef={reactFlowInstanceRef}
+            currentRepo={currentRepo}
           />
         </main>
 

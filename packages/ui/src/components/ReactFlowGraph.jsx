@@ -35,6 +35,7 @@ function ReactFlowInner({
   edgeOpacity,
   curveStyle,
   reactFlowInstanceRef,
+  currentRepo,
 }) {
   const reactFlowInstance = useReactFlow(); // Get React Flow instance
   const [isLayouting, setIsLayouting] = useState(true);
@@ -57,8 +58,20 @@ function ReactFlowInner({
     const { nodes, edges } = convertToReactFlow(graphData);
     const enrichedNodes = enrichNodesWithTimeseries(nodes);
 
-    return { initialNodes: enrichedNodes, initialEdges: edges };
-  }, [graphData]);
+    // Add currentRepo to all nodes
+    const nodesWithRepo = enrichedNodes.map(node => ({
+      ...node,
+      data: {
+        ...node.data,
+        _original: {
+          ...node.data._original,
+          repoPath: currentRepo,
+        },
+      },
+    }));
+
+    return { initialNodes: nodesWithRepo, initialEdges: edges };
+  }, [graphData, currentRepo]);
 
   // React Flow state
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -284,6 +297,7 @@ export function ReactFlowGraph({
   edgeOpacity = 1.0,
   curveStyle = 'smoothstep',
   reactFlowInstanceRef = null,
+  currentRepo = null,
 }) {
   return (
     <ReactFlowProvider>
@@ -296,6 +310,7 @@ export function ReactFlowGraph({
         edgeOpacity={edgeOpacity}
         curveStyle={curveStyle}
         reactFlowInstanceRef={reactFlowInstanceRef}
+        currentRepo={currentRepo}
       />
     </ReactFlowProvider>
   );

@@ -15,6 +15,7 @@ export default function GraphView({
   navigationMode = null,
   layout = 'elk',
   reactFlowInstanceRef = null,
+  currentRepo = null,
 }) {
   // Early return for no graph data
   if (!graph) {
@@ -105,6 +106,7 @@ export default function GraphView({
         edgeOpacity={edgeOpacity}
         curveStyle={curveStyle}
         reactFlowInstanceRef={reactFlowInstanceRef}
+        currentRepo={currentRepo}
       />
     </div>
   );
