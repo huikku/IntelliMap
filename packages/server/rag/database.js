@@ -12,17 +12,17 @@ const __dirname = dirname(__filename);
  */
 export class RAGDatabase {
   constructor(dbPath = null) {
-    // Default to .intellimap/rag.db in the current repo
-    this.dbPath = dbPath || join(process.cwd(), '.intellimap', 'rag.db');
-    
+    // Default to .mothlab/rag.db in the current repo
+    this.dbPath = dbPath || join(process.cwd(), '.mothlab', 'rag.db');
+
     // Ensure directory exists
     fs.ensureDirSync(dirname(this.dbPath));
-    
+
     // Initialize database
     this.db = new Database(this.dbPath);
     this.db.pragma('journal_mode = WAL');
     this.db.pragma('foreign_keys = ON');
-    
+
     this.initializeSchema();
   }
 

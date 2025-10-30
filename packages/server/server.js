@@ -1052,27 +1052,51 @@ app.get('/api/v1/hotspots', async (req, res) => {
   }
 });
 
-// Embed a snapshot (generate vectors for all chunks)
-app.post('/api/v1/snapshots/:id/embed', async (req, res) => {
+// Embed a snapshot (generate vectors for all chunks) with SSE progress
+// Using GET for SSE compatibility (EventSource only supports GET)
+app.get('/api/v1/snapshots/:id/embed', async (req, res) => {
   try {
     const snapshotId = req.params.id;
-    const { type = 'code' } = req.body;
+    const { type = 'code' } = req.query;
+
+    // Set up SSE headers
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no'); // Disable nginx buffering
 
     const { VectorIndex } = await import('./rag/vector-index.js');
     const vectorIndex = new VectorIndex();
 
-    const embeddedCount = await vectorIndex.embedSnapshot(snapshotId, type);
+    // Progress callback for SSE
+    const onProgress = (current, total, percentage) => {
+      res.write(`data: ${JSON.stringify({
+        type: 'progress',
+        current,
+        total,
+        percentage
+      })}\n\n`);
+    };
+
+    const embeddedCount = await vectorIndex.embedSnapshot(snapshotId, type, onProgress);
 
     vectorIndex.close();
 
-    res.json({
+    // Send final success message
+    res.write(`data: ${JSON.stringify({
+      type: 'complete',
       success: true,
       snapshot_id: snapshotId,
       embedded_chunks: embeddedCount
-    });
+    })}\n\n`);
+    res.end();
   } catch (error) {
     console.error('Error embedding snapshot:', error);
-    res.status(500).json({ error: error.message });
+    res.write(`data: ${JSON.stringify({
+      type: 'error',
+      error: error.message
+    })}\n\n`);
+    res.end();
   }
 });
 

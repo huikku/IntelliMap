@@ -113,11 +113,20 @@ export default function App() {
     console.log(`🧭 Navigation mode: ${mode} for node ${selectedNode.id}`);
   };
 
-  // Handle keyboard shortcuts
+  // Handle keyboard shortcuts - only when graph is focused
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Press 'f' to focus/fit view
-      if (e.key === 'f') {
+      // Only trigger 'f' hotkey when focus is on the graph container or body
+      // Ignore if user is typing in an input, textarea, or contenteditable
+      const activeElement = document.activeElement;
+      const isTyping = activeElement && (
+        activeElement.tagName === 'INPUT' ||
+        activeElement.tagName === 'TEXTAREA' ||
+        activeElement.isContentEditable
+      );
+
+      // Press 'f' to focus/fit view (only when not typing)
+      if (e.key === 'f' && !isTyping) {
         e.preventDefault();
 
         if (reactFlowInstanceRef.current) {

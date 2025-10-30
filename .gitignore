@@ -5,6 +5,7 @@ node_modules/
 
 # Output
 .intellimap/
+.mothlab/
 dist/
 build/
 

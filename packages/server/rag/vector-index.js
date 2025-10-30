@@ -50,8 +50,9 @@ export class VectorIndex {
    * Embed all chunks in a snapshot
    * @param {number} snapshotId - Snapshot ID
    * @param {string} type - 'code' or 'docs'
+   * @param {Function} onProgress - Optional callback for progress updates (current, total, percentage)
    */
-  async embedSnapshot(snapshotId, type = 'code') {
+  async embedSnapshot(snapshotId, type = 'code', onProgress = null) {
     // Get all chunks for this snapshot
     const chunks = this.db.db.prepare(`
       SELECT id, text FROM chunks WHERE snapshot_id = ?
@@ -64,9 +65,15 @@ export class VectorIndex {
       try {
         await this.embedChunk(chunk.id, chunk.text, type);
         embedded++;
-        
+
+        // Report progress
+        const percentage = Math.round((embedded / chunks.length) * 100);
+        if (onProgress) {
+          onProgress(embedded, chunks.length, percentage);
+        }
+
         if (embedded % 10 === 0) {
-          console.log(`  Embedded ${embedded}/${chunks.length} chunks...`);
+          console.log(`  Embedded ${embedded}/${chunks.length} chunks (${percentage}%)...`);
         }
       } catch (error) {
         console.error(`  ⚠️  Failed to embed chunk ${chunk.id}: ${error.message}`);
@@ -74,10 +81,10 @@ export class VectorIndex {
     }
 
     console.log(`✅ Embedded ${embedded}/${chunks.length} chunks`);
-    
+
     // Build in-memory index for this snapshot
     await this.buildIndex(snapshotId);
-    
+
     return embedded;
   }
 

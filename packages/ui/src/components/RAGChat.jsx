@@ -8,6 +8,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
   const [snapshots, setSnapshots] = useState([]);
   const [taskType, setTaskType] = useState('explain');
   const [highlightedPaths, setHighlightedPaths] = useState([]);
+  const [embeddingProgress, setEmbeddingProgress] = useState(null); // { current, total, percentage }
   const messagesEndRef = useRef(null);
 
   // Load snapshots on mount
@@ -41,45 +42,85 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
   const createSnapshot = async () => {
     try {
       setIsLoading(true);
+      setEmbeddingProgress(null);
+
       const response = await fetch('/api/v1/snapshots', { method: 'POST' });
       const data = await response.json();
-      
+
       if (data.success) {
         setMessages(prev => [...prev, {
           role: 'system',
           content: `✅ Created snapshot ${data.snapshot.id} (${data.snapshot.manifest_hash.substring(0, 8)}...)`
         }]);
-        
-        // Embed the snapshot
+
+        // Embed the snapshot with SSE progress
         setMessages(prev => [...prev, {
           role: 'system',
-          content: '🔢 Generating embeddings... This may take a few minutes.'
+          content: '🔢 Generating embeddings...',
+          isProgress: true
         }]);
-        
-        const embedResponse = await fetch(`/api/v1/snapshots/${data.snapshot.id}/embed`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'code' })
-        });
-        
-        const embedData = await embedResponse.json();
-        
-        if (embedData.success) {
-          setMessages(prev => [...prev, {
-            role: 'system',
-            content: `✅ Embedded ${embedData.embedded_chunks} chunks. Ready to answer questions!`
-          }]);
-          
-          setSnapshotId(data.snapshot.id);
-          await loadSnapshots();
-        }
+
+        // Use EventSource for SSE
+        const eventSource = new EventSource(`/api/v1/snapshots/${data.snapshot.id}/embed?type=code`);
+
+        eventSource.onmessage = (event) => {
+          const progressData = JSON.parse(event.data);
+
+          if (progressData.type === 'progress') {
+            setEmbeddingProgress({
+              current: progressData.current,
+              total: progressData.total,
+              percentage: progressData.percentage
+            });
+          } else if (progressData.type === 'complete') {
+            setEmbeddingProgress(null);
+            setMessages(prev => {
+              // Remove the progress message
+              const filtered = prev.filter(m => !m.isProgress);
+              return [...filtered, {
+                role: 'system',
+                content: `✅ Embedded ${progressData.embedded_chunks} chunks. Ready to answer questions!`
+              }];
+            });
+
+            setSnapshotId(data.snapshot.id);
+            loadSnapshots();
+            eventSource.close();
+            setIsLoading(false);
+          } else if (progressData.type === 'error') {
+            setEmbeddingProgress(null);
+            setMessages(prev => {
+              const filtered = prev.filter(m => !m.isProgress);
+              return [...filtered, {
+                role: 'system',
+                content: `❌ Error: ${progressData.error}`
+              }];
+            });
+            eventSource.close();
+            setIsLoading(false);
+          }
+        };
+
+        eventSource.onerror = (error) => {
+          console.error('SSE error:', error);
+          setEmbeddingProgress(null);
+          setMessages(prev => {
+            const filtered = prev.filter(m => !m.isProgress);
+            return [...filtered, {
+              role: 'system',
+              content: '❌ Error: Connection lost during embedding'
+            }];
+          });
+          eventSource.close();
+          setIsLoading(false);
+        };
       }
     } catch (error) {
+      setEmbeddingProgress(null);
       setMessages(prev => [...prev, {
         role: 'system',
         content: `❌ Error: ${error.message}`
       }]);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -223,6 +264,26 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
           )}
         </div>
       </div>
+
+      {/* Embedding Progress Bar */}
+      {embeddingProgress && (
+        <div className="px-3 py-2 bg-navy/50 border-b border-teal/20">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[10px] text-mint" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              Embedding chunks...
+            </span>
+            <span className="text-[10px] text-cream" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              {embeddingProgress.current}/{embeddingProgress.total} ({embeddingProgress.percentage}%)
+            </span>
+          </div>
+          <div className="w-full bg-slate/50 rounded-full h-2 overflow-hidden">
+            <div
+              className="bg-teal h-full transition-all duration-300 ease-out"
+              style={{ width: `${embeddingProgress.percentage}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
