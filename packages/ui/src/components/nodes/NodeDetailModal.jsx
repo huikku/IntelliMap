@@ -469,34 +469,36 @@ const NodeDetailModal = ({ data, onClose }) => {
                 </div>
               )}
 
-              {/* Trends */}
+              {/* Trends - Side by Side Tall Boxes */}
               {data.timeseries && (
                 <>
                   <div className="bento-section-header">Trends</div>
-                  {data.timeseries.churn && data.timeseries.churn.length > 0 && (
-                    <div className="bento-card bento-card-full">
-                      <div className="bento-trend-label">Churn Trend</div>
-                      <div className="bento-trend-container">
-                        {renderTrendBars(data.timeseries.churn, '#FF9A4A')}
+                  <div className="bento-trends-grid">
+                    {data.timeseries.churn && data.timeseries.churn.length > 0 && (
+                      <div className="bento-card bento-trend-tall">
+                        <div className="bento-trend-label">Churn Trend</div>
+                        <div className="bento-trend-container-vertical">
+                          {renderTrendBars(data.timeseries.churn, '#FF9A4A')}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {data.timeseries.complexity && data.timeseries.complexity.length > 0 && (
-                    <div className="bento-card bento-card-full">
-                      <div className="bento-trend-label">Complexity Trend</div>
-                      <div className="bento-trend-container">
-                        {renderTrendBars(data.timeseries.complexity, '#7BAEA2')}
+                    )}
+                    {data.timeseries.complexity && data.timeseries.complexity.length > 0 && (
+                      <div className="bento-card bento-trend-tall">
+                        <div className="bento-trend-label">Complexity Trend</div>
+                        <div className="bento-trend-container-vertical">
+                          {renderTrendBars(data.timeseries.complexity, '#7BAEA2')}
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {data.timeseries.coverage && data.timeseries.coverage.length > 0 && (
-                    <div className="bento-card bento-card-full">
-                      <div className="bento-trend-label">Coverage Trend</div>
-                      <div className="bento-trend-container">
-                        {renderTrendBars(data.timeseries.coverage, '#A0C382')}
+                    )}
+                    {data.timeseries.coverage && data.timeseries.coverage.length > 0 && (
+                      <div className="bento-card bento-trend-tall">
+                        <div className="bento-trend-label">Coverage Trend</div>
+                        <div className="bento-trend-container-vertical">
+                          {renderTrendBars(data.timeseries.coverage, '#A0C382')}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </>
               )}
             </div>

@@ -239,6 +239,27 @@
   padding: 14px 16px;
 }
 
+/* Trends Grid - Side by Side */
+.bento-trends-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.bento-trend-tall {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.bento-trend-container-vertical {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  padding-top: 12px;
+}
+
 /* Section headers */
 .bento-section-header {
   font-weight: 700;
