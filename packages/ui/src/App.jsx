@@ -59,6 +59,9 @@ export default function App() {
   const [sizing, setSizing] = useState(persistedSettings.sizing || 'uniform');
   const [sizeExaggeration, setSizeExaggeration] = useState(persistedSettings.sizeExaggeration || 1);
 
+  // RAG highlighting state
+  const [highlightedPaths, setHighlightedPaths] = useState([]);
+
   // Dependency navigation state
   const [navigationMode, setNavigationMode] = useState(null); // 'upstream', 'downstream', 'parents', 'children', or null
 
@@ -87,6 +90,12 @@ export default function App() {
       console.error('Failed to save settings:', e);
     }
   }, [plane, layout, clustering, filters, edgeOpacity, curveStyle, sizing, sizeExaggeration]);
+
+  // Handle RAG node highlighting
+  const handleHighlightNodes = (paths) => {
+    setHighlightedPaths(paths);
+    console.log(`🔍 Highlighting ${paths.length} nodes:`, paths);
+  };
 
   // Handle dependency navigation
   const handleNavigate = (mode) => {
@@ -312,7 +321,13 @@ export default function App() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar - Fixed width */}
         <div className="flex-shrink-0">
-          <Sidebar filters={filters} setFilters={setFilters} graph={graph} currentRepo={currentRepo} />
+          <Sidebar
+            filters={filters}
+            setFilters={setFilters}
+            graph={graph}
+            currentRepo={currentRepo}
+            onHighlightNodes={handleHighlightNodes}
+          />
         </div>
 
         {/* Main Content - Fills remaining space */}
@@ -346,6 +361,7 @@ export default function App() {
             layout={layout}
             reactFlowInstanceRef={reactFlowInstanceRef}
             currentRepo={currentRepo}
+            highlightedPaths={highlightedPaths}
           />
         </main>
 

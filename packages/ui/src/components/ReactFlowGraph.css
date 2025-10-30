@@ -68,6 +68,22 @@
   }
 }
 
+/* RAG highlighting */
+.react-flow__node.rag-highlighted {
+  filter: drop-shadow(0 0 8px #5F9B8C) drop-shadow(0 0 16px #5F9B8C);
+  z-index: 1000 !important;
+}
+
+.react-flow__node.rag-faded {
+  opacity: 0.2 !important;
+}
+
+.react-flow__node.rag-highlighted .code-node {
+  border-color: #5F9B8C !important;
+  border-width: 3px !important;
+  box-shadow: 0 0 12px rgba(95, 155, 140, 0.6) !important;
+}
+
 /* Controls styling with muted palette */
 .react-flow__controls {
   box-shadow: 0 4px 12px rgba(15, 28, 36, 0.6);

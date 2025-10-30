@@ -16,6 +16,7 @@ export default function GraphView({
   layout = 'elk',
   reactFlowInstanceRef = null,
   currentRepo = null,
+  highlightedPaths = [],
 }) {
   // Early return for no graph data
   if (!graph) {
@@ -107,6 +108,7 @@ export default function GraphView({
         curveStyle={curveStyle}
         reactFlowInstanceRef={reactFlowInstanceRef}
         currentRepo={currentRepo}
+        highlightedPaths={highlightedPaths}
       />
     </div>
   );

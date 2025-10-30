@@ -36,6 +36,7 @@ function ReactFlowInner({
   curveStyle,
   reactFlowInstanceRef,
   currentRepo,
+  highlightedPaths = [],
 }) {
   const reactFlowInstance = useReactFlow(); // Get React Flow instance
   const [isLayouting, setIsLayouting] = useState(true);
@@ -182,6 +183,54 @@ function ReactFlowInner({
     }
   }, [edgeOpacity, curveStyle, hasLayouted, layoutChanged, setEdges]);
 
+  // Apply RAG highlighting to nodes
+  useEffect(() => {
+    if (!hasLayouted || highlightedPaths.length === 0) {
+      // Clear all highlights
+      setNodes(nodes => nodes.map(node => ({
+        ...node,
+        className: node.className?.replace('rag-highlighted', '').replace('rag-faded', '').trim() || '',
+        style: {
+          ...node.style,
+          opacity: 1,
+        },
+      })));
+      return;
+    }
+
+    // Normalize paths for comparison (remove leading ./)
+    const normalizedHighlights = highlightedPaths.map(p => p.replace(/^\.\//, ''));
+
+    setNodes(nodes => nodes.map(node => {
+      const nodePath = node.data?._original?.id || node.id;
+      const normalizedNodePath = nodePath.replace(/^\.\//, '');
+
+      const isHighlighted = normalizedHighlights.some(hp =>
+        normalizedNodePath === hp || normalizedNodePath.endsWith(hp) || hp.endsWith(normalizedNodePath)
+      );
+
+      if (isHighlighted) {
+        return {
+          ...node,
+          className: 'rag-highlighted',
+          style: {
+            ...node.style,
+            opacity: 1,
+          },
+        };
+      } else {
+        return {
+          ...node,
+          className: 'rag-faded',
+          style: {
+            ...node.style,
+            opacity: 0.2,
+          },
+        };
+      }
+    }));
+  }, [highlightedPaths, hasLayouted, setNodes]);
+
   // Handle node click
   const onNodeClick = useCallback(
     (event, node) => {
@@ -298,6 +347,7 @@ export function ReactFlowGraph({
   curveStyle = 'smoothstep',
   reactFlowInstanceRef = null,
   currentRepo = null,
+  highlightedPaths = [],
 }) {
   return (
     <ReactFlowProvider>
@@ -311,6 +361,7 @@ export function ReactFlowGraph({
         curveStyle={curveStyle}
         reactFlowInstanceRef={reactFlowInstanceRef}
         currentRepo={currentRepo}
+        highlightedPaths={highlightedPaths}
       />
     </ReactFlowProvider>
   );

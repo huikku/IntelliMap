@@ -3,7 +3,7 @@ import ReportViewer from './ReportViewer';
 import MOTHPanel from './MOTHPanel.jsx';
 import RAGChat from './RAGChat';
 
-export default function Sidebar({ filters, setFilters, graph, cy, currentRepo }) {
+export default function Sidebar({ filters, setFilters, graph, cy, currentRepo, onHighlightNodes }) {
   const [activeSection, setActiveSection] = useState('filters');
   const [analysisReport, setAnalysisReport] = useState('');
   const [cycleReport, setCycleReport] = useState('');
@@ -989,7 +989,7 @@ export default function Sidebar({ filters, setFilters, graph, cy, currentRepo })
         )}
 
         {activeSection === 'chat' && (
-          <RAGChat currentRepo={currentRepo} />
+          <RAGChat currentRepo={currentRepo} onHighlightNodes={onHighlightNodes} />
         )}
       </div>
 

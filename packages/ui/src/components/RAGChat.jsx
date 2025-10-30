@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function RAGChat({ currentRepo }) {
+export default function RAGChat({ currentRepo, onHighlightNodes }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [snapshotId, setSnapshotId] = useState(null);
   const [snapshots, setSnapshots] = useState([]);
   const [taskType, setTaskType] = useState('explain');
+  const [highlightedPaths, setHighlightedPaths] = useState([]);
   const messagesEndRef = useRef(null);
 
   // Load snapshots on mount
@@ -119,12 +120,22 @@ export default function RAGChat({ currentRepo }) {
       const data = await response.json();
 
       if (data.answer) {
+        // Extract file paths from citations
+        const paths = data.citations ? data.citations.map(c => c.path) : [];
+
         setMessages(prev => [...prev, {
           role: 'assistant',
           content: data.answer,
           citations: data.citations,
-          metadata: data.metadata
+          metadata: data.metadata,
+          highlightPaths: paths
         }]);
+
+        // Highlight nodes in the graph
+        if (paths.length > 0 && onHighlightNodes) {
+          setHighlightedPaths(paths);
+          onHighlightNodes(paths);
+        }
       } else {
         throw new Error(data.error || 'Unknown error');
       }
@@ -135,6 +146,13 @@ export default function RAGChat({ currentRepo }) {
       }]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const clearHighlights = () => {
+    setHighlightedPaths([]);
+    if (onHighlightNodes) {
+      onHighlightNodes([]);
     }
   };
 
@@ -183,14 +201,27 @@ export default function RAGChat({ currentRepo }) {
           </select>
         </div>
 
-        <button
-          onClick={createSnapshot}
-          disabled={isLoading}
-          className="w-full px-3 py-1.5 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-xs text-cream transition disabled:opacity-50"
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
-        >
-          {isLoading ? '⏳ Creating...' : '📸 Create Snapshot'}
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={createSnapshot}
+            disabled={isLoading}
+            className="flex-1 px-3 py-1.5 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-xs text-cream transition disabled:opacity-50"
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            {isLoading ? '⏳ Creating...' : '📸 Snapshot'}
+          </button>
+
+          {highlightedPaths.length > 0 && (
+            <button
+              onClick={clearHighlights}
+              className="px-3 py-1.5 bg-rust/20 hover:bg-rust/30 border border-rust/50 rounded text-xs text-cream transition"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+              title="Clear all highlights"
+            >
+              🔆 Clear
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -232,7 +263,33 @@ export default function RAGChat({ currentRepo }) {
                 
                 {msg.citations && msg.citations.length > 0 && (
                   <div className="mt-2 pt-2 border-t border-slate/50">
-                    <p className="text-[10px] text-mint/70 mb-1">📎 Citations:</p>
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-[10px] text-mint/70">📎 Citations ({msg.citations.length}):</p>
+                      {msg.highlightPaths && msg.highlightPaths.length > 0 && (
+                        <button
+                          onClick={() => {
+                            if (onHighlightNodes) {
+                              const isCurrentlyHighlighted =
+                                JSON.stringify(highlightedPaths.sort()) ===
+                                JSON.stringify(msg.highlightPaths.sort());
+
+                              if (isCurrentlyHighlighted) {
+                                clearHighlights();
+                              } else {
+                                setHighlightedPaths(msg.highlightPaths);
+                                onHighlightNodes(msg.highlightPaths);
+                              }
+                            }
+                          }}
+                          className="px-2 py-0.5 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-[9px] text-cream transition"
+                        >
+                          {JSON.stringify(highlightedPaths.sort()) ===
+                           JSON.stringify(msg.highlightPaths.sort())
+                            ? '🔆 Clear'
+                            : '🔍 Highlight'}
+                        </button>
+                      )}
+                    </div>
                     {msg.citations.map((cite, j) => (
                       <div key={j} className="text-[10px] text-teal/80 font-mono">
                         {cite.path}:{cite.start_line}-{cite.end_line}
