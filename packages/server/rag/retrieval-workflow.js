@@ -1,6 +1,7 @@
 import { RAGDatabase } from './database.js';
 import { VectorIndex } from './vector-index.js';
 import { ModelRouter } from './model-router.js';
+import Fuse from 'fuse.js';
 
 /**
  * Retrieval Workflow
@@ -156,15 +157,43 @@ export class RetrievalWorkflow {
   }
 
   /**
-   * FTS filter: Full-text search
+   * FTS filter: Full-text search with fuzzy matching
    */
   async ftsFilter(query, chunks) {
     const keywords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
-    
-    return chunks.filter(chunk => {
+
+    // First try exact matching
+    const exactMatches = chunks.filter(chunk => {
       const text = chunk.text.toLowerCase();
       return keywords.some(keyword => text.includes(keyword));
     });
+
+    // If we have good exact matches, return them
+    if (exactMatches.length >= 5) {
+      return exactMatches;
+    }
+
+    // Otherwise, use fuzzy matching on chunk text
+    const fuse = new Fuse(chunks, {
+      keys: ['text', 'file_path'],
+      threshold: 0.4, // More lenient for spelling mistakes
+      includeScore: true,
+      ignoreLocation: true,
+      minMatchCharLength: 3,
+    });
+
+    const fuzzyResults = fuse.search(query);
+    const fuzzyMatches = fuzzyResults.map(result => result.item);
+
+    // Combine exact and fuzzy matches, prioritizing exact
+    const combined = [...exactMatches];
+    for (const fuzzyMatch of fuzzyMatches) {
+      if (!combined.find(c => c.id === fuzzyMatch.id)) {
+        combined.push(fuzzyMatch);
+      }
+    }
+
+    return combined;
   }
 
   /**

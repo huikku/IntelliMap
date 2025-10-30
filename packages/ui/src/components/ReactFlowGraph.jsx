@@ -198,18 +198,51 @@ function ReactFlowInner({
       return;
     }
 
-    // Normalize paths for comparison (remove leading ./)
-    const normalizedHighlights = highlightedPaths.map(p => p.replace(/^\.\//, ''));
+    // Normalize paths for comparison (remove leading ./, packages/, etc.)
+    const normalizePathForComparison = (path) => {
+      return path
+        .replace(/^\.\//, '')
+        .replace(/^packages\//, '')
+        .replace(/\\/g, '/'); // Normalize backslashes to forward slashes
+    };
+
+    const normalizedHighlights = highlightedPaths.map(normalizePathForComparison);
+
+    console.log('🔍 Highlighting paths:', normalizedHighlights);
+
+    const highlightedNodes = [];
 
     setNodes(nodes => nodes.map(node => {
       const nodePath = node.data?._original?.id || node.id;
-      const normalizedNodePath = nodePath.replace(/^\.\//, '');
+      const normalizedNodePath = normalizePathForComparison(nodePath);
 
-      const isHighlighted = normalizedHighlights.some(hp =>
-        normalizedNodePath === hp || normalizedNodePath.endsWith(hp) || hp.endsWith(normalizedNodePath)
-      );
+      // More flexible matching: check if paths match or contain each other
+      const isHighlighted = normalizedHighlights.some(hp => {
+        // Exact match
+        if (normalizedNodePath === hp) return true;
+
+        // Node path ends with highlight path (e.g., "ui/src/App.jsx" matches "src/App.jsx")
+        if (normalizedNodePath.endsWith(hp)) return true;
+
+        // Highlight path ends with node path (e.g., "packages/ui/src/App.jsx" matches "ui/src/App.jsx")
+        if (hp.endsWith(normalizedNodePath)) return true;
+
+        // Check if the file name matches (last part of path)
+        const nodeFileName = normalizedNodePath.split('/').pop();
+        const highlightFileName = hp.split('/').pop();
+        if (nodeFileName === highlightFileName) {
+          // Also check that at least one directory matches to avoid false positives
+          const nodeDirs = normalizedNodePath.split('/').slice(0, -1);
+          const highlightDirs = hp.split('/').slice(0, -1);
+          return nodeDirs.some(dir => highlightDirs.includes(dir));
+        }
+
+        return false;
+      });
 
       if (isHighlighted) {
+        highlightedNodes.push(node);
+        console.log('  ✅ Highlighted:', nodePath);
         return {
           ...node,
           className: 'rag-highlighted',
@@ -229,7 +262,20 @@ function ReactFlowInner({
         };
       }
     }));
-  }, [highlightedPaths, hasLayouted, setNodes]);
+
+    // Auto-focus on highlighted nodes after a short delay
+    if (highlightedNodes.length > 0 && reactFlowInstance) {
+      setTimeout(() => {
+        const nodeIds = highlightedNodes.map(n => n.id);
+        reactFlowInstance.fitView({
+          padding: 0.3,
+          duration: 800,
+          nodes: highlightedNodes,
+        });
+        console.log(`🎯 Auto-focused on ${highlightedNodes.length} highlighted nodes`);
+      }, 100);
+    }
+  }, [highlightedPaths, hasLayouted, setNodes, reactFlowInstance]);
 
   // Handle node click
   const onNodeClick = useCallback(
