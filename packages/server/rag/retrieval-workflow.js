@@ -291,26 +291,72 @@ export class RetrievalWorkflow {
    * Generate answer with LLM
    */
   async answer(question, chunks, snapshotId, options = {}) {
+    // Get snapshot metadata
+    const snapshot = this.db.getSnapshot(snapshotId);
+
+    // Get file statistics for metadata-aware queries
+    const fileStats = this.db.db.prepare(`
+      SELECT
+        f.path,
+        f.loc,
+        f.size,
+        m.complexity,
+        m.fanin,
+        m.fanout,
+        m.churn
+      FROM files f
+      LEFT JOIN metrics m ON f.id = m.file_id
+      WHERE f.snapshot_id = ?
+      ORDER BY f.size DESC
+    `).all(snapshotId);
+
+    // Build file statistics summary (top files by different metrics)
+    const topBySize = fileStats.slice(0, 20);
+    const topByLoc = [...fileStats].sort((a, b) => b.loc - a.loc).slice(0, 20);
+    const topByComplexity = [...fileStats].filter(f => f.complexity).sort((a, b) => b.complexity - a.complexity).slice(0, 20);
+    const topByChurn = [...fileStats].filter(f => f.churn).sort((a, b) => b.churn - a.churn).slice(0, 20);
+
+    const fileStatsSummary = `
+FILE STATISTICS (Top 20 by each metric):
+
+Top Files by Size (bytes):
+${topBySize.map((f, i) => `${i + 1}. ${f.path} - ${f.size} bytes, ${f.loc} LOC`).join('\n')}
+
+Top Files by Lines of Code:
+${topByLoc.map((f, i) => `${i + 1}. ${f.path} - ${f.loc} LOC, ${f.size} bytes`).join('\n')}
+
+Top Files by Complexity:
+${topByComplexity.map((f, i) => `${i + 1}. ${f.path} - Complexity: ${f.complexity}, LOC: ${f.loc}`).join('\n')}
+
+Top Files by Churn (most changed):
+${topByChurn.map((f, i) => `${i + 1}. ${f.path} - Churn: ${f.churn} commits, Complexity: ${f.complexity || 0}`).join('\n')}
+`;
+
     // Build context from chunks
-    const context = chunks.map((chunk, i) => 
+    const context = chunks.map((chunk, i) =>
       `[${i + 1}] ${chunk.file_path}:${chunk.start_line}-${chunk.end_line}\n${chunk.text}`
     ).join('\n\n---\n\n');
 
-    // Get snapshot metadata
-    const snapshot = this.db.getSnapshot(snapshotId);
-    const snapshotHeader = `Project: ${snapshot.project}\nSnapshot: ${snapshot.manifest_hash.substring(0, 8)}\nDate: ${snapshot.created_at}`;
+    const snapshotHeader = `Project: ${snapshot.project}\nSnapshot: ${snapshot.manifest_hash.substring(0, 8)}\nDate: ${snapshot.created_at}\nTotal Files: ${fileStats.length}`;
 
-    // Build prompt
-    const systemPrompt = `You are RepoGPT, a code analysis assistant. Answer questions about the codebase using the provided context. Always cite sources as path:lines.
+    // Build prompt with file statistics
+    const systemPrompt = `You are RepoGPT, a code analysis assistant. Answer questions about the codebase using the provided context and file statistics.
 
 ${snapshotHeader}
 
-Context:
-${context}`;
+${fileStatsSummary}
 
-    const userPrompt = `${question}
+Code Context (relevant chunks):
+${context}
 
-IMPORTANT: You must cite all sources in your answer using the format: path:start_line-end_line`;
+IMPORTANT CITATION RULES:
+- For questions about file sizes, LOC, complexity, churn, or other metrics: cite files as "path:1-1" (use line 1)
+- For questions about code content: cite the actual line numbers from the Code Context section
+- Always include citations in your answer
+- Be specific and provide exact numbers when available
+- List files in order of relevance to the question`;
+
+    const userPrompt = question;
 
     // Route to appropriate model
     const task = options.task || 'explain';
