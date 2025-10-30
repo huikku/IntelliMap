@@ -21,8 +21,8 @@ const NodeDetailModal = ({ data, onClose }) => {
         );
 
         if (response.ok) {
-          const data = await response.json();
-          const content = data.content || '';
+          const responseData = await response.json();
+          const content = responseData.content || '';
           setFileContent(content);
         } else {
           setFileContent('// Failed to load file content');
