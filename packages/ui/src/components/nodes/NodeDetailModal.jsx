@@ -254,17 +254,17 @@ const NodeDetailModal = ({ data, onClose }) => {
   // Render trend bars (copied from CodeNode)
   const renderTrendBars = (values, color = '#5F9B8C') => {
     if (!values || values.length === 0) return null;
-    
+
     const maxValue = Math.max(...values);
     const minValue = Math.min(...values);
     const range = maxValue - minValue || 1;
-    
+
     return (
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '30px', marginTop: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '4px', height: '100%', width: '100%' }}>
         {values.slice(-10).map((value, i) => {
           const normalizedHeight = range > 0 ? ((value - minValue) / range) * 100 : 50;
-          const height = Math.max(normalizedHeight, 5);
-          
+          const height = Math.max(normalizedHeight, 10);
+
           return (
             <div
               key={i}
@@ -272,9 +272,9 @@ const NodeDetailModal = ({ data, onClose }) => {
                 flex: 1,
                 height: `${height}%`,
                 background: color,
-                borderRadius: '2px',
-                minWidth: '4px',
-                opacity: 0.6 + (i / values.length) * 0.4,
+                borderRadius: '3px',
+                minWidth: '8px',
+                opacity: 0.7 + (i / values.length) * 0.3,
                 transition: 'height 0.3s ease',
               }}
               title={`${value}`}

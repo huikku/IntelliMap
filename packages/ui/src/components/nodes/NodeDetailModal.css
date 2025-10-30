@@ -248,7 +248,7 @@
 }
 
 .bento-trend-tall {
-  min-height: 200px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
 }
@@ -257,7 +257,8 @@
   flex: 1;
   display: flex;
   align-items: flex-end;
-  padding-top: 12px;
+  padding-top: 16px;
+  min-height: 250px;
 }
 
 /* Section headers */
@@ -280,11 +281,12 @@
 }
 
 .bento-trend-label {
-  font-size: 10px;
+  font-size: 13px;
   color: #7BAEA2;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 /* List items in bento cards */
