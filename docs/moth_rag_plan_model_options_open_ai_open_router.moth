@@ -1,0 +1,152 @@
+intent:RAG_for_code_repos; owner:Alienrobot LLC; snapshot:late_2025
+provenance:REPO.moth+worklist.moth+SQLite; portability:high
+
+[FEATURES]
+core:graph_prefilter;fts5_filter;vector_rerank;context_packer;citations_enforced
+persistence:sqlite_system_of_record;immutable_snapshots_by_manifest_hash
+artifacts:REPO.moth(consolidated);worklist.moth(thin);exports:portable
+ui:ReactFlow_graph_view;positions_layout_persisted
+update:git_hooks+CI(watch optional v2);incremental_metrics+symbols+deps;chunk_reembed
+models:router(OpenAI+OpenRouter);primaries(GPT‑5|Claude Sonnet 4.x);cost_savers(Gemini 2.5 Flash|Mistral L2)
+embedding:primary(voyage-3-large docs; voyage-code-3 code);fallback(text-embedding-3-large);alt(cohere-v3|bge-base)
+vector_index:sqlite-vss|sqlite-vec;upgrade:FAISS|Qdrant(sidecar)
+limits:pack<=8_chunks;chunk<=800_tokens(allow_one_oversize<=1200);citations:path:line;worklist_bias=true
+
+[SCHEMAS.snapshots]
+*id:int; *manifest_hash:string; *project:string; *created_at:timestamp; (meta_json):jsonb
+
+[SCHEMAS.files]
+*id:int; *snapshot_id→snapshots.id; *path:string; *content_hash:string; *loc:int; *size:int; (mtime):timestamp; (doc_snippet):string; (tags):string   # e.g. "react,tensorflow,vite"
+unique: (snapshot_id,path)
+
+[SCHEMAS.metrics]
+*file_id→files.id; *complexity:int; *fanin:int; *fanout:int; *depth:int; *churn:int; (coverage):float
+
+[SCHEMAS.deps]
+*snapshot_id→snapshots.id; *src_file_id→files.id; (dst_file_id)→files.id; (dst_external):string
+pk:(snapshot_id,src_file_id,dst_file_id,dst_external)
+
+[SCHEMAS.symbols]
+*id:int; *file_id→files.id; *kind:enum; *name:string; (span_start):int; (span_end):int
+
+[SCHEMAS.positions]
+*file_id→files.id; (x):float; (y):float; pinned:enum
+
+[SCHEMAS.worklist]
+*id:int; *snapshot_id→snapshots.id; (file_id)→files.id; *issue_type:string; *severity:enum; (notes):string
+
+[SCHEMAS.chunks]
+
+# vectorized retrieval units (function/class or slice)
+
+*id:int; *snapshot_id→snapshots.id; *file_id→files.id; (symbol):string; *path:string; *start_line:int; *end_line:int; *text:string; (summary):string; *content_hash:string; (metrics_json):jsonb; (deps_topN):jsonb; (embed_model):string
+
+[SCHEMAS.vectors]
+*chunk_id→chunks.id; *model:string; *dim:int; *vector:blob; norm:float; unique:(chunk_id,model)
+
+[SCHEMAS.fts_files]
+
+# virtual FTS5 table mirrors files/doc_snippet/content (content_rowid=files.id)
+
+*rowid:int; path:string; doc_snippet:string; content:string
+
+[VIEWS]
+hotspots_by_snapshot:{ columns:file_id,fanin,fanout,depth,churn,coverage; order:fanout DESC,churn DESC; filter:snapshot_id }
+
+[WORKFLOWS.retrieval]
+initial:seed
+seed→graph_prefilter[on:question; if:seed_files|symbols|path_hints]
+graph_prefilter→fts_filter[on:query_text]
+fts_filter→vector_rerank[on:embeddings]
+vector_rerank→pack[on:topK]
+pack→answer[on:llm_call; with:snapshot_header+worklist_bias+citations]
+any→reject[on:missing_citations]
+
+[WORKFLOWS.incremental_update]
+initial:idle
+idle→detect_changes[on:git_hooks|CI]
+detect_changes→recompute_file_stats[on:files_changed]
+recompute_file_stats→update_db[on:metrics+symbols+deps]
+update_db→reembed_changed[on:chunk_hash_delta]
+reembed_changed→recompute_derived[on:local_neighborhood≤2_hops]
+recompute_derived→emit_artifacts[on:REPO.moth|worklist.moth|validation.log]
+
+[WORKFLOWS.evaluation]
+initial:define_bench
+define_bench→run[on:10–20_repo_questions]
+run→score[on:correctness;citations;steps;token_cost]
+score→compare_models[on:routing_profiles]
+compare_models→lock_default[on:winner_selected]
+
+[API]
+snapshots:{GET,POST:/v1/snapshots;auth:required;rate:100/hour}
+search:{GET:/v1/search?query&snapshot_id&within=graph|path_prefix;auth:required;rate:300/hour}
+chunks:{GET:/v1/chunks?file_id|path|symbol;auth:required;rate:300/hour}
+pack:{POST:/v1/pack;auth:required;rate:120/hour} -> req:{*snapshot_id;*question; (seed_paths); (worklist_bias=true)} res:{*chunks;*citations}
+ask:{POST:/v1/ask;auth:required;rate:60/hour} -> req:{*snapshot_id;*question; (pack_policy); (model)} res:{*answer;*citations;*used_chunks}
+worklist:{GET:/v1/worklist?snapshot_id&severity>=;auth:required;rate:120/hour}
+graph:{GET:/v1/graph?hops=1..2&seed=file_id;auth:required;rate:120/hour}
+
+[PACKING.rules]
+chunk_size_tokens:600..800(allow_one_oversize<=1200 to preserve semantics); max_chunks:8; include:imports/exports/doc
+header:loc;complexity;fanout;depth;churn;coverage
+citations:required(path:start..end); enforce_in_llm_output:true
+snapshot_header:{manifest_hash;project;date;counts}
+
+[EMBEDDINGS]
+code_primary:voyage-code-3; docs_primary:voyage-3-large; fallback:text-embedding-3-large; alt:cohere-v3|bge-base
+normalize:cosine; cache_key:content_hash; dim:1024; persist(embed_model,version)
+
+[VECTOR_INDEX]
+mode:sqlite_vss|sqlite_vec; colocate:true; filter_by:snapshot_id;path_prefix
+upgrade_if:>5M_chunks OR multi_tenant -> qdrant|faiss_sidecar
+
+[ROUTING]
+policy:{ task+maxTokens+latency -> model }
+map:{ explain=openai:gpt-5-thinking; impact=openai:gpt-5-thinking; triage=openrouter:gemini-2.5-flash; transform=openrouter:grok-code-fast }
+fallbacks:{ explain:[anthropic:claude-sonnet-4, openrouter:gemini-2.5-pro]; impact:[openrouter:mistral-large-2]; triage:[openai:gpt-4.1-mini]; transform:[openrouter:deepseek-v3] }
+router_hints:{ files.tags:ml -> prefer(claude|gpt-5); files.tags:config|build -> prefer(gemini_flash) }
+knobs:{ maxTokens; costCap; latencyTargetMs }
+logging:{ snapshot_hash; question_id; model; tokens_in; tokens_out; latency_ms }
+
+[GUARDRAILS]
+
+# Graph explosion
+
+maxNeighborsPerNode:50; maxSubgraph:600; include_seed:true; include_top_dependents_by_fanin:10
+priority_score:=0.5*churn_norm+0.3*worklist_severity+0.2*fanout_norm
+
+# Watcher noise
+
+live_fs_watcher:false(v1); debounce_ms:1000; skip_if:content_hash_unchanged
+
+# Layout defaults
+
+layout:auto(force_directed on snapshot); axes:{y=depth; x=dir_prefix}; pins_override:true
+
+[PROMPTS]
+system:"You are RepoGPT. MOTH fields: path, loc, complexity, fanin, fanout, depth, churn, coverage. Answer concisely; cite as path:lines."
+explain_subgraph:"Summarize behavior in 3 bullets; propose 2 refactors with effort S/M/L and tests. Cite files."
+impact_of_change:"If we rename <symbol> in <path>, list breakpoints and a test plan. Cite files."
+sprint_from_worklist:"Create two-sprint plan with acceptance criteria and PR checklist."
+
+[TOKEN_STRATEGY]
+no_full_repo_moth:true; prefilter:graph+fts → vector; pack<=8; bias:worklist.high
+
+[ONBOARDING]
+bench:10–20 Qs per repo slice; measure:correctness+citations+steps+cost; choose:2 primaries + 1 cost_saver + 1 code_specialist
+
+[RESOURCE_LIMITS]
+cost:{cap:$X/period; alert_at=80%}
+latency:{target=<X ms}
+rate_limit:{api=per_endpoint_defined}
+
+[RISKS]
+data_drift_in_vectors:mitigate(cache_by_content_hash; periodic_reembed)
+large_graph_explosions:mitigate(k-hop cap; fanout thresholds)
+model_hallucination:mitigate(strict_citations; pack_small_curated)
+ops_complexity:mitigate(sqlite_all_in_one; defer_external_services)
+provider_downtime:mitigate(router_fallback+circuit_breaker)
+
+[NEXT_STEPS]
+add_watch_mode(git_hooks+CI first); stand_up_sqlite+fts; implement hybrid retriever; land 3 prompt flows; add model router with cost guards; ship ReactFlow adapter
