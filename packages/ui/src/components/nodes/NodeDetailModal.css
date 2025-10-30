@@ -169,6 +169,14 @@
   margin-bottom: 16px;
 }
 
+/* Compact Bento Grid - Interesting mixed layout */
+.bento-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
 .bento-card {
   background: #1a2830;
   border: 1px solid #2a3840;
@@ -206,6 +214,29 @@
 /* Full width bento cards */
 .bento-card-full {
   grid-column: 1 / -1;
+}
+
+/* Bento card size variations for compact grid */
+.bento-tall {
+  grid-row: span 2;
+}
+
+.bento-wide {
+  grid-column: span 2;
+}
+
+.bento-small {
+  padding: 8px 10px;
+}
+
+.bento-tiny {
+  padding: 6px 8px;
+}
+
+.bento-highlight {
+  background: linear-gradient(135deg, #1a2830 0%, #2a3840 100%);
+  border: 2px solid #5F9B8C;
+  padding: 14px 16px;
 }
 
 /* Section headers */

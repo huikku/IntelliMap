@@ -312,29 +312,27 @@ const NodeDetailModal = ({ data, onClose }) => {
                 </div>
               </div>
 
-              {/* File Info Grid */}
-              <div className="bento-grid">
-                <div className="bento-card">
+              {/* Compact Bento Grid - Interesting mixed layout */}
+              <div className="bento-grid-compact">
+                {/* Row 1: Language (big), Env + File Size (small stack) */}
+                <div className="bento-card bento-tall">
                   <div className="bento-card-label">Language</div>
-                  <div className="bento-card-value">{data.lang || 'unknown'}</div>
+                  <div className="bento-card-value" style={{ fontSize: '28px' }}>{data.lang || 'unknown'}</div>
                 </div>
-                <div className="bento-card">
+                <div className="bento-card bento-small">
                   <div className="bento-card-label">Environment</div>
-                  <div className="bento-card-value">{data.env || 'unknown'}</div>
+                  <div className="bento-card-value bento-card-small">{data.env || 'unknown'}</div>
                 </div>
-                <div className="bento-card">
+                <div className="bento-card bento-small">
                   <div className="bento-card-label">File Size</div>
-                  <div className="bento-card-value">{Math.round((data._original?.size || 0) / 1024)}KB</div>
+                  <div className="bento-card-value bento-card-small">{Math.round((data._original?.size || 0) / 1024)}KB</div>
                 </div>
-                <div className="bento-card">
+
+                {/* Row 2: LOC (wide), Complexity, Depth */}
+                <div className="bento-card bento-wide">
                   <div className="bento-card-label">Lines of Code</div>
                   <div className="bento-card-value">{Math.round(data.metrics?.loc || 0)}</div>
                 </div>
-              </div>
-
-              {/* Code Metrics Section */}
-              <div className="bento-section-header">Code Metrics</div>
-              <div className="bento-grid">
                 <div className="bento-card">
                   <div className="bento-card-label">Complexity</div>
                   <div className="bento-card-value">{Math.round(data.metrics?.complexity || 0)}</div>
@@ -343,19 +341,26 @@ const NodeDetailModal = ({ data, onClose }) => {
                   <div className="bento-card-label">Import Depth</div>
                   <div className="bento-card-value">{data.metrics?.depth || 0}</div>
                 </div>
-                <div className="bento-card">
-                  <div className="bento-card-label">Fan-in</div>
-                  <div className="bento-card-value">{data.metrics?.fanin || 0}</div>
-                </div>
-                <div className="bento-card">
-                  <div className="bento-card-label">Fan-out</div>
-                  <div className="bento-card-value">{data.metrics?.fanout || 0}</div>
-                </div>
-              </div>
 
-              {/* Relative Metrics Section */}
-              <div className="bento-section-header">Relative Metrics</div>
-              <div className="bento-grid">
+                {/* Row 3: Fan-in, Fan-out, Churn, Authors */}
+                <div className="bento-card bento-tiny">
+                  <div className="bento-card-label">Fan-in</div>
+                  <div className="bento-card-value bento-card-small">{data.metrics?.fanin || 0}</div>
+                </div>
+                <div className="bento-card bento-tiny">
+                  <div className="bento-card-label">Fan-out</div>
+                  <div className="bento-card-value bento-card-small">{data.metrics?.fanout || 0}</div>
+                </div>
+                <div className="bento-card bento-tiny">
+                  <div className="bento-card-label">Churn</div>
+                  <div className="bento-card-value bento-card-small">{data._original?.churn || 0}</div>
+                </div>
+                <div className="bento-card bento-tiny">
+                  <div className="bento-card-label">Authors</div>
+                  <div className="bento-card-value bento-card-small">{data._original?.authors || 0}</div>
+                </div>
+
+                {/* Row 4: LOC Quantile, Complexity Quantile, Age */}
                 <div className="bento-card">
                   <div className="bento-card-label">LOC Quantile</div>
                   <div className="bento-card-value">{data._original?.loc_q || 'N/A'} / 5</div>
@@ -364,10 +369,17 @@ const NodeDetailModal = ({ data, onClose }) => {
                   <div className="bento-card-label">Complexity Quantile</div>
                   <div className="bento-card-value">{data._original?.cx_q || 'N/A'} / 5</div>
                 </div>
+                <div className="bento-card">
+                  <div className="bento-card-label">Age</div>
+                  <div className="bento-card-value">{data._original?.age || 0} days</div>
+                </div>
+
+                {/* Row 5: Hotspot Risk (full width, prominent) */}
                 {data._original?.hotspot_q !== undefined && (
-                  <div className="bento-card bento-card-full">
-                    <div className="bento-card-label">Hotspot Risk</div>
+                  <div className="bento-card bento-card-full bento-highlight">
+                    <div className="bento-card-label">🔥 Hotspot Risk</div>
                     <div className="bento-card-value" style={{
+                      fontSize: '24px',
                       color: data._original.hotspot_q >= 4 ? '#FF7D2D' :
                              data._original.hotspot_q >= 3 ? '#FAC846' : '#A0C382'
                     }}>
@@ -376,38 +388,19 @@ const NodeDetailModal = ({ data, onClose }) => {
                     </div>
                   </div>
                 )}
-              </div>
 
-              {/* Git History */}
-              {(data._original?.churn > 0 || data.changed) && (
-                <>
-                  <div className="bento-section-header">Git History</div>
-                  <div className="bento-grid">
-                    {data._original?.churn > 0 && (
-                      <div className="bento-card">
-                        <div className="bento-card-label">Total Churn</div>
-                        <div className="bento-card-value">{data._original.churn}</div>
-                      </div>
-                    )}
-                    {data._original?.authors > 0 && (
-                      <div className="bento-card">
-                        <div className="bento-card-label">Contributors</div>
-                        <div className="bento-card-value">{data._original.authors}</div>
-                      </div>
-                    )}
-                    {data._original?.age !== undefined && (
-                      <div className="bento-card bento-card-full">
-                        <div className="bento-card-label">Last Modified</div>
-                        <div className="bento-card-value bento-card-small">
-                          {data._original.age === 0 ? 'Today' :
-                           data._original.age === 1 ? '1 day ago' :
-                           `${data._original.age} days ago`}
-                        </div>
-                      </div>
-                    )}
+                {/* Last Modified (if available) */}
+                {data._original?.age !== undefined && (
+                  <div className="bento-card bento-card-full">
+                    <div className="bento-card-label">Last Modified</div>
+                    <div className="bento-card-value bento-card-small">
+                      {data._original.age === 0 ? 'Today' :
+                       data._original.age === 1 ? '1 day ago' :
+                       `${data._original.age} days ago`}
+                    </div>
                   </div>
-                </>
-              )}
+                )}
+              </div>
 
               {/* Symbols */}
               {data._original?.symbols && data._original.symbols.length > 0 && (
