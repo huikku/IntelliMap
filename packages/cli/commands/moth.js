@@ -22,21 +22,24 @@ export default async function moth(options) {
     const generator = new MOTHGenerator(cwd);
 
     // Run analysis
-    const { manifest, index, validation } = await generator.analyze();
+    const { manifest, index, validation, analysis } = await generator.analyze();
 
     // Write outputs
     const manifestPath = resolve(mothDir, 'REPO.moth');
     const indexPath = resolve(mothDir, 'moth.index.json');
     const validationPath = resolve(mothDir, 'validation.json');
+    const analysisPath = resolve(mothDir, 'ANALYSIS.md');
 
     await fs.writeFile(manifestPath, manifest, 'utf8');
     await fs.writeFile(indexPath, JSON.stringify(index, null, 2), 'utf8');
     await fs.writeFile(validationPath, JSON.stringify(validation, null, 2), 'utf8');
+    await fs.writeFile(analysisPath, analysis, 'utf8');
 
     console.log('\n✅ MOTH manifest generated successfully!\n');
     console.log(`📄 Manifest: ${manifestPath}`);
     console.log(`📊 Index: ${indexPath}`);
-    console.log(`✓ Validation: ${validationPath}\n`);
+    console.log(`✓ Validation: ${validationPath}`);
+    console.log(`📈 Analysis: ${analysisPath}\n`);
 
     // Print summary
     console.log('📈 Summary:');

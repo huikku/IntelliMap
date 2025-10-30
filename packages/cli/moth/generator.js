@@ -45,10 +45,11 @@ export class MOTHGenerator {
     const manifest = await this.generateManifest();
     const index = await this.generateIndex();
     const validation = await this.generateValidation();
+    const analysis = await this.generateAnalysis();
 
     console.log('✅ MOTH analysis complete!');
 
-    return { manifest, index, validation };
+    return { manifest, index, validation, analysis };
   }
 
   async loadFileList() {
@@ -516,14 +517,24 @@ ${body}
   }
 
   generateDocSnippet(filePath) {
+    // Skip binary files
+    if (this.isBinaryFile(filePath)) {
+      const ext = path.extname(filePath).toLowerCase();
+      const sizeKB = this.metrics.get(filePath)?.size
+        ? (this.metrics.get(filePath).size / 1024).toFixed(1)
+        : '?';
+      return `Binary file (${ext}) - ${sizeKB} KB`;
+    }
+
     try {
       const content = fs.readFileSync(path.resolve(this.projectRoot, filePath), 'utf8');
       const lines = content.split('\n');
 
       for (const line of lines) {
         const trimmed = line.trim();
-        if (trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*')) {
-          let doc = trimmed.replace(/^[/\*\s]*/, '').substring(0, 200);
+        if (trimmed.startsWith('//') || trimmed.startsWith('/*') || trimmed.startsWith('*') ||
+            trimmed.startsWith('#')) {
+          let doc = trimmed.replace(/^[/#\*\s]*/, '').substring(0, 200);
           return doc.replace(/\|/g, '\\|').replace(/\{/g, '\\{').replace(/\}/g, '\\}');
         }
       }
@@ -646,6 +657,198 @@ ${body}
       typeof metrics.loc === 'number' &&
       typeof metrics.complexity === 'number'
     );
+  }
+
+  isBinaryFile(filePath) {
+    const binaryExtensions = [
+      // Images
+      '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.ico', '.svg', '.webp', '.tiff', '.tif',
+      // Fonts
+      '.ttf', '.otf', '.woff', '.woff2', '.eot',
+      // Archives
+      '.zip', '.tar', '.gz', '.bz2', '.7z', '.rar',
+      // Executables
+      '.exe', '.dll', '.so', '.dylib', '.bin',
+      // Media
+      '.mp3', '.mp4', '.avi', '.mov', '.wav', '.flac',
+      // Documents
+      '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
+      // Design files
+      '.ai', '.psd', '.sketch', '.fig', '.xd',
+      // Other
+      '.wasm', '.pyc', '.class', '.jar'
+    ];
+
+    const ext = path.extname(filePath).toLowerCase();
+    return binaryExtensions.includes(ext);
+  }
+
+  async generateAnalysis() {
+    console.log('📊 Generating analysis report...');
+
+    const codeFiles = [];
+    const binaryFiles = [];
+
+    // Separate code files from binary files
+    for (const filePath of this.files) {
+      const metrics = this.metrics.get(filePath);
+      if (!metrics) continue;
+
+      if (this.isBinaryFile(filePath)) {
+        binaryFiles.push({ path: filePath, metrics });
+      } else {
+        codeFiles.push({ path: filePath, metrics });
+      }
+    }
+
+    // Sort by different criteria for insights
+    const byComplexity = [...codeFiles].sort((a, b) => b.metrics.complexity - a.metrics.complexity);
+    const byChurn = [...codeFiles].sort((a, b) => b.metrics.churn - a.metrics.churn);
+    const byLOC = [...codeFiles].sort((a, b) => b.metrics.loc - a.metrics.loc);
+    const byFanout = [...codeFiles].sort((a, b) => b.metrics.fanout - a.metrics.fanout);
+    const byFanin = [...codeFiles].sort((a, b) => b.metrics.fanin - a.metrics.fanin);
+
+    // Calculate hotspots (high complexity + high churn)
+    const hotspots = codeFiles
+      .map(f => ({
+        ...f,
+        hotspotScore: (f.metrics.complexity / 10) * (f.metrics.churn / 10)
+      }))
+      .filter(f => f.hotspotScore > 5)
+      .sort((a, b) => b.hotspotScore - a.hotspotScore);
+
+    // Build analysis report
+    const lines = [];
+    lines.push('# MOTH Code Analysis Report');
+    lines.push('');
+    lines.push(`Generated: ${new Date().toISOString()}`);
+    lines.push(`Repository: ${path.basename(this.projectRoot)}`);
+    lines.push('');
+    lines.push('---');
+    lines.push('');
+
+    // Summary
+    lines.push('## Summary');
+    lines.push('');
+    lines.push(`- **Total Files**: ${this.files.length}`);
+    lines.push(`- **Code Files**: ${codeFiles.length}`);
+    lines.push(`- **Binary Files**: ${binaryFiles.length}`);
+    lines.push(`- **Total Lines of Code**: ${codeFiles.reduce((sum, f) => sum + f.metrics.loc, 0).toLocaleString()}`);
+    lines.push(`- **Total Complexity**: ${codeFiles.reduce((sum, f) => sum + f.metrics.complexity, 0).toLocaleString()}`);
+    lines.push(`- **Average Complexity**: ${(codeFiles.reduce((sum, f) => sum + f.metrics.complexity, 0) / codeFiles.length).toFixed(2)}`);
+    lines.push('');
+
+    // Top 10 Most Complex Files
+    lines.push('## 🔥 Top 10 Most Complex Files');
+    lines.push('');
+    lines.push('High complexity indicates files that may be difficult to understand and maintain.');
+    lines.push('');
+    for (let i = 0; i < Math.min(10, byComplexity.length); i++) {
+      const f = byComplexity[i];
+      lines.push(`${i + 1}. **${f.path}**`);
+      lines.push(`   - Complexity: ${f.metrics.complexity}`);
+      lines.push(`   - LOC: ${f.metrics.loc}`);
+      lines.push(`   - Churn: ${f.metrics.churn} commits`);
+      lines.push('');
+    }
+
+    // Top 10 Most Changed Files (Churn)
+    lines.push('## 📝 Top 10 Most Changed Files');
+    lines.push('');
+    lines.push('High churn indicates files that change frequently, which may indicate instability or active development.');
+    lines.push('');
+    for (let i = 0; i < Math.min(10, byChurn.length); i++) {
+      const f = byChurn[i];
+      lines.push(`${i + 1}. **${f.path}**`);
+      lines.push(`   - Churn: ${f.metrics.churn} commits`);
+      lines.push(`   - Complexity: ${f.metrics.complexity}`);
+      lines.push(`   - LOC: ${f.metrics.loc}`);
+      lines.push('');
+    }
+
+    // Top 10 Largest Files
+    lines.push('## 📏 Top 10 Largest Files');
+    lines.push('');
+    lines.push('Large files may be candidates for refactoring or splitting into smaller modules.');
+    lines.push('');
+    for (let i = 0; i < Math.min(10, byLOC.length); i++) {
+      const f = byLOC[i];
+      lines.push(`${i + 1}. **${f.path}**`);
+      lines.push(`   - LOC: ${f.metrics.loc}`);
+      lines.push(`   - Complexity: ${f.metrics.complexity}`);
+      lines.push(`   - Churn: ${f.metrics.churn} commits`);
+      lines.push('');
+    }
+
+    // Top 10 Most Coupled Files (Fanout)
+    lines.push('## 🔗 Top 10 Most Coupled Files (Dependencies)');
+    lines.push('');
+    lines.push('High fanout indicates files that depend on many other files, which may indicate tight coupling.');
+    lines.push('');
+    for (let i = 0; i < Math.min(10, byFanout.length); i++) {
+      const f = byFanout[i];
+      if (f.metrics.fanout === 0) break;
+      lines.push(`${i + 1}. **${f.path}**`);
+      lines.push(`   - Dependencies (fanout): ${f.metrics.fanout}`);
+      lines.push(`   - Dependents (fanin): ${f.metrics.fanin}`);
+      lines.push(`   - Complexity: ${f.metrics.complexity}`);
+      lines.push('');
+    }
+
+    // Top 10 Most Depended Upon Files (Fanin)
+    lines.push('## 🎯 Top 10 Most Depended Upon Files');
+    lines.push('');
+    lines.push('High fanin indicates files that many other files depend on. Changes to these files have wide impact.');
+    lines.push('');
+    for (let i = 0; i < Math.min(10, byFanin.length); i++) {
+      const f = byFanin[i];
+      if (f.metrics.fanin === 0) break;
+      lines.push(`${i + 1}. **${f.path}**`);
+      lines.push(`   - Dependents (fanin): ${f.metrics.fanin}`);
+      lines.push(`   - Dependencies (fanout): ${f.metrics.fanout}`);
+      lines.push(`   - Complexity: ${f.metrics.complexity}`);
+      lines.push('');
+    }
+
+    // Hotspots
+    if (hotspots.length > 0) {
+      lines.push('## ⚠️  Code Hotspots (High Risk)');
+      lines.push('');
+      lines.push('Files with both high complexity AND high churn are risky - they are complex and change frequently.');
+      lines.push('');
+      for (let i = 0; i < Math.min(10, hotspots.length); i++) {
+        const f = hotspots[i];
+        lines.push(`${i + 1}. **${f.path}** (Risk Score: ${f.hotspotScore.toFixed(1)})`);
+        lines.push(`   - Complexity: ${f.metrics.complexity}`);
+        lines.push(`   - Churn: ${f.metrics.churn} commits`);
+        lines.push(`   - LOC: ${f.metrics.loc}`);
+        lines.push('');
+      }
+    }
+
+    // Binary files summary
+    if (binaryFiles.length > 0) {
+      lines.push('## 📦 Binary Files');
+      lines.push('');
+      lines.push(`Found ${binaryFiles.length} binary files (excluded from code analysis):`);
+      lines.push('');
+      const bySize = [...binaryFiles].sort((a, b) => b.metrics.size - a.metrics.size);
+      for (let i = 0; i < Math.min(20, bySize.length); i++) {
+        const f = bySize[i];
+        const sizeKB = (f.metrics.size / 1024).toFixed(1);
+        lines.push(`- ${f.path} (${sizeKB} KB)`);
+      }
+      if (binaryFiles.length > 20) {
+        lines.push(`- ... and ${binaryFiles.length - 20} more`);
+      }
+      lines.push('');
+    }
+
+    lines.push('---');
+    lines.push('');
+    lines.push('*Generated by IntelliMap MOTH Generator*');
+
+    return lines.join('\n');
   }
 }
 

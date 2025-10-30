@@ -1,0 +1,140 @@
+{
+  "timestamp": "2025-10-30T02:57:41.926Z",
+  "version": "1.2",
+  "project": "cli",
+  "summary": {
+    "totalFiles": 24,
+    "totalLines": 4095,
+    "totalComplexity": 941,
+    "averageDepth": 2.25
+  },
+  "validation": {
+    "manifestHash": "c45f781ff2c4fb936f81377bf7b91ce099228cc89a0b6f3d0226b1a173d5d569",
+    "schemaValid": true,
+    "checksumsValid": true,
+    "pathsResolved": true,
+    "metricsValid": true
+  },
+  "files": {
+    "commands/capture.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "commands/diff.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "commands/index.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "commands/moth.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "commands/run.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "commands/serve.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "generate-sample-trace.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "index.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/esbuildGraph.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/gitMetrics.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/mergeGraphs.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/mergeGraphs.test.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/metricsComputer.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/pythonGraph.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/python_indexer.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "indexers/staticGraph.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "moth/generator.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "moth/parse_python.py": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "package.json": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "runtime-instrument.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "runtime/collector.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "runtime/enhanced-v8-converter.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "runtime/loader.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    },
+    "watcher.js": {
+      "hashValid": true,
+      "metricsValid": true,
+      "pathValid": true
+    }
+  }
+}
