@@ -62,6 +62,9 @@ export class RAGDatabase {
         depth INTEGER DEFAULT 0,
         churn INTEGER DEFAULT 0,
         coverage REAL,
+        age INTEGER,
+        authors INTEGER,
+        hotspot REAL,
         FOREIGN KEY (file_id) REFERENCES files(id) ON DELETE CASCADE
       );
 
@@ -232,17 +235,20 @@ export class RAGDatabase {
    */
   addMetrics(fileId, metrics) {
     const stmt = this.db.prepare(`
-      INSERT INTO metrics (file_id, complexity, fanin, fanout, depth, churn, coverage)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO metrics (file_id, complexity, fanin, fanout, depth, churn, coverage, age, authors, hotspot)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(file_id) DO UPDATE SET
         complexity = excluded.complexity,
         fanin = excluded.fanin,
         fanout = excluded.fanout,
         depth = excluded.depth,
         churn = excluded.churn,
-        coverage = excluded.coverage
+        coverage = excluded.coverage,
+        age = excluded.age,
+        authors = excluded.authors,
+        hotspot = excluded.hotspot
     `);
-    
+
     stmt.run(
       fileId,
       metrics.complexity || 0,
@@ -250,7 +256,10 @@ export class RAGDatabase {
       metrics.fanout || 0,
       metrics.depth || 0,
       metrics.churn || 0,
-      metrics.coverage || null
+      metrics.coverage || null,
+      metrics.age || null,
+      metrics.authors || null,
+      metrics.hotspot || null
     );
   }
 

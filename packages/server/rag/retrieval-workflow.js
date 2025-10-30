@@ -303,7 +303,10 @@ export class RetrievalWorkflow {
         m.complexity,
         m.fanin,
         m.fanout,
-        m.churn
+        m.churn,
+        m.age,
+        m.authors,
+        m.hotspot
       FROM files f
       LEFT JOIN metrics m ON f.id = m.file_id
       WHERE f.snapshot_id = ?
@@ -315,6 +318,8 @@ export class RetrievalWorkflow {
     const topByLoc = [...fileStats].sort((a, b) => b.loc - a.loc).slice(0, 20);
     const topByComplexity = [...fileStats].filter(f => f.complexity).sort((a, b) => b.complexity - a.complexity).slice(0, 20);
     const topByChurn = [...fileStats].filter(f => f.churn).sort((a, b) => b.churn - a.churn).slice(0, 20);
+    const topByHotspot = [...fileStats].filter(f => f.hotspot).sort((a, b) => b.hotspot - a.hotspot).slice(0, 20);
+    const topByAge = [...fileStats].filter(f => f.age !== null).sort((a, b) => b.age - a.age).slice(0, 20);
 
     const fileStatsSummary = `
 FILE STATISTICS (Top 20 by each metric):
@@ -330,6 +335,12 @@ ${topByComplexity.map((f, i) => `${i + 1}. ${f.path} - Complexity: ${f.complexit
 
 Top Files by Churn (most changed):
 ${topByChurn.map((f, i) => `${i + 1}. ${f.path} - Churn: ${f.churn} commits, Complexity: ${f.complexity || 0}`).join('\n')}
+
+Top Hotspot Files (complexity × churn):
+${topByHotspot.map((f, i) => `${i + 1}. ${f.path} - Hotspot: ${f.hotspot?.toFixed(2)}, Complexity: ${f.complexity}, Churn: ${f.churn}`).join('\n')}
+
+Oldest Files (by age):
+${topByAge.map((f, i) => `${i + 1}. ${f.path} - Age: ${f.age} days, Authors: ${f.authors || 'N/A'}`).join('\n')}
 `;
 
     // Build context from chunks

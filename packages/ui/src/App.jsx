@@ -128,12 +128,18 @@ export default function App() {
       // Press 'f' to focus/fit view (only when not typing)
       if (e.key === 'f' && !isTyping) {
         e.preventDefault();
+        console.log('🔍 F key pressed, attempting to fit view...');
 
         if (reactFlowInstanceRef.current) {
           const instance = reactFlowInstanceRef.current;
+          console.log('✅ ReactFlow instance found:', instance);
           instance.fitView({ padding: 0.2, duration: 500 });
-          console.log(`🔍 Fitted view`);
+          console.log('🔍 Fitted view');
+        } else {
+          console.warn('⚠️ ReactFlow instance not available');
         }
+      } else if (e.key === 'f' && isTyping) {
+        console.log('⌨️ F key pressed but user is typing in:', activeElement.tagName);
       }
     };
 

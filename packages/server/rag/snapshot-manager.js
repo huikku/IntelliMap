@@ -105,28 +105,34 @@ export class SnapshotManager {
     const tags = this.detectTags(filePath, content);
 
     // Add file to database
+    // Use node.size and node.loc from graph.json if available (overrides file read)
     const fileId = this.db.addFile(
       snapshotId,
       filePath,
       contentHash,
-      loc,
-      size,
+      node.loc || loc,  // Prefer graph.json LOC (more accurate)
+      node.size || size,  // Prefer graph.json size
       mtime,
       docSnippet,
       tags.join(',')
     );
 
     // Add metrics from node data
-    if (node.data) {
-      this.db.addMetrics(fileId, {
-        complexity: node.data.complexity || 0,
-        fanin: node.data.fanin || 0,
-        fanout: node.data.fanout || 0,
-        depth: node.data.depth || 0,
-        churn: node.data.churn || 0,
-        coverage: node.data.coverage || null
-      });
-    }
+    // Graph.json has metrics at top level (node.complexity, node.churn, etc.)
+    // ReactFlow adapter puts them in node.data
+    const metrics = node.data || node;  // Support both formats
+
+    this.db.addMetrics(fileId, {
+      complexity: metrics.complexity || 0,
+      fanin: metrics.fanin || 0,
+      fanout: metrics.fanout || 0,
+      depth: metrics.depth || 0,
+      churn: metrics.churn || 0,
+      coverage: metrics.coverage || null,
+      age: metrics.age || null,
+      authors: metrics.authors || null,
+      hotspot: metrics.hotspot || null
+    });
 
     // Extract and store symbols (if available)
     const symbols = this.extractSymbols(content, filePath);
