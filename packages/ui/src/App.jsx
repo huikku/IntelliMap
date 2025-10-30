@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
 import Inspector from './components/Inspector';
 import PlaneSwitcher from './components/PlaneSwitcher';
+import SettingsModal from './components/SettingsModal';
 import RepoLoader from './components/RepoLoader';
 import SearchBox from './components/SearchBox';
 
@@ -42,6 +43,7 @@ export default function App() {
   const [clustering, setClustering] = useState(persistedSettings.clustering || false);
   const [currentRepo, setCurrentRepo] = useState(null);
   const [showRepoLoader, setShowRepoLoader] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [filters, setFilters] = useState({
     language: 'all',
     env: 'all', // Always default to 'all' to avoid filtering out nodes
@@ -145,7 +147,7 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [reactFlowInstanceRef]);
 
   useEffect(() => {
     fetchGraph();
@@ -333,6 +335,13 @@ export default function App() {
         />
       )}
 
+      {showSettings && (
+        <SettingsModal
+          isOpen={showSettings}
+          onClose={() => setShowSettings(false)}
+        />
+      )}
+
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar - Fixed width */}
         <div className="flex-shrink-0">
@@ -362,6 +371,7 @@ export default function App() {
             sizeExaggeration={sizeExaggeration}
             setSizeExaggeration={setSizeExaggeration}
             currentRepo={currentRepo}
+            onSettingsClick={() => setShowSettings(true)}
           />
           <GraphView
             graph={graph}

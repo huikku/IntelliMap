@@ -627,36 +627,36 @@ export default function Sidebar({ filters, setFilters, graph, cy, currentRepo, o
       <div className="flex border-b border-slate">
         <button
           onClick={() => setActiveSection('filters')}
-          className={`flex-1 px-3 py-2 text-xs font-semibold transition uppercase tracking-wider ${
+          className={`flex-1 px-3 py-2 text-sm font-semibold transition ${
             activeSection === 'filters'
               ? 'bg-slate text-cream border-b-2 border-teal'
               : 'text-mint hover:text-cream'
           }`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'Inter', sans-serif" }}
         >
           Filters
         </button>
         <button
           onClick={() => setActiveSection('analysis')}
-          className={`flex-1 px-3 py-2 text-xs font-semibold transition uppercase tracking-wider ${
+          className={`flex-1 px-3 py-2 text-sm font-semibold transition ${
             activeSection === 'analysis'
               ? 'bg-slate text-cream border-b-2 border-teal'
               : 'text-mint hover:text-cream'
           }`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'Inter', sans-serif" }}
         >
           Analysis
         </button>
         <button
           onClick={() => setActiveSection('chat')}
-          className={`flex-1 px-3 py-2 text-xs font-semibold transition uppercase tracking-wider ${
+          className={`flex-1 px-3 py-2 text-sm font-semibold transition ${
             activeSection === 'chat'
               ? 'bg-slate text-cream border-b-2 border-teal'
               : 'text-mint hover:text-cream'
           }`}
-          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          style={{ fontFamily: "'Inter', sans-serif" }}
         >
-          RAG Chat
+          RepoGPT
         </button>
       </div>
 

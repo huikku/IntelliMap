@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import ChatModeInfoModal from './ChatModeInfoModal';
 
 export default function RAGChat({ currentRepo, onHighlightNodes }) {
   const [messages, setMessages] = useState([]);
@@ -9,6 +10,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
   const [taskType, setTaskType] = useState('explain');
   const [highlightedPaths, setHighlightedPaths] = useState([]);
   const [embeddingProgress, setEmbeddingProgress] = useState(null); // { current, total, percentage }
+  const [showModeInfo, setShowModeInfo] = useState(false);
   const messagesEndRef = useRef(null);
 
   // Load snapshots on mount
@@ -131,7 +133,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
     if (!snapshotId) {
       setMessages(prev => [...prev, {
         role: 'system',
-        content: '⚠️ Please create a snapshot first by clicking "Create Snapshot"'
+        content: '⚠️ Please create an index first by clicking "🔄 Update Index"'
       }]);
       return;
     }
@@ -206,17 +208,21 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
 
   return (
     <div className="flex flex-col h-full">
+      <ChatModeInfoModal isOpen={showModeInfo} onClose={() => setShowModeInfo(false)} />
+
       {/* Header */}
       <div className="p-3 border-b border-slate">
-        <h3 className="text-xs text-mint font-semibold mb-2">RAG CHAT</h3>
-        
+        <h3 className="text-sm text-mint font-semibold mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
+          🤖 RepoGPT
+        </h3>
+
         {/* Snapshot selector */}
         <div className="mb-2">
           <select
             value={snapshotId || ''}
             onChange={(e) => setSnapshotId(Number(e.target.value))}
-            className="w-full px-2 py-1 bg-navy border border-teal/30 rounded text-xs text-cream"
-            style={{ colorScheme: 'dark' }}
+            className="w-full px-2 py-1.5 bg-navy border border-teal/30 rounded text-sm text-cream"
+            style={{ colorScheme: 'dark', fontFamily: "'Inter', sans-serif" }}
           >
             <option value="">Select snapshot...</option>
             {snapshots.map(s => (
@@ -227,29 +233,36 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
           </select>
         </div>
 
-        {/* Task type selector */}
-        <div className="mb-2">
+        {/* Task type selector with info button */}
+        <div className="mb-2 flex gap-1">
           <select
             value={taskType}
             onChange={(e) => setTaskType(e.target.value)}
-            className="w-full px-2 py-1 bg-navy border border-teal/30 rounded text-xs text-cream"
-            style={{ colorScheme: 'dark' }}
+            className="flex-1 px-2 py-1.5 bg-navy border border-teal/30 rounded text-sm text-cream"
+            style={{ colorScheme: 'dark', fontFamily: "'Inter', sans-serif" }}
           >
-            <option value="explain">💡 Explain</option>
-            <option value="impact">⚡ Impact Analysis</option>
-            <option value="triage">🎯 Triage (Fast)</option>
-            <option value="transform">🔄 Transform</option>
+            <option value="explain">🔍 Explain</option>
+            <option value="impact">💥 Impact</option>
+            <option value="triage">🏥 Triage</option>
+            <option value="transform">🔧 Transform</option>
           </select>
+          <button
+            onClick={() => setShowModeInfo(true)}
+            className="px-2 py-1.5 bg-navy border border-teal/30 hover:bg-teal/10 rounded text-sm text-teal transition-colors"
+            title="Learn about chat modes"
+          >
+            ℹ️
+          </button>
         </div>
 
         <div className="flex gap-2">
           <button
             onClick={createSnapshot}
             disabled={isLoading}
-            className="flex-1 px-3 py-1.5 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-xs text-cream transition disabled:opacity-50"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            className="flex-1 px-3 py-1.5 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-sm text-cream transition disabled:opacity-50"
+            style={{ fontFamily: "'Inter', sans-serif" }}
           >
-            {isLoading ? '⏳ Creating...' : '📸 Snapshot'}
+            {isLoading ? '⏳ Indexing...' : '🔄 Update Index'}
           </button>
 
           {highlightedPaths.length > 0 && (
@@ -288,10 +301,10 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
         {messages.length === 0 && (
-          <div className="text-xs text-mint/50 text-center mt-8">
+          <div className="text-sm text-mint/50 text-center mt-8" style={{ fontFamily: "'Inter', sans-serif" }}>
             <p className="mb-2">💬 Ask questions about your codebase</p>
-            <p className="text-[10px]">Examples:</p>
-            <ul className="text-[10px] mt-2 space-y-1 text-left max-w-[200px] mx-auto">
+            <p className="text-xs">Examples:</p>
+            <ul className="text-xs mt-2 space-y-1 text-left max-w-[250px] mx-auto">
               <li>• How does authentication work?</li>
               <li>• What are the main components?</li>
               <li>• Explain the graph visualization</li>
@@ -302,21 +315,22 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`text-xs ${
+            className={`text-sm ${
               msg.role === 'user' ? 'text-cream' :
               msg.role === 'system' ? 'text-mint/70' :
               'text-teal'
             }`}
+            style={{ fontFamily: "'Inter', sans-serif" }}
           >
             {msg.role === 'user' && (
-              <div className="bg-slate/50 rounded p-2 mb-1">
+              <div className="bg-slate/50 rounded p-3 mb-1">
                 <span className="font-semibold text-cream">You:</span>
                 <p className="mt-1 whitespace-pre-wrap">{msg.content}</p>
               </div>
             )}
 
             {msg.role === 'assistant' && (
-              <div className="bg-navy/50 rounded p-2 mb-1">
+              <div className="bg-navy/50 rounded p-3 mb-1">
                 <span className="font-semibold text-teal">🤖 RepoGPT:</span>
                 <p className="mt-1 whitespace-pre-wrap text-cream/90 leading-relaxed">
                   {msg.content}
@@ -325,7 +339,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
                 {msg.citations && msg.citations.length > 0 && (
                   <div className="mt-2 pt-2 border-t border-slate/50">
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-[10px] text-mint/70">📎 Citations ({msg.citations.length}):</p>
+                      <p className="text-xs text-mint/70">📎 Citations ({msg.citations.length}):</p>
                       {msg.highlightPaths && msg.highlightPaths.length > 0 && (
                         <button
                           onClick={() => {
@@ -342,7 +356,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
                               }
                             }
                           }}
-                          className="px-2 py-0.5 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-[9px] text-cream transition"
+                          className="px-2 py-1 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-xs text-cream transition"
                         >
                           {JSON.stringify(highlightedPaths.sort()) ===
                            JSON.stringify(msg.highlightPaths.sort())
@@ -351,8 +365,8 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
                         </button>
                       )}
                     </div>
-                    {msg.citations.map((cite, j) => (
-                      <div key={j} className="text-[10px] text-teal/80 font-mono">
+                    {msg.citations.map((cite) => (
+                      <div key={`${cite.path}-${cite.start_line}-${cite.end_line}`} className="text-xs text-teal/80" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                         {cite.path}:{cite.start_line}-{cite.end_line}
                       </div>
                     ))}
@@ -360,9 +374,9 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
                 )}
 
                 {msg.metadata && (
-                  <div className="mt-2 pt-2 border-t border-slate/50 text-[9px] text-mint/50">
-                    Model: {msg.metadata.model} | 
-                    Tokens: {msg.metadata.tokensIn}→{msg.metadata.tokensOut} | 
+                  <div className="mt-2 pt-2 border-t border-slate/50 text-xs text-mint/50" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    Model: {msg.metadata.model} |
+                    Tokens: {msg.metadata.tokensIn}→{msg.metadata.tokensOut} |
                     Cost: ${msg.metadata.cost?.toFixed(4) || '0.0000'}
                   </div>
                 )}
@@ -370,7 +384,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
             )}
 
             {msg.role === 'system' && (
-              <div className="text-[10px] text-mint/70 italic">
+              <div className="text-xs text-mint/70 italic" style={{ fontFamily: "'Inter', sans-serif" }}>
                 {msg.content}
               </div>
             )}
@@ -378,7 +392,7 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
         ))}
 
         {isLoading && (
-          <div className="text-xs text-mint/70 animate-pulse">
+          <div className="text-sm text-mint/70 animate-pulse" style={{ fontFamily: "'Inter', sans-serif" }}>
             🤔 Thinking...
           </div>
         )}
@@ -395,15 +409,15 @@ export default function RAGChat({ currentRepo, onHighlightNodes }) {
             onKeyPress={handleKeyPress}
             placeholder="Ask a question..."
             disabled={isLoading}
-            className="flex-1 px-2 py-1.5 bg-navy border border-teal/30 rounded text-xs text-cream resize-none disabled:opacity-50"
-            style={{ colorScheme: 'dark', fontFamily: "'JetBrains Mono', monospace" }}
+            className="flex-1 px-3 py-2 bg-navy border border-teal/30 rounded text-sm text-cream resize-none disabled:opacity-50"
+            style={{ colorScheme: 'dark', fontFamily: "'Inter', sans-serif" }}
             rows={2}
           />
           <button
             onClick={sendMessage}
             disabled={isLoading || !input.trim()}
-            className="px-3 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-xs text-cream transition disabled:opacity-50"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            className="px-4 bg-teal/20 hover:bg-teal/30 border border-teal/50 rounded text-sm text-cream transition disabled:opacity-50"
+            style={{ fontFamily: "'Inter', sans-serif" }}
           >
             Send
           </button>

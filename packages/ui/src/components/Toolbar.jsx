@@ -1,18 +1,19 @@
-export default function Toolbar({ 
-  reactFlowInstance, 
-  layout, 
-  setLayout, 
-  clustering, 
-  setClustering, 
-  edgeOpacity, 
-  setEdgeOpacity, 
-  curveStyle, 
-  setCurveStyle, 
-  sizing, 
-  setSizing, 
-  sizeExaggeration, 
-  setSizeExaggeration, 
-  currentRepo 
+export default function Toolbar({
+  reactFlowInstance,
+  layout,
+  setLayout,
+  clustering,
+  setClustering,
+  edgeOpacity,
+  setEdgeOpacity,
+  curveStyle,
+  setCurveStyle,
+  sizing,
+  setSizing,
+  sizeExaggeration,
+  setSizeExaggeration,
+  currentRepo,
+  onSettingsClick
 }) {
   const handleFit = () => {
     if (reactFlowInstance?.current) {
@@ -207,9 +208,18 @@ export default function Toolbar({
         </select>
       </div>
 
-      {/* Status */}
-      <div className="ml-auto text-xs text-mint whitespace-nowrap">
-        ✓ React Flow
+      {/* Settings Button */}
+      <div className="ml-auto flex items-center gap-2">
+        <button
+          onClick={onSettingsClick}
+          className="px-3 py-1 bg-slate hover:bg-teal/20 border border-teal/30 hover:border-teal rounded text-sm transition text-cream whitespace-nowrap"
+          title="Settings"
+        >
+          ⚙️ Settings
+        </button>
+        <div className="text-xs text-mint whitespace-nowrap">
+          ✓ React Flow
+        </div>
       </div>
     </div>
   );
