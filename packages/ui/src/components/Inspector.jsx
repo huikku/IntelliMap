@@ -236,9 +236,10 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
           <h2 className="text-sm font-heading font-bold text-cream mb-4">DETAILS</h2>
 
         <div className="space-y-3 text-sm">
+          {/* Full Path - Full Width */}
           <div>
-            <label className="text-xs text-mint font-condensed">Path</label>
-            <div className="flex items-center gap-2 mt-1">
+            <label className="text-xs text-mint font-condensed mb-1 block">FULL PATH</label>
+            <div className="flex items-center gap-2">
               <code className="flex-1 bg-slate p-2 rounded text-xs break-all font-mono text-cream border border-teal/30">
                 {selectedNode.id}
               </code>
@@ -248,40 +249,92 @@ export default function Inspector({ selectedNode, graph, currentRepo, onNavigate
                   window.location.href = `vscode://file/${fullPath}`;
                   console.log(`🚀 Opening in VS Code: ${fullPath}`);
                 }}
-                className="px-2 py-1.5 bg-[#5F9B8C] hover:bg-[#7BAEA2] rounded text-xs transition flex-shrink-0"
+                className="px-2 py-1.5 bg-teal hover:bg-mint rounded text-xs transition flex-shrink-0 text-white font-semibold"
                 title="Open file in VS Code"
               >
-                📝 VS Code
+                📝
               </button>
             </div>
           </div>
 
-          <div>
-            <label className="text-xs text-mint">Language</label>
-            <span className="block mt-1">
-              <span className="px-2 py-1 bg-teal text-white rounded text-xs font-semibold">
-                {selectedNode.lang?.toUpperCase()}
-              </span>
-            </span>
-          </div>
-
-          <div>
-            <label className="text-xs text-mint">Environment</label>
-            <span className="block mt-1">
-              <span className="px-2 py-1 bg-slate text-cream rounded text-xs border border-teal/30">
-                {selectedNode.env}
-              </span>
-            </span>
-          </div>
-
-          <div className="flex gap-4">
-            <div>
-              <label className="text-xs text-mint">Imports</label>
-              <span className="block mt-1 text-lg font-bold text-cream">{outgoing.length}</span>
+          {/* Compact Bento Grid - 3 columns for simple metrics */}
+          <div className="grid grid-cols-3 gap-2">
+            {/* Language */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Language</div>
+              <div className="text-sm font-bold text-gold">{selectedNode.lang?.toUpperCase()}</div>
             </div>
-            <div>
-              <label className="text-xs text-mint">Imported by</label>
-              <span className="block mt-1 text-lg font-bold text-cream">{incoming.length}</span>
+
+            {/* Environment */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Environment</div>
+              <div className="text-sm font-bold text-peach">{selectedNode.env}</div>
+            </div>
+
+            {/* File Size */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">File Size</div>
+              <div className="text-sm font-bold text-cream">{Math.round((selectedNode.size || 0) / 1024)}KB</div>
+            </div>
+
+            {/* Lines of Code */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">LOC</div>
+              <div className="text-sm font-bold text-sage">{Math.round(selectedNode.loc || 0)}</div>
+            </div>
+
+            {/* Complexity */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Complexity</div>
+              <div className="text-sm font-bold text-gold">{Math.round(selectedNode.complexity || 0)}</div>
+            </div>
+
+            {/* Import Depth */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Depth</div>
+              <div className="text-sm font-bold text-teal">{selectedNode.depth || 0}</div>
+            </div>
+
+            {/* Fan-in */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Fan-in</div>
+              <div className="text-sm font-bold text-cream">{incoming.length}</div>
+            </div>
+
+            {/* Fan-out */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Fan-out</div>
+              <div className="text-sm font-bold text-cream">{outgoing.length}</div>
+            </div>
+
+            {/* Churn */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Churn</div>
+              <div className="text-sm font-bold text-orange">{selectedNode.churn || 0}</div>
+            </div>
+
+            {/* Age (days) */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Age</div>
+              <div className="text-sm font-bold text-mint">{selectedNode.age || 0}d</div>
+            </div>
+
+            {/* Authors */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Authors</div>
+              <div className="text-sm font-bold text-cream">{selectedNode.authors || 0}</div>
+            </div>
+
+            {/* Hotspot */}
+            <div className="bg-slate border border-teal/30 rounded p-2">
+              <div className="text-[10px] text-mint uppercase font-condensed mb-1">Hotspot</div>
+              <div className="text-sm font-bold text-rust">
+                {selectedNode.hotspot_q === 5 ? '🔥🔥🔥🔥🔥' :
+                 selectedNode.hotspot_q === 4 ? '🔥🔥🔥🔥' :
+                 selectedNode.hotspot_q === 3 ? '🔥🔥🔥' :
+                 selectedNode.hotspot_q === 2 ? '🔥🔥' :
+                 selectedNode.hotspot_q === 1 ? '🔥' : '❄️'}
+              </div>
             </div>
           </div>
 
