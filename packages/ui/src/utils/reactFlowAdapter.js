@@ -123,7 +123,7 @@ export function convertToReactFlow(graphData) {
  * Generate stable mock timeseries data based on node ID
  * TODO: Replace with real data from graph.json
  */
-export function generateMockTimeseries(nodeId) {
+export function generateMockTimeseries(nodeId, nodeData = {}) {
   // Create deterministic random based on node ID
   const seed = nodeId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const random = (index) => {
@@ -131,10 +131,20 @@ export function generateMockTimeseries(nodeId) {
     return Math.abs(x - Math.floor(x));
   };
 
+  // Generate age trend (freshness decreasing over time)
+  // Start from current age and go backwards in time (younger)
+  const currentAge = nodeData._original?.age || 30;
+  const ageTrend = Array.from({ length: 8 }, (_, i) => {
+    // Go backwards in time: most recent (index 7) = current age, oldest (index 0) = younger
+    const daysAgo = (7 - i) * 7; // Each point is ~1 week apart
+    return Math.max(0, currentAge - daysAgo);
+  });
+
   return {
     churn: Array.from({ length: 8 }, (_, i) => Math.floor(random(i) * 10)),
     complexity: Array.from({ length: 5 }, (_, i) => Math.floor(random(i + 10) * 100)),
     coverage: Array.from({ length: 4 }, (_, i) => Math.floor(random(i + 20) * 100)),
+    age: ageTrend, // Days since last modification (increasing over time)
   };
 }
 
@@ -146,7 +156,7 @@ export function enrichNodesWithTimeseries(nodes) {
     ...node,
     data: {
       ...node.data,
-      timeseries: node.data.timeseries || generateMockTimeseries(node.id),
+      timeseries: node.data.timeseries || generateMockTimeseries(node.id, node.data),
     },
   }));
 }

@@ -498,6 +498,14 @@ const NodeDetailModal = ({ data, onClose }) => {
                         </div>
                       </div>
                     )}
+                    {data.timeseries.age && data.timeseries.age.length > 0 && (
+                      <div className="bento-card bento-trend-tall">
+                        <div className="bento-trend-label">File Age Trend</div>
+                        <div className="bento-trend-container-vertical">
+                          {renderTrendBars(data.timeseries.age, '#5F9B8C')}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
