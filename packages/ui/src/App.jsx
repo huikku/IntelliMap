@@ -312,7 +312,7 @@ export default function App() {
       <div className="flex flex-1 overflow-hidden relative">
         {/* Left Sidebar - Fixed width */}
         <div className="flex-shrink-0">
-          <Sidebar filters={filters} setFilters={setFilters} graph={graph} />
+          <Sidebar filters={filters} setFilters={setFilters} graph={graph} currentRepo={currentRepo} />
         </div>
 
         {/* Main Content - Fills remaining space */}

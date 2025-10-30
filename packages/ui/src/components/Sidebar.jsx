@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import ReportViewer from './ReportViewer';
 import MOTHPanel from './MOTHPanel.jsx';
+import RAGChat from './RAGChat';
 
-export default function Sidebar({ filters, setFilters, graph, cy }) {
+export default function Sidebar({ filters, setFilters, graph, cy, currentRepo }) {
   const [activeSection, setActiveSection] = useState('filters');
   const [analysisReport, setAnalysisReport] = useState('');
   const [cycleReport, setCycleReport] = useState('');
@@ -626,7 +627,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
       <div className="flex border-b border-slate">
         <button
           onClick={() => setActiveSection('filters')}
-          className={`flex-1 px-4 py-2 text-xs font-semibold transition uppercase tracking-wider ${
+          className={`flex-1 px-3 py-2 text-xs font-semibold transition uppercase tracking-wider ${
             activeSection === 'filters'
               ? 'bg-slate text-cream border-b-2 border-teal'
               : 'text-mint hover:text-cream'
@@ -637,7 +638,7 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
         </button>
         <button
           onClick={() => setActiveSection('analysis')}
-          className={`flex-1 px-4 py-2 text-xs font-semibold transition uppercase tracking-wider ${
+          className={`flex-1 px-3 py-2 text-xs font-semibold transition uppercase tracking-wider ${
             activeSection === 'analysis'
               ? 'bg-slate text-cream border-b-2 border-teal'
               : 'text-mint hover:text-cream'
@@ -646,10 +647,21 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
         >
           Analysis
         </button>
+        <button
+          onClick={() => setActiveSection('chat')}
+          className={`flex-1 px-3 py-2 text-xs font-semibold transition uppercase tracking-wider ${
+            activeSection === 'chat'
+              ? 'bg-slate text-cream border-b-2 border-teal'
+              : 'text-mint hover:text-cream'
+          }`}
+          style={{ fontFamily: "'JetBrains Mono', monospace" }}
+        >
+          RAG Chat
+        </button>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className={`flex-1 overflow-y-auto ${activeSection === 'chat' ? '' : 'p-4'}`}>
         {activeSection === 'filters' && (
           <>
             <h2 className="text-sm font-bold text-cream mb-4">FILTERS</h2>
@@ -974,6 +986,10 @@ export default function Sidebar({ filters, setFilters, graph, cy }) {
               </div>
             )}
           </>
+        )}
+
+        {activeSection === 'chat' && (
+          <RAGChat currentRepo={currentRepo} />
         )}
       </div>
 
