@@ -8,6 +8,8 @@ import { buildJSGraph } from '../cli/indexers/esbuildGraph.js';
 import { buildPythonGraph } from '../cli/indexers/pythonGraph.js';
 import { mergeGraphs } from '../cli/indexers/mergeGraphs.js';
 import { mergeRuntimeData, generateRuntimeReport } from './runtime-analyzer.js';
+import { SnapshotManager } from './rag/snapshot-manager.js';
+import { RAGDatabase } from './rag/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -886,6 +888,316 @@ app.get('/api/moth-validation', async (req, res) => {
 
   } catch (error) {
     console.error('Error loading MOTH validation:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ============================================================================
+// RAG API Endpoints
+// ============================================================================
+
+// Create a snapshot from current graph
+app.post('/api/v1/snapshots', async (req, res) => {
+  try {
+    // Load current graph
+    const graphPath = resolve(currentRepoPath, '.intellimap/graph.json');
+    if (!fs.existsSync(graphPath)) {
+      return res.status(404).json({
+        error: 'No graph found. Run indexing first.',
+        repoPath: currentRepoPath,
+      });
+    }
+
+    const graph = await fs.readJson(graphPath);
+
+    // Create snapshot
+    const snapshotManager = new SnapshotManager(currentRepoPath);
+    const snapshotId = await snapshotManager.createSnapshotFromGraph(graph);
+    const snapshot = snapshotManager.db.getSnapshot(snapshotId);
+
+    snapshotManager.close();
+
+    res.json({
+      success: true,
+      snapshot: {
+        id: snapshot.id,
+        manifest_hash: snapshot.manifest_hash,
+        project: snapshot.project,
+        created_at: snapshot.created_at,
+        meta: snapshot.meta_json ? JSON.parse(snapshot.meta_json) : null
+      }
+    });
+  } catch (error) {
+    console.error('Error creating snapshot:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all snapshots
+app.get('/api/v1/snapshots', async (req, res) => {
+  try {
+    const db = new RAGDatabase();
+    const snapshots = db.db.prepare('SELECT * FROM snapshots ORDER BY created_at DESC').all();
+    db.close();
+
+    res.json({
+      snapshots: snapshots.map(s => ({
+        id: s.id,
+        manifest_hash: s.manifest_hash,
+        project: s.project,
+        created_at: s.created_at,
+        meta: s.meta_json ? JSON.parse(s.meta_json) : null
+      }))
+    });
+  } catch (error) {
+    console.error('Error fetching snapshots:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get snapshot by ID
+app.get('/api/v1/snapshots/:id', async (req, res) => {
+  try {
+    const db = new RAGDatabase();
+    const snapshot = db.getSnapshot(req.params.id);
+
+    if (!snapshot) {
+      db.close();
+      return res.status(404).json({ error: 'Snapshot not found' });
+    }
+
+    // Get file count
+    const fileCount = db.db.prepare('SELECT COUNT(*) as count FROM files WHERE snapshot_id = ?').get(snapshot.id).count;
+
+    // Get chunk count
+    const chunkCount = db.db.prepare('SELECT COUNT(*) as count FROM chunks WHERE snapshot_id = ?').get(snapshot.id).count;
+
+    db.close();
+
+    res.json({
+      snapshot: {
+        id: snapshot.id,
+        manifest_hash: snapshot.manifest_hash,
+        project: snapshot.project,
+        created_at: snapshot.created_at,
+        meta: snapshot.meta_json ? JSON.parse(snapshot.meta_json) : null,
+        stats: {
+          files: fileCount,
+          chunks: chunkCount
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching snapshot:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get chunks for a file
+app.get('/api/v1/chunks', async (req, res) => {
+  try {
+    const { file_id, path, symbol, snapshot_id } = req.query;
+
+    const db = new RAGDatabase();
+    let chunks;
+
+    if (file_id) {
+      chunks = db.db.prepare('SELECT * FROM chunks WHERE file_id = ?').all(file_id);
+    } else if (path && snapshot_id) {
+      const file = db.db.prepare('SELECT id FROM files WHERE snapshot_id = ? AND path = ?').get(snapshot_id, path);
+      if (file) {
+        chunks = db.db.prepare('SELECT * FROM chunks WHERE file_id = ?').all(file.id);
+      } else {
+        chunks = [];
+      }
+    } else if (symbol && snapshot_id) {
+      chunks = db.db.prepare('SELECT * FROM chunks WHERE snapshot_id = ? AND symbol = ?').all(snapshot_id, symbol);
+    } else {
+      db.close();
+      return res.status(400).json({ error: 'Must provide file_id, path+snapshot_id, or symbol+snapshot_id' });
+    }
+
+    db.close();
+
+    res.json({ chunks });
+  } catch (error) {
+    console.error('Error fetching chunks:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get hotspots for a snapshot
+app.get('/api/v1/hotspots', async (req, res) => {
+  try {
+    const { snapshot_id, limit = 20 } = req.query;
+
+    if (!snapshot_id) {
+      return res.status(400).json({ error: 'snapshot_id is required' });
+    }
+
+    const db = new RAGDatabase();
+    const hotspots = db.db.prepare(`
+      SELECT * FROM hotspots_by_snapshot
+      WHERE snapshot_id = ?
+      LIMIT ?
+    `).all(snapshot_id, Number.parseInt(limit));
+
+    db.close();
+
+    res.json({ hotspots });
+  } catch (error) {
+    console.error('Error fetching hotspots:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Embed a snapshot (generate vectors for all chunks)
+app.post('/api/v1/snapshots/:id/embed', async (req, res) => {
+  try {
+    const snapshotId = req.params.id;
+    const { type = 'code' } = req.body;
+
+    const { VectorIndex } = await import('./rag/vector-index.js');
+    const vectorIndex = new VectorIndex();
+
+    const embeddedCount = await vectorIndex.embedSnapshot(snapshotId, type);
+
+    vectorIndex.close();
+
+    res.json({
+      success: true,
+      snapshot_id: snapshotId,
+      embedded_chunks: embeddedCount
+    });
+  } catch (error) {
+    console.error('Error embedding snapshot:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Search for similar chunks (vector search)
+app.post('/api/v1/search', async (req, res) => {
+  try {
+    const { query, snapshot_id, topK = 10, type = 'code', hybrid = true } = req.body;
+
+    if (!query || !snapshot_id) {
+      return res.status(400).json({ error: 'query and snapshot_id are required' });
+    }
+
+    const { VectorIndex } = await import('./rag/vector-index.js');
+    const vectorIndex = new VectorIndex();
+
+    let results;
+    if (hybrid) {
+      results = await vectorIndex.hybridSearch(query, snapshot_id, topK);
+    } else {
+      results = await vectorIndex.search(query, snapshot_id, topK, type);
+    }
+
+    vectorIndex.close();
+
+    res.json({
+      query,
+      snapshot_id,
+      results: results.map(r => ({
+        chunk_id: r.chunk_id,
+        score: r.score,
+        path: r.chunk.file_path || r.chunk.path,
+        start_line: r.chunk.start_line,
+        end_line: r.chunk.end_line,
+        text: r.chunk.text,
+        summary: r.chunk.summary
+      }))
+    });
+  } catch (error) {
+    console.error('Error searching:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Pack chunks for a question (retrieval without answer)
+app.post('/api/v1/pack', async (req, res) => {
+  try {
+    const { snapshot_id, question, seed_paths, worklist_bias = true } = req.body;
+
+    if (!snapshot_id || !question) {
+      return res.status(400).json({ error: 'snapshot_id and question are required' });
+    }
+
+    const { RetrievalWorkflow } = await import('./rag/retrieval-workflow.js');
+    const workflow = new RetrievalWorkflow(null, { worklistBias: worklist_bias });
+
+    // Extract seeds
+    const seeds = workflow.extractSeeds(question);
+    if (seed_paths) {
+      seeds.paths.push(...seed_paths);
+    }
+
+    // Run retrieval pipeline up to packing
+    const candidateChunks = await workflow.graphPrefilter(snapshot_id, seeds);
+    const rankedChunks = await workflow.vectorRerank(question, candidateChunks);
+    const packedChunks = await workflow.pack(rankedChunks, snapshot_id);
+
+    workflow.close();
+
+    res.json({
+      snapshot_id,
+      question,
+      chunks: packedChunks.map(c => ({
+        chunk_id: c.id,
+        path: c.file_path || c.path,
+        start_line: c.start_line,
+        end_line: c.end_line,
+        text: c.text,
+        summary: c.summary,
+        score: c.similarity_score
+      })),
+      citations: packedChunks.map(c => ({
+        path: c.file_path || c.path,
+        start_line: c.start_line,
+        end_line: c.end_line
+      }))
+    });
+  } catch (error) {
+    console.error('Error packing chunks:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ask a question (full RAG pipeline)
+app.post('/api/v1/ask', async (req, res) => {
+  try {
+    const { snapshot_id, question, pack_policy, model, task = 'explain' } = req.body;
+
+    if (!snapshot_id || !question) {
+      return res.status(400).json({ error: 'snapshot_id and question are required' });
+    }
+
+    const { RetrievalWorkflow } = await import('./rag/retrieval-workflow.js');
+    const workflow = new RetrievalWorkflow(null, {
+      maxChunks: pack_policy?.maxChunks || 8,
+      worklistBias: pack_policy?.worklistBias !== undefined ? pack_policy.worklistBias : true
+    });
+
+    const result = await workflow.retrieve(snapshot_id, question, { task, model });
+
+    workflow.close();
+
+    res.json({
+      snapshot_id,
+      question,
+      answer: result.answer,
+      citations: result.citations,
+      used_chunks: result.chunks.map(c => ({
+        chunk_id: c.id,
+        path: c.file_path || c.path,
+        start_line: c.start_line,
+        end_line: c.end_line
+      })),
+      metadata: result.metadata
+    });
+  } catch (error) {
+    console.error('Error answering question:', error);
     res.status(500).json({ error: error.message });
   }
 });
