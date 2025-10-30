@@ -1179,7 +1179,7 @@ app.post('/api/v1/ask', async (req, res) => {
       worklistBias: pack_policy?.worklistBias !== undefined ? pack_policy.worklistBias : true
     });
 
-    const result = await workflow.retrieve(snapshot_id, question, { task, model });
+    const result = await workflow.retrieve(question, snapshot_id, { task, model });
 
     workflow.close();
 
